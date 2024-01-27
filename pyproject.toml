@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "connect-four"
+version = "0.1.0"
+description = ""
+authors = ["Vincent Lo <lovincent536@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
