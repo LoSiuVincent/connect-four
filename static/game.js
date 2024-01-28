@@ -1,3 +1,9 @@
 export class Game {
-	constructor() {}
+	constructor(boardX) {
+        this.boardX = boardX;
+    }
+
+    getBoardX() {
+        return this.boardX;
+    }
 }
