@@ -15,6 +15,10 @@ export class Game {
 		return this.cellLength * 8;
 	}
 
+    getCellState(col, row) {
+        return "empty";
+    }
+
 	run() {
 		new p5((p5) => {
 			p5.setup = () => {
