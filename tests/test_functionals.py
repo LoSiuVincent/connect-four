@@ -69,7 +69,7 @@ def test_drop_coins_to_board(browser):
 
         time.sleep(1)
 
-    # He clicks on the first column
+    # He clicks in the first column
     click_column(0)
 
     first_column_bottom_cell_state = browser.execute_script("return game.getCellState(0, 0);")
@@ -82,7 +82,7 @@ def test_drop_coins_to_board(browser):
     fourth_column_bottom_cell_state = browser.execute_script("return game.getCellState(3, 0);")
     assert fourth_column_bottom_cell_state == 'player'
 
-    # He tries to drop a coin at the first column again
+    # He tries to drop a coin in the first column again
     click_column(0)
 
     # Check the game state to ensure another coin has been stacked in the first column

@@ -1,6 +1,7 @@
 export class Game {
 	constructor(cellLength) {
 		this.cellLength = cellLength;
+		this.board = make2DBoard(6, 7);
 	}
 
 	getCellLength() {
@@ -15,9 +16,17 @@ export class Game {
 		return this.cellLength * 8;
 	}
 
-    getCellState(col, row) {
-        return "empty";
-    }
+	getCellState(col, row) {
+        return this.board[row][col];
+	}
+
+	dropCoin(colIndex) {
+		for (var i = 0; i < 6; i++) {
+			if (this.board[i][colIndex] === "empty") {
+				this.board[i][colIndex] = "player";
+			}
+		}
+	}
 
 	run() {
 		new p5((p5) => {
@@ -30,4 +39,15 @@ export class Game {
 			};
 		});
 	}
+}
+
+function make2DBoard(rows, cols) {
+	var board = [];
+	for (var i = 0; i < rows; i++) {
+		board[i] = [];
+		for (var j = 0; j < cols; j++) {
+			board[i][j] = "empty";
+		}
+	}
+    return board;
 }
