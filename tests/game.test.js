@@ -2,6 +2,8 @@ import { Game } from "../static/game.js";
 
 test("create a Game object without problem", () => {
 	const game = new Game();
+
+	expect(game).toBeDefined();
 });
 
 test("get cell length from the Game object", () => {
