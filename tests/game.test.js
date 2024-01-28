@@ -1,4 +1,5 @@
-import { Game } from "../static/game.js";
+import { Game, make2DBoard } from "../static/game.js";
+import { jest } from "@jest/globals";
 
 test("create a Game object without problem", () => {
 	const game = new Game();
@@ -36,7 +37,7 @@ test("all cell should be emptied on start", () => {
 			expect(game.getCellState(j, i)).toBe("empty");
 		}
 	}
-})
+});
 
 test("drop multiple coins should stack up properly", () => {
 	const game = new Game(100);
@@ -48,4 +49,15 @@ test("drop multiple coins should stack up properly", () => {
 	expect(game.getCellState(0, 0)).toBe("player");
 	expect(game.getCellState(0, 1)).toBe("player");
 	expect(game.getCellState(1, 0)).toBe("player");
-})
+});
+
+test("Game should call draw board after construction", () => {
+	const mockView = {
+		drawBoard: jest.fn().mockImplementation(() => {}),
+	};
+	const spy = jest.spyOn(mockView, "drawBoard");
+	const game = new Game(100, mockView);
+	const emptyBoard = make2DBoard(6, 7);
+
+	expect(spy).toHaveBeenCalledWith(emptyBoard);
+});

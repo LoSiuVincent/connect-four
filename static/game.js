@@ -1,7 +1,12 @@
+import { p5View } from "./view.js";
+
 export class Game {
-	constructor(cellLength) {
+	constructor(cellLength, view) {
 		this.cellLength = cellLength;
 		this.board = make2DBoard(6, 7);
+		this.view = (view === undefined) ? new p5View() : view;
+
+		this.view.drawBoard(this.board);
 	}
 
 	getCellLength() {
@@ -17,7 +22,7 @@ export class Game {
 	}
 
 	getCellState(col, row) {
-        return this.board[row][col];
+		return this.board[row][col];
 	}
 
 	dropCoin(colIndex) {
@@ -27,21 +32,9 @@ export class Game {
 			}
 		}
 	}
-
-	run() {
-		new p5((p5) => {
-			p5.setup = () => {
-				p5.createCanvas(this.getCanvasWidth(), this.getCanvasHeight());
-			};
-
-			p5.draw = () => {
-				p5.fill(0);
-			};
-		});
-	}
 }
 
-function make2DBoard(rows, cols) {
+export function make2DBoard(rows, cols) {
 	let board = [];
 	for (let i = 0; i < rows; i++) {
 		board[i] = [];
@@ -49,5 +42,5 @@ function make2DBoard(rows, cols) {
 			board[i][j] = "empty";
 		}
 	}
-    return board;
+	return board;
 }
