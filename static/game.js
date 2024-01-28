@@ -1,5 +1,3 @@
-class Game {
+export default class Game {
 	constructor() {}
 }
-
-module.exports = Game;
