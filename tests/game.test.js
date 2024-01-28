@@ -15,3 +15,9 @@ test("get board y from the Game object", () => {
 
 	expect(game.getBoardY()).toEqual(20);
 })
+
+test("get cell width from the Game object", () => {
+	const game = new Game(10, 20, 100);
+
+	expect(game.getCellWidth()).toEqual(100);
+})

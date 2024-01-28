@@ -1,7 +1,8 @@
 export class Game {
-	constructor(boardX, boardY) {
+	constructor(boardX, boardY, cellWidth) {
         this.boardX = boardX;
         this.boardY = boardY;
+        this.cellWidth = cellWidth;
     }
 
     getBoardX() {
@@ -10,5 +11,9 @@ export class Game {
 
     getBoardY() {
         return this.boardY;
+    }
+
+    getCellWidth() {
+        return this.cellWidth;
     }
 }
