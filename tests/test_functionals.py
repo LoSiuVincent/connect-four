@@ -40,7 +40,7 @@ def test_correct_canvas_size(browser):
     # John goes to the webiste
     browser.get('http://localhost:8000')
 
-    # John sees the board shows up with 6 cells height and 7 cells width
+    # John sees the canvas has 8 cells height and 7 cells width
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
 
     cell_length = browser.execute_script('return game.getCellLength();')
