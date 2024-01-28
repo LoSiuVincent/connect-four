@@ -1,13 +1,8 @@
 import { Game } from "./game.js";
 
-window.game = new Game();
+const CELL_SIZE = 100;
 
-new p5((p5) => {
-	p5.setup = () => {
-		p5.createCanvas(1024, 800);
-	};
+const game = new Game();
+game.run()
 
-	p5.draw = () => {
-		p5.fill(0);
-	};
-});
+window.game = game;
