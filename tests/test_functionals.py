@@ -26,3 +26,14 @@ def test_canvas_exists(browser):
         browser.find_element(By.TAG_NAME, 'canvas')
     except NoSuchElementException:
         pytest.fail('There is no canvas element')
+
+
+def test_layout(browser):
+    # John goes to the website
+    browser.get('http://localhost:8000')
+    browser.set_window_size(1600, 900)
+
+    # He sees a canvas center on the website
+    canvas = browser.find_element(By.TAG_NAME, 'canvas')
+    canvas_center = canvas.location['x'] + canvas.size['width'] / 2 
+    assert canvas_center == 800
