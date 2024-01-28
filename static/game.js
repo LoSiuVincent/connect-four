@@ -1,19 +1,9 @@
 export class Game {
-	constructor(boardX, boardY, cellWidth) {
-        this.boardX = boardX;
-        this.boardY = boardY;
-        this.cellWidth = cellWidth;
+	constructor(cellLength) {
+        this.cellLength = cellLength;
     }
 
-    getBoardX() {
-        return this.boardX;
-    }
-
-    getBoardY() {
-        return this.boardY;
-    }
-
-    getCellWidth() {
-        return this.cellWidth;
+    getCellLength() {
+        return this.cellLength;
     }
 }
