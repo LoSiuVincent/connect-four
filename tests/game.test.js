@@ -1,5 +1,5 @@
 import { Game, make2DBoard } from "../static/game.js";
-import { jest } from "@jest/globals";
+import { test, expect, jest } from "@jest/globals";
 
 test("create a Game object without problem", () => {
 	const game = new Game();
@@ -46,9 +46,11 @@ test("drop multiple coins should stack up properly", () => {
 	game.dropCoin(0);
 	game.dropCoin(1);
 
-	expect(game.getCellState(0, 0)).toBe("player");
-	expect(game.getCellState(0, 1)).toBe("player");
-	expect(game.getCellState(1, 0)).toBe("player");
+	let expectedBoard = make2DBoard(6, 7);
+	expectedBoard[0][0] = "player";
+	expectedBoard[1][0] = "player";
+	expectedBoard[0][1] = "player";
+	expect(game.board).toEqual(expectedBoard);
 });
 
 test("Game should call draw board after construction", () => {
@@ -60,4 +62,20 @@ test("Game should call draw board after construction", () => {
 	const emptyBoard = make2DBoard(6, 7);
 
 	expect(spy).toHaveBeenCalledWith(emptyBoard);
+});
+
+test("Game should call draw board after coin drops", () => {
+	const mockView = {
+		drawBoard: jest.fn().mockImplementation(() => {}),
+	};
+	const game = new Game(100, mockView);
+
+	game.dropCoin(0);
+	let expectedBoard = make2DBoard(6, 7);
+	expectedBoard[0][0] = "player";
+	expect(mockView.drawBoard).toHaveBeenNthCalledWith(1, expectedBoard);
+
+	game.dropCoin(0);
+	expectedBoard[1][0] = "player";
+	expect(mockView.drawBoard).toHaveBeenNthCalledWith(2, expectedBoard);
 });

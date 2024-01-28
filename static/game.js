@@ -4,7 +4,7 @@ export class Game {
 	constructor(cellLength, view) {
 		this.cellLength = cellLength;
 		this.board = make2DBoard(6, 7);
-		this.view = (view === undefined) ? new p5View() : view;
+		this.view = view === undefined ? new p5View() : view;
 
 		this.view.drawBoard(this.board);
 	}
@@ -29,8 +29,10 @@ export class Game {
 		for (let i = 0; i < 6; i++) {
 			if (this.board[i][colIndex] === "empty") {
 				this.board[i][colIndex] = "player";
+				break;
 			}
 		}
+		this.view.drawBoard(this.board);
 	}
 }
 
