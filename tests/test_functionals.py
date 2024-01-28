@@ -8,14 +8,12 @@ import pytest
 @pytest.fixture
 def browser():
     driver = webdriver.Firefox()
+    driver.get('http://localhost:8000')
     yield driver
     driver.quit()
 
 
 def test_canvas_exists(browser):
-    # John goes to the website
-    browser.get('http://localhost:8000')
-
     # He sees a canvas where he can play the game
     try:
         browser.find_element(By.TAG_NAME, 'canvas')
@@ -24,8 +22,6 @@ def test_canvas_exists(browser):
 
 
 def test_layout(browser):
-    # John goes to the website
-    browser.get('http://localhost:8000')
     browser.set_window_size(1600, 1000)
 
     # He sees a canvas center on the website
@@ -37,9 +33,6 @@ def test_layout(browser):
 
 
 def test_correct_canvas_size(browser):
-    # John goes to the webiste
-    browser.get('http://localhost:8000')
-
     # John sees the canvas has 8 cells height and 7 cells width
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
 
@@ -49,9 +42,6 @@ def test_correct_canvas_size(browser):
 
 
 def test_drop_coins_to_board(browser):
-    # John goes to the website
-    browser.get('http://localhost:8000')
-
     # John sees the canvas for the game
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
     assert canvas is not None
@@ -73,14 +63,18 @@ def test_drop_coins_to_board(browser):
     click_column(0)
 
     first_column_bottom_cell_state = browser.execute_script("return game.getCellState(0, 0);")
-    assert first_column_bottom_cell_state == 'player'
+    assert (
+        first_column_bottom_cell_state == 'player'
+    ), 'The first column did not have a coin after clicking'
 
     # He clicks another column
     click_column(3)
 
     # Check the game state to ensure a coin has been added to the fourth column
     fourth_column_bottom_cell_state = browser.execute_script("return game.getCellState(3, 0);")
-    assert fourth_column_bottom_cell_state == 'player'
+    assert (
+        fourth_column_bottom_cell_state == 'player'
+    ), 'The fourth column did not have a coin after clicking'
 
     # He tries to drop a coin in the first column again
     click_column(0)
@@ -89,4 +83,6 @@ def test_drop_coins_to_board(browser):
     first_column_second_last_bottom_cell_state = browser.execute_script(
         "return game.getCellState(0, 1);"
     )
-    assert first_column_second_last_bottom_cell_state == 'player'
+    assert (
+        first_column_second_last_bottom_cell_state == 'player'
+    ), 'The first column did not have the second coin be stacked up on the first coin after click again'
