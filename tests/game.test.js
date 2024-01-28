@@ -9,3 +9,9 @@ test("get board x from the Game object", () => {
 
 	expect(game.getBoardX()).toEqual(10);
 })
+
+test("get board y from the Game object", () => {
+	const game = new Game(10, 20);
+
+	expect(game.getBoardY()).toEqual(20);
+})
