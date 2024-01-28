@@ -11,6 +11,7 @@ def browser():
     yield driver
     driver.quit()
 
+
 def test_canvas_exists(browser):
     # John goes to the website
     browser.get('http://localhost:8000')
@@ -35,6 +36,23 @@ def test_layout(browser):
     assert abs(canvas_center_y - 500) < 100
 
 
+def test_board_exists(browser):
+    # John goes to the webiste
+    browser.get('http://localhost:8000')
+    browser.set_window_size(1600, 1000)
+
+    # John sees the board shows up with 6 cells height and 7 cells width
+    canvas = browser.find_element(By.TAG_NAME, 'canvas')
+    board_x = browser.execute_script('return game.getBoardX();')
+    assert board_x == canvas.location['x']
+
+    board_y = browser.execute_script('return game.getBoardY();')
+    assert board_y == canvas.location['y'] + 100
+
+    cell_width = browser.execute_script('return game.getCellWidth();')
+    assert cell_width == pytest.approx(canvas.size['width'] / 7)
+
+
 def test_drop_coins_to_board(browser):
     # John goes to the website
     browser.get('http://localhost:8000')
@@ -47,10 +65,10 @@ def test_drop_coins_to_board(browser):
         board_x = browser.execute_script('return game.getBoardX();')
         board_y = browser.execute_script('return game.getBoardY();')
         cell_width = browser.execute_script('return game.getCellWidth();')
-        
+
         click_x = board_x + column_index * cell_width + 0.5 * cell_width
         click_y = board_y - 10
-        
+
         action = webdriver.common.action_chains.ActionChains(browser)
         action.move_to_element_with_offset(canvas, click_x, click_y)
         action.click()
@@ -75,5 +93,7 @@ def test_drop_coins_to_board(browser):
     click_column(0)
 
     # Check the game state to ensure another coin has been stacked in the first column
-    first_column_second_last_bottom_cell_state = browser.execute_script("return game.getCellState(0, 1);")
+    first_column_second_last_bottom_cell_state = browser.execute_script(
+        "return game.getCellState(0, 1);"
+    )
     assert first_column_second_last_bottom_cell_state == 'player'
