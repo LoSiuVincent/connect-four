@@ -36,7 +36,7 @@ def test_layout(browser):
     assert abs(canvas_center_y - 500) < 100
 
 
-def test_board_exists(browser):
+def test_correct_canvas_size(browser):
     # John goes to the webiste
     browser.get('http://localhost:8000')
 
