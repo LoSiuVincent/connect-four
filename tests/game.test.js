@@ -38,22 +38,14 @@ test("all cell should be emptied on start", () => {
 	}
 })
 
-test("drop a coin in the first column should change the bottom cell state to player", () => {
-	const game = new Game(100);
-
-	game.dropCoin(0);
-
-	expect(game.getCellState(0, 0)).toBe("player");
-})
-
-test("drop multiple coin in the same column should stack up the coin", () => {
+test("drop multiple coins should stack up properly", () => {
 	const game = new Game(100);
 
 	game.dropCoin(0);
 	game.dropCoin(0);
-	game.dropCoin(0);
+	game.dropCoin(1);
 
 	expect(game.getCellState(0, 0)).toBe("player");
 	expect(game.getCellState(0, 1)).toBe("player");
-	expect(game.getCellState(0, 2)).toBe("player");
+	expect(game.getCellState(1, 0)).toBe("player");
 })
