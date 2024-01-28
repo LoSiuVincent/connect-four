@@ -35,5 +35,6 @@ def test_layout(browser):
 
     # He sees a canvas center on the website
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
-    canvas_center = canvas.location['x'] + canvas.size['width'] / 2 
-    assert canvas_center == 800
+    canvas_center_x = canvas.location['x'] + canvas.size['width'] / 2
+    canvas_center_y = canvas.location['y'] + canvas.size['height'] / 2
+    assert (canvas_center_x, canvas_center_y) == (800, 450)
