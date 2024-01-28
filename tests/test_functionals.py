@@ -44,7 +44,7 @@ def test_board_exists(browser):
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
 
     cell_length = browser.execute_script('return game.getCellLength();')
-    assert 6 * cell_length + 200 == canvas.size['height']
+    assert 8 * cell_length == canvas.size['height']
     assert 7 * cell_length == canvas.size['width']
 
 
