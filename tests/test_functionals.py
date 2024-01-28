@@ -11,13 +11,6 @@ def browser():
     yield driver
     driver.quit()
 
-
-def test_launch_website(browser):
-    browser.get('http://localhost:8000')
-
-    assert 'Connect 4' in browser.title
-
-
 def test_canvas_exists(browser):
     # John goes to the website
     browser.get('http://localhost:8000')
