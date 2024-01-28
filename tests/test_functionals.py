@@ -39,18 +39,13 @@ def test_layout(browser):
 def test_board_exists(browser):
     # John goes to the webiste
     browser.get('http://localhost:8000')
-    browser.set_window_size(1600, 1000)
 
     # John sees the board shows up with 6 cells height and 7 cells width
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
-    board_x = browser.execute_script('return game.getBoardX();')
-    assert board_x == canvas.location['x']
 
-    board_y = browser.execute_script('return game.getBoardY();')
-    assert board_y == canvas.location['y'] + 100
-
-    cell_width = browser.execute_script('return game.getCellWidth();')
-    assert cell_width == pytest.approx(canvas.size['width'] / 7)
+    cell_length = browser.execute_script('return game.getCellLength();')
+    assert 6 * cell_length + 200 == canvas.size['height']
+    assert 7 * cell_length == canvas.size['width']
 
 
 def test_drop_coins_to_board(browser):
@@ -62,12 +57,10 @@ def test_drop_coins_to_board(browser):
     assert canvas is not None
 
     def click_column(column_index):
-        board_x = browser.execute_script('return game.getBoardX();')
-        board_y = browser.execute_script('return game.getBoardY();')
-        cell_width = browser.execute_script('return game.getCellWidth();')
+        cell_width = browser.execute_script('return game.getCellLength();')
 
-        click_x = board_x + column_index * cell_width + 0.5 * cell_width
-        click_y = board_y - 10
+        click_x = column_index * cell_width + 0.5 * cell_width
+        click_y = 10
 
         action = webdriver.common.action_chains.ActionChains(browser)
         action.move_to_element_with_offset(canvas, click_x, click_y)
