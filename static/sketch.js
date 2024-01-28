@@ -1,7 +1,9 @@
-function setup() {
-	createCanvas(1024, 800);
-}
+new p5((p5) => {
+	p5.setup = () => {
+		p5.createCanvas(1024, 800);
+	};
 
-function draw() {
-    fill(0);
-}
+	p5.draw = () => {
+		p5.fill(0);
+	};
+});
