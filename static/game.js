@@ -18,7 +18,7 @@ export class Game {
 	run() {
 		new p5((p5) => {
 			p5.setup = () => {
-				p5.createCanvas(1024, 800);
+				p5.createCanvas(this.getCanvasWidth(), this.getCanvasHeight());
 			};
 
 			p5.draw = () => {
