@@ -21,7 +21,7 @@ export class Game {
 	}
 
 	dropCoin(colIndex) {
-		for (var i = 0; i < 6; i++) {
+		for (let i = 0; i < 6; i++) {
 			if (this.board[i][colIndex] === "empty") {
 				this.board[i][colIndex] = "player";
 			}
@@ -42,10 +42,10 @@ export class Game {
 }
 
 function make2DBoard(rows, cols) {
-	var board = [];
-	for (var i = 0; i < rows; i++) {
+	let board = [];
+	for (let i = 0; i < rows; i++) {
 		board[i] = [];
-		for (var j = 0; j < cols; j++) {
+		for (let j = 0; j < cols; j++) {
 			board[i][j] = "empty";
 		}
 	}
