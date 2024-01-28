@@ -6,4 +6,12 @@ export class Game {
     getCellLength() {
         return this.cellLength;
     }
+
+    getCanvasWidth() {
+        return this.cellLength * 7;
+    }
+
+    getCanvasHeight() {
+        return this.cellLength * 8;
+    }
 }
