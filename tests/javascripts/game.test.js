@@ -1,4 +1,4 @@
-import { Game, make2DBoard } from "../static/game.js";
+import { Game, make2DBoard } from "../../src/static/js/game.js";
 import { test, expect, jest } from "@jest/globals";
 
 test("create a Game object without problem", () => {
