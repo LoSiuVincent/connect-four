@@ -1,7 +1,8 @@
 export class p5View {
-	constructor(game, p5) {
+	constructor(game, p5, cellLength) {
 		this.game = game;
 		this.p5 = p5;
+		this.cellLength = (cellLength === undefined) ? 100 : cellLength;
 	}
 
 	draw() {
@@ -9,7 +10,7 @@ export class p5View {
 	}
 
 	_drawCell(row, col) {
-		const cellLength = this.game.getCellLength();
+		const cellLength = this.cellLength;
 		const cornerX = col * cellLength;
 		const cornerY = 2 * cellLength + row * cellLength;
 
