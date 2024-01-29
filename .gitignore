@@ -1,6 +1,7 @@
 .pytest_cache
 .venv
 .vscode
+.tests
 __pycache__
 static/static
 node_modules

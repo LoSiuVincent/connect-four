@@ -3,6 +3,18 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import time
 import pytest
+import os
+from pathlib import Path
+import logging
+
+logging.basicConfig(level=logging.INFO, format=r'[%(levelname)s] %(message)s')
+
+BASELINE_IMG_DIR = Path(__file__).resolve().parent / 'baseline'
+CURRENT_IMG_DIR = Path(__file__).resolve().parent / 'current'
+
+if not CURRENT_IMG_DIR.exists():
+    CURRENT_IMG_DIR.mkdir()
+    logging.info(f'Made {CURRENT_IMG_DIR}')
 
 
 @pytest.fixture
@@ -39,6 +51,22 @@ def test_correct_canvas_size(browser):
     cell_length = browser.execute_script('return view.getCellLength();')
     assert 8 * cell_length == canvas.size['height']
     assert 7 * cell_length == canvas.size['width']
+
+
+@pytest.mark.visual
+def test_board_exists(browser, image_diff):
+    # John sees a board drawn on the page
+    canvas = browser.find_element(By.TAG_NAME, 'canvas')
+    time.sleep(1)
+
+    baseline_image_path = str(BASELINE_IMG_DIR / 'board.png')
+    current_image_path = str(CURRENT_IMG_DIR / 'board.png')
+    if int(os.environ.get('UPDATE_BASELINE', 0)) == 1:
+        canvas.screenshot(baseline_image_path)
+        logging.info(f'Captured image to {baseline_image_path}')
+    else:
+        canvas.screenshot(current_image_path)
+        assert image_diff(baseline_image_path, current_image_path)
 
 
 def test_drop_coins_to_board(browser):

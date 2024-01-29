@@ -10,3 +10,6 @@ unit-test:
 
 functional-test:
 	pytest
+
+update-baseline:
+	UPDATE_BASELINE=1 pytest -m visual
