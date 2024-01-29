@@ -1,19 +1,6 @@
 export class Game {
-	constructor(cellLength) {
-		this.cellLength = cellLength;
+	constructor() {
 		this.board = make2DBoard(6, 7);
-	}
-
-	getCellLength() {
-		return this.cellLength;
-	}
-
-	getCanvasWidth() {
-		return this.cellLength * 7;
-	}
-
-	getCanvasHeight() {
-		return this.cellLength * 8;
 	}
 
 	getCellState(col, row) {

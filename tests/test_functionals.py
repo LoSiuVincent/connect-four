@@ -36,7 +36,7 @@ def test_correct_canvas_size(browser):
     # John sees the canvas has 8 cells height and 7 cells width
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
 
-    cell_length = browser.execute_script('return game.getCellLength();')
+    cell_length = browser.execute_script('return view.getCellLength();')
     assert 8 * cell_length == canvas.size['height']
     assert 7 * cell_length == canvas.size['width']
 
@@ -47,7 +47,7 @@ def test_drop_coins_to_board(browser):
     assert canvas is not None
 
     def click_column(column_index):
-        cell_width = browser.execute_script('return game.getCellLength();')
+        cell_width = browser.execute_script('return view.getCellLength();')
 
         click_x = column_index * cell_width + 0.5 * cell_width
         click_y = 10

@@ -2,7 +2,19 @@ export class p5View {
 	constructor(game, p5, cellLength) {
 		this.game = game;
 		this.p5 = p5;
-		this.cellLength = (cellLength === undefined) ? 100 : cellLength;
+		this.cellLength = cellLength === undefined ? 100 : cellLength;
+	}
+	
+	getCellLength() {
+		return this.cellLength;
+	}
+
+	getCanvasWidth() {
+		return this.cellLength * 7;
+	}
+
+	getCanvasHeight() {
+		return this.cellLength * 8;
 	}
 
 	draw() {

@@ -1,14 +1,15 @@
 import { Game } from "./game.js";
 import { p5View } from "./view.js";
 
-const CELL_SIZE = 100;
-const game = new Game(CELL_SIZE);
-window.game = game;
-
 new p5((p5) => {
 	p5.setup = () => {
-		p5.createCanvas(game.getCanvasWidth(), game.getCanvasHeight());
-		window.view = new p5View(game, p5);
+		const CELL_SIZE = 100;
+		const game = new Game();
+		const view = new p5View(game, p5, CELL_SIZE);
+		p5.createCanvas(view.getCanvasWidth(), view.getCanvasHeight());
+
+		window.game = game;
+		window.view = view;
 	};
 
 	p5.draw = () => {
