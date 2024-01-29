@@ -1,12 +1,7 @@
-import { p5View } from "./view.js";
-
 export class Game {
-	constructor(cellLength, view) {
+	constructor(cellLength) {
 		this.cellLength = cellLength;
 		this.board = make2DBoard(6, 7);
-		this.view = view === undefined ? new p5View() : view;
-
-		this.view.drawBoard(this.board);
 	}
 
 	getCellLength() {
@@ -32,7 +27,6 @@ export class Game {
 				break;
 			}
 		}
-		this.view.drawBoard(this.board);
 	}
 }
 

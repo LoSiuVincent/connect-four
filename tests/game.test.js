@@ -52,30 +52,3 @@ test("drop multiple coins should stack up properly", () => {
 	expectedBoard[0][1] = "player";
 	expect(game.board).toEqual(expectedBoard);
 });
-
-test("Game should call draw board after construction", () => {
-	const mockView = {
-		drawBoard: jest.fn().mockImplementation(() => {}),
-	};
-	const spy = jest.spyOn(mockView, "drawBoard");
-	const game = new Game(100, mockView);
-	const emptyBoard = make2DBoard(6, 7);
-
-	expect(spy).toHaveBeenCalledWith(emptyBoard);
-});
-
-test("Game should call draw board after coin drops", () => {
-	const mockView = {
-		drawBoard: jest.fn().mockImplementation(() => {}),
-	};
-	const game = new Game(100, mockView);
-
-	game.dropCoin(0);
-	let expectedBoard = make2DBoard(6, 7);
-	expectedBoard[0][0] = "player";
-	expect(mockView.drawBoard).toHaveBeenNthCalledWith(1, expectedBoard);
-
-	game.dropCoin(0);
-	expectedBoard[1][0] = "player";
-	expect(mockView.drawBoard).toHaveBeenNthCalledWith(2, expectedBoard);
-});
