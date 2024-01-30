@@ -1,4 +1,3 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pytest
 import time
@@ -11,12 +10,6 @@ logging.basicConfig(level=logging.INFO, format=r'[%(levelname)s] %(message)s')
 BASELINE_IMG_DIR = Path(__file__).resolve().parent / 'baseline'
 CURRENT_IMG_DIR = Path(__file__).resolve().parent / 'current'
 
-@pytest.fixture
-def browser():
-    driver = webdriver.Firefox()
-    driver.get('http://localhost:8000')
-    yield driver
-    driver.quit()
 
 @pytest.mark.visual
 def test_coins_show_up_when_the_game_drops_the_coins(browser, image_diff):

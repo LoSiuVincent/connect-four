@@ -17,14 +17,6 @@ if not CURRENT_IMG_DIR.exists():
     logging.info(f'Made {CURRENT_IMG_DIR}')
 
 
-@pytest.fixture
-def browser():
-    driver = webdriver.Firefox()
-    driver.get('http://localhost:8000')
-    yield driver
-    driver.quit()
-
-
 def test_canvas_exists(browser):
     # He sees a canvas where he can play the game
     try:
