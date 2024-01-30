@@ -31,11 +31,11 @@ def web_element_image_regression(element: WebElement, name: str):
     otherwise it will check whether the element matches the latest image
     """
     baseline_image_path = str(BASELINE_IMG_DIR / f"{name}.png")
-    current_image_path = str(CURRENT_IMG_DIR / f"{name}.png")
     if int(os.environ.get("UPDATE_BASELINE", 0)) == 1:
         element.screenshot(baseline_image_path)
         logging.info(f"Captured image to {baseline_image_path}")
     else:
+        current_image_path = str(CURRENT_IMG_DIR / f"{name}.png")
         element.screenshot(current_image_path)
 
         base_image = Image.open(baseline_image_path)
