@@ -11,8 +11,8 @@ test("all cell should be emptied on start", () => {
 	const game = new Game(100);
 
 	for (var i = 0; i < 6; i++) {
-		for (var j = 0; j < 6; j++) {
-			expect(game.getCellState(j, i)).toBe("empty");
+		for (var j = 0; j < 7; j++) {
+			expect(game.getCellState(i, j)).toBe("empty");
 		}
 	}
 });
