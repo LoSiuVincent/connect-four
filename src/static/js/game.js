@@ -7,10 +7,11 @@ export class Game {
 		return this.board[row][col];
 	}
 
-	dropCoin(colIndex) {
+	dropCoin(colIndex, whoseMove) {
+		whoseMove = (whoseMove === undefined) ? "player" : whoseMove;
 		for (let i = 0; i < 6; i++) {
 			if (this.board[i][colIndex] === "empty") {
-				this.board[i][colIndex] = "player";
+				this.board[i][colIndex] = whoseMove;
 				break;
 			}
 		}

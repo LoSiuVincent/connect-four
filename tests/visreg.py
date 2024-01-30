@@ -1,7 +1,6 @@
-import time
-
 import logging
 import os
+import time
 from pathlib import Path
 from typing import TypeVar
 
@@ -32,8 +31,8 @@ class _MatchingElement:
     def __init__(self, element: WebElement, name: str):
         self._element = element
         self._name = name
-        self._baseline_path = BASELINE_IMG_DIR / f'{name}.png'
-        self._current_path = CURRENT_IMG_DIR / f'{name}.png'
+        self._baseline_path = BASELINE_IMG_DIR / f"{name}.png"
+        self._current_path = CURRENT_IMG_DIR / f"{name}.png"
 
     def take_baseline_image(self):
         self._element.screenshot(str(self._baseline_path))

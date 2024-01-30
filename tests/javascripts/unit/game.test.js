@@ -30,3 +30,15 @@ test("drop multiple coins should stack up properly", () => {
 	expectedBoard[0][1] = "player";
 	expect(game.board).toEqual(expectedBoard);
 });
+
+test("drop a computer coin should change the cell state to 'computer'", () => {
+	const game = new Game();
+
+	game.dropCoin(0, "computer");
+	game.dropCoin(2, "computer");
+
+	let expectedBoard = make2DBoard(6, 7);
+	expectedBoard[0][0] = "computer";
+	expectedBoard[0][2] = "computer";
+	expect(game.board).toEqual(expectedBoard);
+})

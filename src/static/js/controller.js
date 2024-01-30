@@ -13,5 +13,10 @@ export class Controller {
     handleMouseClick(x, y) {
         const colIndex = Math.floor(x / this.view.getCellLength());
         this.game.dropCoin(colIndex);
+        this.computerMove();
+    }
+
+    computerMove() {
+        this.game.dropCoin(0, "computer");
     }
 }
