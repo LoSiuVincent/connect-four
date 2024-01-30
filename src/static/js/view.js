@@ -3,6 +3,7 @@ export class p5View {
 		this.game = game;
 		this.p5 = p5;
 		this.cellLength = cellLength === undefined ? 100 : cellLength;
+		this.callbacks = [];
 	}
 
 	getCellLength() {
@@ -19,6 +20,20 @@ export class p5View {
 
 	draw() {
 		this._drawBoard();
+	}
+
+	addListener(event, callback) {
+		this.callbacks.push([event, callback]);
+	}
+
+	notify(event, data) {
+		this.callbacks.forEach(eventCallbackTuple => {
+			const listenEvent = eventCallbackTuple[0];
+			const listenCallback = eventCallbackTuple[1];
+			if (event === listenEvent) {
+				listenCallback(data);
+			}
+		})
 	}
 
 	_getCell(row, col) {
