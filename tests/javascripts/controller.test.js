@@ -1,4 +1,4 @@
-import { Controller } from "../../src/static/js/controller.js";
+import { Controller } from "controller.js";
 import { test, expect, jest } from "@jest/globals";
 
 test("controller should call the correct dropCoin when receieve the mouse click event", () => {

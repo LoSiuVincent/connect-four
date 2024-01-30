@@ -1,4 +1,4 @@
-import { p5View } from "../../src/static/js/view.js";
+import { p5View } from "view.js";
 
 test("View has the correct cell length", () => {
     const dummyObject = {};
