@@ -24,5 +24,5 @@ test("controller should add itself to listen on View", () => {
 	const mockView = {addListener: jest.fn()};
 	const controller = new Controller(mockGame, mockView);
 
-	expect(mockView.addListener).toHaveBeenCalledWith("mouseClick", controller.handleMouseClick);
+	expect(mockView.addListener).toHaveBeenCalledWith("mouseClick", controller);
 })

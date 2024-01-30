@@ -3,7 +3,11 @@ export class Controller {
         this.game = game;
         this.view = view;
 
-        this.view.addListener("mouseClick", this.handleMouseClick);
+        this.view.addListener("mouseClick", this);
+    }
+
+    update(data) {
+        this.handleMouseClick(data.x, data.y);
     }
 
     handleMouseClick(x, y) {
