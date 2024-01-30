@@ -40,8 +40,7 @@ def test_correct_canvas_size(browser):
 def test_board_exists(browser):
     # John sees a board drawn on the page
     canvas = browser.find_element(By.TAG_NAME, "canvas")
-    time.sleep(1)
-
+    
     web_element_image_regression(canvas, "board")
 
 
