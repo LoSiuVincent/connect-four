@@ -9,7 +9,8 @@ test("controller should call the correct dropCoin when receieve the mouse click 
 		getCellLength: () => {
 			return 100;
 		},
-		addListener: () => {}
+		addListener: () => {},
+		isInsideCanvas: () => true
 	};
 	const controller = new Controller(mockGame, mockView);
 
