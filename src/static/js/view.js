@@ -22,16 +22,16 @@ export class p5View {
 		this._drawBoard();
 	}
 
-	addListener(event, callback) {
-		this.callbacks.push([event, callback]);
+	addListener(event, listener) {
+		this.callbacks.push([event, listener]);
 	}
 
 	notify(event, data) {
 		this.callbacks.forEach(eventCallbackTuple => {
 			const listenEvent = eventCallbackTuple[0];
-			const listenCallback = eventCallbackTuple[1];
+			const listener = eventCallbackTuple[1];
 			if (event === listenEvent) {
-				listenCallback(data);
+				listener.update(data);
 			}
 		})
 	}

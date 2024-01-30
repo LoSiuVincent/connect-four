@@ -29,16 +29,16 @@ test("View has the correct canvas height", () => {
 test("View should notify listeners when they subscribe to it", () => {
 	const dummyObject = {};
 	const view = new p5View(dummyObject, dummyObject, dummyObject);
-	const callbackOne = jest.fn();
-	const callbackTwo = jest.fn();
-	const callbackThree = jest.fn();
-	view.addListener("mouseClick", callbackOne);
-	view.addListener("mouseClick", callbackTwo);
-	view.addListener("otherEvent", callbackThree);
+	const listenerOne = {update: jest.fn()};
+	const listenerTwo = {update: jest.fn()};
+	const listenerThree = {update: jest.fn()};
+	view.addListener("mouseClick", listenerOne);
+	view.addListener("mouseClick", listenerTwo);
+	view.addListener("otherEvent", listenerThree);
 
 	view.notify("mouseClick", { x: 10, y: 10 });
 
-	expect(callbackOne).toHaveBeenCalledWith({ x: 10, y: 10 });
-	expect(callbackTwo).toHaveBeenCalledWith({ x: 10, y: 10 });
-	expect(callbackThree).not.toHaveBeenCalled();
+	expect(listenerOne.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+	expect(listenerTwo.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+	expect(listenerThree.update).not.toHaveBeenCalled();
 });

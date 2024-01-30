@@ -6,11 +6,11 @@ run-dev:
 all-test: unit-test integration-test functional-test
 
 unit-test:
-	npm test
+	npm test tests/javascripts/unit
 
 integration-test:
 	pytest tests/test_integrations.py
-	npm test -t "integration"
+	npm test tests/javascripts/integration.test.js
 
 functional-test:
 	pytest tests/test_functionals.py
