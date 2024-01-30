@@ -28,6 +28,29 @@ def _are_images_the_same(base: Image, other: Image, threshold: float = 0.0) -> b
     return pixel_diff <= threshold
 
 
+class _MatchingElement:
+    def __init__(self, element: WebElement, name: str):
+        self._element = element
+        self._name = name
+        self._baseline_path = BASELINE_IMG_DIR / f'{name}.png'
+        self._current_path = CURRENT_IMG_DIR / f'{name}.png'
+
+    def take_baseline_image(self):
+        self._element.screenshot(str(self._baseline_path))
+        logging.info(f"Captured image to {self._baseline_path}")
+
+    def take_current_image(self):
+        self._element.screenshot(str(self._current_path))
+
+    def has_baseline(self):
+        return self._baseline_path.exists()
+
+    def match_baseline(self):
+        base = Image.open(self._baseline_path)
+        current = Image.open(self._current_path)
+        return _are_images_the_same(base, current)
+
+
 def web_element_image_regression(
     element: WebElement, name: str, wait_time: float = 5, timeout: float = 5
 ):
@@ -35,32 +58,26 @@ def web_element_image_regression(
     It will capture an image of the element when the environment variable UPDATE_BASELINE=1,
     otherwise it will check whether the element matches the latest image
     """
-    baseline_image_path = str(BASELINE_IMG_DIR / f"{name}.png")
+    matching_element = _MatchingElement(element, name)
     if int(os.environ.get("UPDATE_BASELINE", 0)) == 1:
         time.sleep(wait_time)
-        element.screenshot(baseline_image_path)
-        logging.info(f"Captured image to {baseline_image_path}")
+        matching_element.take_baseline_image()
     else:
-        try:
-            base_image = Image.open(baseline_image_path)
-        except FileNotFoundError:
+        if not matching_element.has_baseline():
             logging.error(
                 f"Please use UPDATE_BASELINE=1 to update the baseline image of {name} first"
             )
             pytest.fail()
 
-        current_image_path = str(CURRENT_IMG_DIR / f"{name}.png")
-        element.screenshot(current_image_path)
-        current_image = Image.open(current_image_path)
-
         start_time = time.time()
-        elapsed_time = time.time() - start_time
-        while not _are_images_the_same(base_image, current_image) and elapsed_time < timeout:
+        elapsed_time = 0
+
+        matching_element.take_current_image()
+        while not matching_element.match_baseline() and elapsed_time < timeout:
             time.sleep(0.1)
-            element.screenshot(current_image_path)
-            current_image = Image.open(current_image_path)
+            matching_element.take_current_image()
             elapsed_time = time.time() - start_time
 
-        assert _are_images_the_same(
-            base_image, current_image
+        assert (
+            matching_element.match_baseline()
         ), f'[Visual Regression "{name}"] Images are not the same.'
