@@ -10,6 +10,7 @@ unit-test:
 
 integration-test:
 	pytest tests/test_integrations.py
+	npm test -t "integration"
 
 functional-test:
 	pytest tests/test_functionals.py
