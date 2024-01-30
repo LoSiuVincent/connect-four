@@ -9,6 +9,7 @@ test("controller should call the correct dropCoin when receieve the mouse click 
 		getCellLength: () => {
 			return 100;
 		},
+		addListener: () => {}
 	};
 	const controller = new Controller(mockGame, mockView);
 
@@ -17,3 +18,11 @@ test("controller should call the correct dropCoin when receieve the mouse click 
 		expect(mockGame.dropCoin).toHaveBeenCalledWith(i);
 	}
 });
+
+test("controller should add itself to listen on View", () => {
+	const mockGame = {};
+	const mockView = {addListener: jest.fn()};
+	const controller = new Controller(mockGame, mockView);
+
+	expect(mockView.addListener).toHaveBeenCalledWith("mouseClick", controller.handleMouseClick);
+})
