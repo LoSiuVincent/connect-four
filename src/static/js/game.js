@@ -3,7 +3,7 @@ export class Game {
 		this.board = make2DBoard(6, 7);
 	}
 
-	getCellState(col, row) {
+	getCellState(row, col) {
 		return this.board[row][col];
 	}
 
