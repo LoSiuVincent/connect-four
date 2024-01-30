@@ -8,7 +8,7 @@ test("create a Game object without problem", () => {
 });
 
 test("all cell should be emptied on start", () => {
-	const game = new Game(100);
+	const game = new Game();
 
 	for (var i = 0; i < 6; i++) {
 		for (var j = 0; j < 7; j++) {
@@ -18,7 +18,7 @@ test("all cell should be emptied on start", () => {
 });
 
 test("drop multiple coins should stack up properly", () => {
-	const game = new Game(100);
+	const game = new Game();
 
 	game.dropCoin(0);
 	game.dropCoin(0);
