@@ -22,6 +22,10 @@ export class p5View {
 		return this.cellLength * 8;
 	}
 
+	isInsideCanvas(x, y) {
+		return (0 <= x && x <= this.getCanvasWidth()) && (0 <= y && y <= this.getCanvasHeight());
+	}
+
 	draw() {
 		this._drawBoard();
 	}

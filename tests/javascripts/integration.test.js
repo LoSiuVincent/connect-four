@@ -15,7 +15,7 @@ describe("integration", () => {
 		expect(spy).toHaveBeenCalledWith(10, 10);
 	});
 
-	test("computer can response to player's move", () => {
+	test("computer should response to player's move", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
 		const controller = new Controller(game, view);
@@ -33,5 +33,25 @@ describe("integration", () => {
 			return false;
 		};
 		expect(hasComputerMove()).toBe(true);
+	});
+
+	test("computer should not response to non-player move", () => {
+		const game = new Game();
+		const view = new p5View(game, {}, 100);
+		const controller = new Controller(game, view);
+
+		view.notify("mouseClick", { x: -10, y: 100 });
+
+		const hasComputerMove = () => {
+			for (let i = 0; i < 6; i++) {
+				for (let j = 0; j < 7; j++) {
+					if (game.getCellState(i, j) === "computer") {
+						return true;
+					}
+				}
+			}
+			return false;
+		};
+		expect(hasComputerMove()).toBe(false);
 	});
 });

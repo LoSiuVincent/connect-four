@@ -1,5 +1,5 @@
 import { p5View } from "view.js";
-import { jest, expect } from "@jest/globals";
+import { jest, expect, test} from "@jest/globals";
 
 test("View has the correct cell length", () => {
 	const dummyObject = {};
@@ -42,3 +42,11 @@ test("View should notify listeners when they subscribe to it", () => {
 	expect(listenerTwo.update).toHaveBeenCalledWith({ x: 10, y: 10 });
 	expect(listenerThree.update).not.toHaveBeenCalled();
 });
+
+test("isInsideCanvas should return correct value", () => {
+	const view = new p5View({}, {}, 100);
+
+	expect(view.isInsideCanvas(-10, 400)).toBe(false);
+	expect(view.isInsideCanvas(200, 400)).toBe(true);
+	expect(view.isInsideCanvas(800, 900)).toBe(false);
+})
