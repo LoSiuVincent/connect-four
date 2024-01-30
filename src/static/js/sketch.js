@@ -1,5 +1,6 @@
 import { Game } from "./game.js";
 import { p5View } from "./view.js";
+import { Controller } from "./controller.js";
 
 new p5((p5) => {
 	p5.setup = () => {
@@ -10,6 +11,7 @@ new p5((p5) => {
 
 		window.game = game;
 		window.view = view;
+		window.controller = new Controller(game, view);
 	};
 
 	p5.draw = () => {

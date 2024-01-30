@@ -4,6 +4,10 @@ export class p5View {
 		this.p5 = p5;
 		this.cellLength = cellLength === undefined ? 100 : cellLength;
 		this.callbacks = [];
+
+		this.p5.mouseClicked = () => {
+			this.notify("mouseClick", {x: this.p5.mouseX, y: this.p5.mouseY});
+		}
 	}
 
 	getCellLength() {
