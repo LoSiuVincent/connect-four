@@ -1,21 +1,22 @@
-from PIL import Image, ImageChops
-from pathlib import Path
-import numpy as np
-from typing import TypeVar
 import logging
 import os
+from pathlib import Path
+from typing import TypeVar
 
-logging.basicConfig(level=logging.INFO, format=r'[%(levelname)s] %(message)s')
+import numpy as np
+from PIL import Image, ImageChops
 
-BASELINE_IMG_DIR = Path(__file__).resolve().parent / 'baseline'
-CURRENT_IMG_DIR = Path(__file__).resolve().parent / 'current'
+logging.basicConfig(level=logging.INFO, format=r"[%(levelname)s] %(message)s")
+
+BASELINE_IMG_DIR = Path(__file__).resolve().parent / "baseline"
+CURRENT_IMG_DIR = Path(__file__).resolve().parent / "current"
 
 if not CURRENT_IMG_DIR.exists():
     CURRENT_IMG_DIR.mkdir()
-    logging.info(f'Made {CURRENT_IMG_DIR}')
+    logging.info(f"Made {CURRENT_IMG_DIR}")
 
 
-WebElement = TypeVar('WebElement')
+WebElement = TypeVar("WebElement")
 
 
 def _are_images_the_same(base: Image, other: Image, threshold: float = 0.0):
@@ -29,11 +30,11 @@ def web_element_image_regression(element: WebElement, name: str):
     It will capture an image of the element when the environment variable UPDATE_BASELINE=1,
     otherwise it will check whether the element matches the latest image
     """
-    baseline_image_path = str(BASELINE_IMG_DIR / f'{name}.png')
-    current_image_path = str(CURRENT_IMG_DIR / f'{name}.png')
-    if int(os.environ.get('UPDATE_BASELINE', 0)) == 1:
+    baseline_image_path = str(BASELINE_IMG_DIR / f"{name}.png")
+    current_image_path = str(CURRENT_IMG_DIR / f"{name}.png")
+    if int(os.environ.get("UPDATE_BASELINE", 0)) == 1:
         element.screenshot(baseline_image_path)
-        logging.info(f'Captured image to {baseline_image_path}')
+        logging.info(f"Captured image to {baseline_image_path}")
     else:
         element.screenshot(current_image_path)
 

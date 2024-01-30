@@ -6,6 +6,7 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="src/static"), name="static")
 
+
 @app.get("/")
 async def index():
-    return FileResponse('src/static/index.html')
+    return FileResponse("src/static/index.html")

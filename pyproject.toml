@@ -17,6 +17,12 @@ pytest = "^7.4.4"
 pillow = "^10.2.0"
 numpy = "^1.26.3"
 
+
+[tool.poetry.group.dev.dependencies]
+autoflake = "^2.2.1"
+isort = "^5.13.2"
+black = "^24.1.1"
+
 [tool.pytest.ini_options]
 markers = [
     'visual: marks as visual regression tests. The tests will capture images when the environment variable UPDATE_BASELINE=1',

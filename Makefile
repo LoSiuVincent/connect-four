@@ -16,3 +16,8 @@ functional-test:
 
 update-baseline:
 	UPDATE_BASELINE=1 pytest -m visual
+
+linter:
+	poetry run autoflake -i -r .
+	poetry run isort .
+	poetry run black .
