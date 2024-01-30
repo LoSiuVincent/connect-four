@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import TypeVar
 
 import numpy as np
+import pytest
 from PIL import Image, ImageChops
 
 logging.basicConfig(level=logging.INFO, format=r"[%(levelname)s] %(message)s")
@@ -38,7 +39,14 @@ def web_element_image_regression(element: WebElement, name: str):
         current_image_path = str(CURRENT_IMG_DIR / f"{name}.png")
         element.screenshot(current_image_path)
 
-        base_image = Image.open(baseline_image_path)
+        try:
+            base_image = Image.open(baseline_image_path)
+        except FileNotFoundError:
+            logging.error(
+                f"Please use UPDATE_BASELINE=1 to update the baseline image of {name} first"
+            )
+            pytest.fail()
+
         current_image = Image.open(current_image_path)
         assert _are_images_the_same(
             base_image, current_image
