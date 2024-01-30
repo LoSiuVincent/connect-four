@@ -4,7 +4,7 @@ export class p5View {
 		this.p5 = p5;
 		this.cellLength = cellLength === undefined ? 100 : cellLength;
 	}
-	
+
 	getCellLength() {
 		return this.cellLength;
 	}
@@ -17,31 +17,39 @@ export class p5View {
 		return this.cellLength * 8;
 	}
 
+	_getCell(row, col) {
+		const cornerX = col * this.cellLength;
+		const cornerY = (7 - row) * this.cellLength;
+		const centerX = cornerX + this.cellLength / 2;
+		const centerY = cornerY + this.cellLength / 2;
+		return {
+			cornerX: cornerX,
+			cornerY: cornerY,
+			centerX: centerX,
+			centerY: centerY,
+		};
+	}
+
 	draw() {
 		this._drawBoard();
 	}
 
 	_drawCell(row, col) {
-		const cellLength = this.cellLength;
-		const cornerX = col * cellLength;
-		const cornerY = 2 * cellLength + (5 - row) * cellLength;
+		const cell = this._getCell(row, col);
 
 		this.p5.fill(255, 255, 255);
 		this.p5.stroke(0, 0, 0);
 		this.p5.strokeWeight(4);
-		this.p5.square(cornerX, cornerY, cellLength);
+		this.p5.square(cell.cornerX, cell.cornerY, this.cellLength);
 	}
 
 	_drawCoin(row, col) {
+		const cell = this._getCell(row, col);
 		const diameter = this.cellLength * 0.75;
-		const cornerX = col * this.cellLength;
-		const cornerY = 2 * this.cellLength + (5 - row) * this.cellLength;
-		const centerX = cornerX + this.cellLength / 2;
-		const centerY = cornerY + this.cellLength / 2;
 
 		this.p5.fill(255, 0, 0);
 		this.p5.noStroke();
-		this.p5.circle(centerX, centerY, diameter);
+		this.p5.circle(cell.centerX, cell.centerY, diameter);
 	}
 
 	_drawBoard() {
