@@ -6,8 +6,8 @@ export class p5View {
 		this.callbacks = [];
 
 		this.p5.mouseClicked = () => {
-			this.notify("mouseClick", {x: this.p5.mouseX, y: this.p5.mouseY});
-		}
+			this.notify("mouseClick", { x: this.p5.mouseX, y: this.p5.mouseY });
+		};
 	}
 
 	getCellLength() {
@@ -31,13 +31,13 @@ export class p5View {
 	}
 
 	notify(event, data) {
-		this.callbacks.forEach(eventCallbackTuple => {
+		this.callbacks.forEach((eventCallbackTuple) => {
 			const listenEvent = eventCallbackTuple[0];
 			const listener = eventCallbackTuple[1];
 			if (event === listenEvent) {
 				listener.update(data);
 			}
-		})
+		});
 	}
 
 	_getCell(row, col) {
@@ -66,7 +66,12 @@ export class p5View {
 		const cell = this._getCell(row, col);
 		const diameter = this.cellLength * 0.75;
 
-		this.p5.fill(255, 0, 0);
+		const cellState = game.getCellState(row, col);
+		if (cellState === "player") {
+			this.p5.fill(255, 0, 0);
+		} else if (cellState === "computer") {
+			this.p5.fill(255, 204, 0);
+		}
 		this.p5.noStroke();
 		this.p5.circle(cell.centerX, cell.centerY, diameter);
 	}
@@ -75,7 +80,7 @@ export class p5View {
 		for (let i = 0; i < 6; i++) {
 			for (let j = 0; j < 7; j++) {
 				this._drawCell(i, j);
-				if (this.game.getCellState(i, j) === "player") {
+				if (this.game.getCellState(i, j) === "player" || this.game.getCellState(i, j) === "computer") {
 					this._drawCoin(i, j);
 				}
 			}
