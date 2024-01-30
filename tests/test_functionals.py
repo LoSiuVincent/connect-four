@@ -45,6 +45,7 @@ def test_board_exists(browser):
     web_element_image_regression(canvas, "board")
 
 
+@pytest.mark.visual
 def test_drop_coins_to_board(browser):
     # John sees the canvas for the game
     canvas = browser.find_element(By.TAG_NAME, "canvas")
@@ -66,31 +67,14 @@ def test_drop_coins_to_board(browser):
     # He clicks in the first column
     click_column(0)
 
-    first_column_bottom_cell_state = browser.execute_script(
-        "return game.getCellState(0, 0);"
-    )
-    assert (
-        first_column_bottom_cell_state == "player"
-    ), "The first column did not have a coin after clicking"
+    web_element_image_regression(canvas, "functional_first_coin")
 
     # He clicks another column
     click_column(3)
 
-    # Check the game state to ensure a coin has been added to the fourth column
-    fourth_column_bottom_cell_state = browser.execute_script(
-        "return game.getCellState(3, 0);"
-    )
-    assert (
-        fourth_column_bottom_cell_state == "player"
-    ), "The fourth column did not have a coin after clicking"
+    web_element_image_regression(canvas, "functional_second_coin")
 
     # He tries to drop a coin in the first column again
     click_column(0)
 
-    # Check the game state to ensure another coin has been stacked in the first column
-    first_column_second_last_bottom_cell_state = browser.execute_script(
-        "return game.getCellState(0, 1);"
-    )
-    assert (
-        first_column_second_last_bottom_cell_state == "player"
-    ), "The first column did not have the second coin be stacked up on the first coin after click again"
+    web_element_image_regression(canvas, "functional_third_coin")
