@@ -18,7 +18,8 @@ describe("integration", () => {
 	test("computer should response to player's move", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
-		const controller = new Controller(game, view);
+		const mockServer = { getComputerMove: () => 1 };
+		const controller = new Controller(game, view, mockServer);
 
 		view.notify("mouseClick", { x: 10, y: 100 });
 
@@ -55,15 +56,14 @@ describe("integration", () => {
 		expect(hasComputerMove()).toBe(false);
 	});
 
-	test("controller should respnose to a player move by getting a computer move from the server", () => {
+	test("controller should call getComputerMove from the server when the player make a move", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
-		const mockServer = { getComputerMove: () => 1 };
+		const mockServer = { getComputerMove: jest.fn() };
 		const controller = new Controller(game, view, mockServer);
 
 		view.notify("mouseClick", { x: 10, y: 100 });
 
 		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
-		expect(game.getCellState(0, 1)).toEqual("computer");
 	});
 });

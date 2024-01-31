@@ -1,7 +1,8 @@
 export class Controller {
-	constructor(game, view) {
+	constructor(game, view, server) {
 		this.game = game;
 		this.view = view;
+		this.server = server;
 
 		this.view.addListener("mouseClick", this);
 	}
@@ -19,6 +20,7 @@ export class Controller {
 	}
 
 	computerMove() {
+		this.server.getComputerMove(this._encodeBoard(this.game.board));
 		this.game.dropCoin(0, "computer");
 	}
 
