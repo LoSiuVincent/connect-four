@@ -1,7 +1,8 @@
 export class Controller {
-	constructor(game, view) {
+	constructor(game, view, _fetch = fetch) {
 		this.game = game;
 		this.view = view;
+		this.fetch = _fetch
 
 		this.view.addListener("mouseClick", this);
 	}
@@ -21,6 +22,10 @@ export class Controller {
 	}
 
 	computerMove() {
+		this.fetch("/predict", {
+			method: "POST",
+			body: this._encodeBoard(this.game.board),
+		})
 		this.game.dropCoin(0, "computer");
 	}
 

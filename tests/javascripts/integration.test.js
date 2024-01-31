@@ -7,7 +7,7 @@ describe("integration", () => {
 	test("controller should handle mouse click when view notify a mouse click event", () => {
 		const mockGame = { dropCoin: jest.fn() };
 		const view = new p5View(mockGame, {}, {});
-		const controller = new Controller(mockGame, view);
+		const controller = new Controller(mockGame, view, jest.fn());
 		const spy = jest.spyOn(controller, "handleMouseClick");
 
 		view.notify("mouseClick", { x: 10, y: 10 });
@@ -18,7 +18,7 @@ describe("integration", () => {
 	test("computer should response to player's move", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
-		const controller = new Controller(game, view);
+		const controller = new Controller(game, view, jest.fn());
 
 		view.notify("mouseClick", { x: 10, y: 100 });
 
@@ -38,7 +38,7 @@ describe("integration", () => {
 	test("computer should not response to non-player move", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
-		const controller = new Controller(game, view);
+		const controller = new Controller(game, view, jest.fn());
 
 		view.notify("mouseClick", { x: -10, y: 100 });
 

@@ -5,13 +5,14 @@ import { make2DBoard } from "../../../src/static/js/game";
 test("controller should call the correct dropCoin when receieve the mouse click event", () => {
 	const mockGame = {
 		dropCoin: jest.fn(),
+		board: [[]],
 	};
 	const mockView = {
 		getCellLength: () => 100,
 		addListener: () => {},
 		isInsideCanvas: () => true
 	};
-	const controller = new Controller(mockGame, mockView);
+	const controller = new Controller(mockGame, mockView, jest.fn());
 
 	for (var i = 0; i < 7; i++) {
 		controller.handleMouseClick(50 + 100 * i, 10);
