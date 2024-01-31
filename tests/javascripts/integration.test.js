@@ -23,23 +23,14 @@ describe("when player clicks on the first column", () => {
 
 		view.notify("mouseClick", { x: 10, y: 100 });
 
-		const hasComputerMove = () => {
-			for (let i = 0; i < 6; i++) {
-				for (let j = 0; j < 7; j++) {
-					if (game.getCellState(i, j) === "computer") {
-						return true;
-					}
-				}
-			}
-			return false;
-		};
-		expect(hasComputerMove()).toBe(true);
+		expect(game.getCellState(0, 1)).toEqual("computer");
 	});
 
 	test("computer should not response to non-player move", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
-		const controller = new Controller(game, view);
+		const mockServer = { getComputerMove: () => 1 };
+		const controller = new Controller(game, view, mockServer);
 
 		view.notify("mouseClick", { x: -10, y: 100 });
 
