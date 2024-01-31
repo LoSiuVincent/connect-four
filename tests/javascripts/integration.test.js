@@ -4,57 +4,82 @@ import { jest, expect, describe } from "@jest/globals";
 import { Game } from "../../src/static/js/game";
 
 describe("when player clicks on the first column", () => {
-	test("controller should handle mouse click", () => {
-		const mockGame = { dropCoin: jest.fn() };
-		const view = new p5View(mockGame, {}, {});
-		const controller = new Controller(mockGame, view);
-		const spy = jest.spyOn(controller, "handleMouseClick");
+	describe("when there are mocks", () => {
+		test("controller should handle mouse click", () => {
+			const mockGame = { dropCoin: jest.fn() };
+			const view = new p5View(mockGame, {}, {});
+			const controller = new Controller(mockGame, view);
+			const spy = jest.spyOn(controller, "handleMouseClick");
 
-		view.notify("mouseClick", { x: 10, y: 10 });
+			view.notify("mouseClick", { x: 10, y: 10 });
 
-		expect(spy).toHaveBeenCalledWith(10, 10);
-	});
+			expect(spy).toHaveBeenCalledWith(10, 10);
+		});
 
-	test("computer should response to player's move", () => {
-		const game = new Game();
-		const view = new p5View(game, {}, 100);
-		const mockServer = { getComputerMove: () => 1 };
-		const controller = new Controller(game, view, mockServer);
+		test("computer should response to player's move", () => {
+			const game = new Game();
+			const view = new p5View(game, {}, 100);
+			const mockServer = { getComputerMove: () => 1 };
+			const controller = new Controller(game, view, mockServer);
 
-		view.notify("mouseClick", { x: 10, y: 100 });
+			view.notify("mouseClick", { x: 10, y: 100 });
 
-		expect(game.getCellState(0, 1)).toEqual("computer");
-	});
+			expect(game.getCellState(0, 1)).toEqual("computer");
+		});
 
-	test("computer should not response to non-player move", () => {
-		const game = new Game();
-		const view = new p5View(game, {}, 100);
-		const mockServer = { getComputerMove: () => 1 };
-		const controller = new Controller(game, view, mockServer);
+		test("computer should not response to non-player move", () => {
+			const game = new Game();
+			const view = new p5View(game, {}, 100);
+			const mockServer = { getComputerMove: () => 1 };
+			const controller = new Controller(game, view, mockServer);
 
-		view.notify("mouseClick", { x: -10, y: 100 });
+			view.notify("mouseClick", { x: -10, y: 100 });
 
-		const hasComputerMove = () => {
-			for (let i = 0; i < 6; i++) {
-				for (let j = 0; j < 7; j++) {
-					if (game.getCellState(i, j) === "computer") {
-						return true;
+			const hasComputerMove = () => {
+				for (let i = 0; i < 6; i++) {
+					for (let j = 0; j < 7; j++) {
+						if (game.getCellState(i, j) === "computer") {
+							return true;
+						}
 					}
 				}
-			}
-			return false;
-		};
-		expect(hasComputerMove()).toBe(false);
-	});
+				return false;
+			};
+			expect(hasComputerMove()).toBe(false);
+		});
 
-	test("controller should call getComputerMove from the server", () => {
-		const game = new Game();
-		const view = new p5View(game, {}, 100);
-		const mockServer = { getComputerMove: jest.fn() };
-		const controller = new Controller(game, view, mockServer);
+		test("controller should call getComputerMove from the server", () => {
+			const game = new Game();
+			const view = new p5View(game, {}, 100);
+			const mockServer = { getComputerMove: jest.fn() };
+			const controller = new Controller(game, view, mockServer);
 
-		view.notify("mouseClick", { x: 10, y: 100 });
+			view.notify("mouseClick", { x: 10, y: 100 });
 
-		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
-	});
+			expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
+		});
+	})
+
+	describe("when there are no mocks (except p5)", () => {
+		test("computer should response to player move", () => {
+			const game = new Game();
+			const view = new p5View(game, {}, 100);
+			const server = new Server();
+			const controller = new Controller(game, view, server);
+
+			view.notify("mouseClick", { x: 10, y: 100 });
+
+			const hasComputerMove = () => {
+				for (let i = 0; i < 6; i++) {
+					for (let j = 0; j < 7; j++) {
+						if (game.getCellState(i, j) === "computer") {
+							return true;
+						}
+					}
+				}
+				return false;
+			};
+			expect(hasComputerMove()).toBe(true);
+		})
+	})
 })
