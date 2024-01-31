@@ -65,7 +65,7 @@ describe("when player clicks on the first column", () => {
 		test("computer should response to player move", () => {
 			const game = new Game();
 			const view = new p5View(game, {}, 100);
-			const server = new Server();
+			const server = new Server("http://localhost:8000");
 			const controller = new Controller(game, view, server);
 
 			view.notify("mouseClick", { x: 10, y: 100 });
