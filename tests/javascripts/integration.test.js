@@ -3,8 +3,8 @@ import { Controller } from "controller.js";
 import { jest, expect, describe } from "@jest/globals";
 import { Game } from "../../src/static/js/game";
 
-describe("integration", () => {
-	test("controller should handle mouse click when view notify a mouse click event", () => {
+describe("when player clicks on the first column", () => {
+	test("controller should handle mouse click", () => {
 		const mockGame = { dropCoin: jest.fn() };
 		const view = new p5View(mockGame, {}, {});
 		const controller = new Controller(mockGame, view);
@@ -56,7 +56,7 @@ describe("integration", () => {
 		expect(hasComputerMove()).toBe(false);
 	});
 
-	test("controller should call getComputerMove from the server when the player make a move", () => {
+	test("controller should call getComputerMove from the server", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
 		const mockServer = { getComputerMove: jest.fn() };
@@ -66,4 +66,4 @@ describe("integration", () => {
 
 		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
 	});
-});
+})
