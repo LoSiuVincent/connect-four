@@ -1,6 +1,6 @@
-import { Controller } from "controller.js";
 import { test, expect, jest } from "@jest/globals";
-import { make2DBoard } from "../../../src/static/js/game";
+import { Controller } from "controller.js";
+import { make2DBoard } from "game.js";
 
 test("controller should call the correct dropCoin when receieve the mouse click event", () => {
 	const mockGame = {
