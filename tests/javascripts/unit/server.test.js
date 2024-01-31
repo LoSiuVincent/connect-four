@@ -4,7 +4,7 @@ import { jest, expect, describe, test } from "@jest/globals";
 test("getComputerMove should return an integer", async () => {
     const server = new Server();
     jest.spyOn(global, "fetch").mockResolvedValue({
-        json: jest.fn().mockResolvedValue(2),
+        json: jest.fn().mockResolvedValue({ move: 2 }),
     });
 
     const result = await server.getComputerMove("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE");
