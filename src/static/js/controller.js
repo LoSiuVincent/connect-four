@@ -20,8 +20,8 @@ export class Controller {
 	}
 
 	computerMove() {
-		this.server.getComputerMove(this._encodeBoard(this.game.board));
-		this.game.dropCoin(0, "computer");
+		const computerMove = this.server.getComputerMove(this._encodeBoard(this.game.board));
+		this.game.dropCoin(computerMove, "computer");
 	}
 
 	_encodeBoard(board) {
