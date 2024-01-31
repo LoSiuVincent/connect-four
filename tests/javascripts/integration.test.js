@@ -53,5 +53,19 @@ describe("integration", () => {
 			return false;
 		};
 		expect(hasComputerMove()).toBe(false);
+	});	
+	
+	test("controller should send a fetch request for a computer move", () => {
+		const game = new Game();
+		const view = new p5View(game, {}, 100);
+		const spyFetch = jest.fn();
+		const controller = new Controller(game, view, spyFetch);
+
+		view.notify("mouseClick", { x: 10, y: 100 });
+
+		expect(spyFetch).toHaveBeenCalledWith("/predict", {
+			method: "POST",
+			body: "PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE",
+		})
 	});
 });

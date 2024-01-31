@@ -23,4 +23,30 @@ export class Controller {
 	computerMove() {
 		this.game.dropCoin(0, "computer");
 	}
+
+	_encodeBoard(board) {
+		let result = "";
+		for (let row of board) {
+			for (let state of row) {
+				let char;
+				switch (state) {
+					case "player":
+						char = "P";
+						break;
+					case "computer":
+						char = "C";
+						break;
+					case "empty":
+						char = "E";
+						break;
+					default:
+						console.error("Got unknown cell state")
+				}
+				result = result.concat(char);
+			}
+			result = result.concat("|");
+		}
+		result = result.slice(0, -1);
+		return result;
+	}
 }

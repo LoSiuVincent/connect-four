@@ -1,14 +1,13 @@
 import { Controller } from "controller.js";
 import { test, expect, jest } from "@jest/globals";
+import { make2DBoard } from "../../../src/static/js/game";
 
 test("controller should call the correct dropCoin when receieve the mouse click event", () => {
 	const mockGame = {
 		dropCoin: jest.fn(),
 	};
 	const mockView = {
-		getCellLength: () => {
-			return 100;
-		},
+		getCellLength: () => 100,
 		addListener: () => {},
 		isInsideCanvas: () => true
 	};
@@ -26,4 +25,15 @@ test("controller should add itself to listen on View", () => {
 	const controller = new Controller(mockGame, mockView);
 
 	expect(mockView.addListener).toHaveBeenCalledWith("mouseClick", controller);
+})
+
+test("controller encode board to correct string", () => {
+	const mockGame = {};
+	const mockView = {addListener: jest.fn()};
+	const controller = new Controller(mockGame, mockView);
+	const board = make2DBoard(6, 7);
+	board[0][0] = "player";
+	board[1][0] = "computer";
+
+	expect(controller._encodeBoard(board)).toEqual("PEEEEEE|CEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE");
 })
