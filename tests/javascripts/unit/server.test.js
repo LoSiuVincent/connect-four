@@ -18,5 +18,9 @@ test("server should call fetch", async () => {
 
     const result = await server.getComputerMove("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE");
 
-    expect(fetchSpy).toHaveBeenCalledWith("/predict", { method: "POST", body: "PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE" });
+    expect(fetchSpy).toHaveBeenCalledWith("/predict", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: "PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE"
+    });
 })
