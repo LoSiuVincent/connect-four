@@ -53,19 +53,17 @@ describe("integration", () => {
 			return false;
 		};
 		expect(hasComputerMove()).toBe(false);
-	});	
-	
-	test("controller should send a fetch request for a computer move", () => {
+	});
+
+	test("controller should respnose to a player move by getting a computer move from the server", () => {
 		const game = new Game();
 		const view = new p5View(game, {}, 100);
-		const spyFetch = jest.fn();
-		const controller = new Controller(game, view, spyFetch);
+		const mockServer = { getComputerMove: () => 1 };
+		const controller = new Controller(game, view, mockServer);
 
 		view.notify("mouseClick", { x: 10, y: 100 });
 
-		expect(spyFetch).toHaveBeenCalledWith("/predict", {
-			method: "POST",
-			body: "PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE",
-		})
+		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
+		expect(game.getCellState(0, 1)).toEqual("computer");
 	});
 });
