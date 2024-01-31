@@ -1,4 +1,5 @@
 import { p5View } from "view.js";
+import { Server } from "server.js"
 import { Controller } from "controller.js";
 import { jest, expect, describe } from "@jest/globals";
 import { Game } from "../../src/static/js/game";
@@ -16,7 +17,7 @@ describe("when player clicks on the first column", () => {
 			expect(spy).toHaveBeenCalledWith(10, 10);
 		});
 
-		test("computer should response to player's move", () => {
+		test("controller should use the computer move from the server to response player", () => {
 			const game = new Game();
 			const view = new p5View(game, {}, 100);
 			const mockServer = { getComputerMove: () => 1 };
