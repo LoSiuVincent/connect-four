@@ -1,7 +1,7 @@
+import inspect
 import logging
 import os
 import time
-import inspect
 from pathlib import Path
 from typing import TypeVar
 
@@ -21,10 +21,12 @@ if not CURRENT_IMG_DIR.exists():
 
 WebElement = TypeVar('WebElement')
 
+
 def _get_caller_name():
     caller_frame = inspect.stack()[2]
     function_name = caller_frame.function
     return function_name
+
 
 def _are_images_the_same(base: Image, other: Image, threshold: float = 0.0) -> bool:
     image_ops_diff = ImageChops.difference(base, other).getdata()

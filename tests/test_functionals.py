@@ -4,8 +4,6 @@ import pytest
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from tests.conftest import BROWSER_WIDTH
 from tests.visreg import web_element_regression
