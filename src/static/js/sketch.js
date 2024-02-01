@@ -13,7 +13,7 @@ new p5((p5) => {
 
 		window.game = game;
 		window.view = view;
-		window.controller = new Controller(game, view, server);
+		window.controller = new Controller(game, view, server, true);
 	};
 
 	p5.draw = () => {

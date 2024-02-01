@@ -1,8 +1,9 @@
 export class Controller {
-	constructor(game, view, server) {
+	constructor(game, view, server, delayComputerMove = false) {
 		this.game = game;
 		this.view = view;
 		this.server = server;
+		this.delayComputerMove = delayComputerMove
 
 		this.view.addListener("mouseClick", this);
 	}
@@ -21,7 +22,14 @@ export class Controller {
 
 	async makeComputerMove() {
 		const computerMove = await this.server.getComputerMove(this._encodeBoard(this.game.board));
+		if (this.delayComputerMove) {
+			await this._sleep(2000);
+		}
 		this.game.dropCoin(computerMove, "computer");
+	}
+
+	async _sleep(ms) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 
 	_encodeBoard(board) {
