@@ -4,6 +4,8 @@ import pytest
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from tests.conftest import BROWSER_WIDTH
 from tests.visreg import web_element_regression
@@ -62,23 +64,23 @@ def test_drop_coins_to_board(browser):
 
     # He clicks in the first column
     click_column(0)
-    web_element_regression(canvas, 'functional_player_first_coin', wait_time_before_capture=1)
+    web_element_regression(canvas, 'player_first_coin', wait_time_before_capture=1)
 
     # He waits for the computer move
-    web_element_regression(canvas, 'functional_computer_first_coin')
+    web_element_regression(canvas, 'computer_first_coin')
 
     # He clicks another column
     click_column(3)
-    web_element_regression(canvas, 'functional_player_second_coin', wait_time_before_capture=1)
+    web_element_regression(canvas, 'player_second_coin', wait_time_before_capture=1)
 
     # He waits for the computer move again
     time.sleep(3)
-    web_element_regression(canvas, 'functional_computer_second_coin')
+    web_element_regression(canvas, 'computer_second_coin')
 
     # He tries to drop a coin in the first column again
     click_column(0)
-    web_element_regression(canvas, 'functional_player_third_coin', wait_time_before_capture=1)
+    web_element_regression(canvas, 'player_third_coin', wait_time_before_capture=1)
 
     # He waits for the computer move again
     time.sleep(3)
-    web_element_regression(canvas, 'functional_computer_third_coin')
+    web_element_regression(canvas, 'computer_third_coin')

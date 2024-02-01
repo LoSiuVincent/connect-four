@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+import inspect
 from pathlib import Path
 from typing import TypeVar
 
@@ -20,6 +21,10 @@ if not CURRENT_IMG_DIR.exists():
 
 WebElement = TypeVar('WebElement')
 
+def _get_caller_name():
+    caller_frame = inspect.stack()[2]
+    function_name = caller_frame.function
+    return function_name
 
 def _are_images_the_same(base: Image, other: Image, threshold: float = 0.0) -> bool:
     image_ops_diff = ImageChops.difference(base, other).getdata()
@@ -28,17 +33,21 @@ def _are_images_the_same(base: Image, other: Image, threshold: float = 0.0) -> b
 
 
 class _MatchingElement:
-    def __init__(self, element: WebElement, name: str):
+    def __init__(self, element: WebElement, name: str, caller: str):
         self._element = element
         self._name = name
-        self._baseline_path = BASELINE_IMG_DIR / f'{name}.png'
-        self._current_path = CURRENT_IMG_DIR / f'{name}.png'
+        self._baseline_path = BASELINE_IMG_DIR / caller / f'{name}.png'
+        self._current_path = CURRENT_IMG_DIR / caller / f'{name}.png'
 
     def take_baseline_image(self):
+        if not self._baseline_path.parent.exists():
+            self._baseline_path.parent.mkdir()
         self._element.screenshot(str(self._baseline_path))
         logging.info(f'Captured image to {self._baseline_path}')
 
     def take_current_image(self):
+        if not self._current_path.parent.exists():
+            self._current_path.parent.mkdir()
         self._element.screenshot(str(self._current_path))
 
     def has_baseline(self):
@@ -51,7 +60,7 @@ class _MatchingElement:
 
 
 def web_element_regression(
-    element: WebElement, name: str, wait_time_before_capture: float = 5, timeout: float = 5
+    element: WebElement, name: str, wait_time_before_capture: float = 3, timeout: float = 3
 ):
     """When the environment variable UPDATE_BASELINE=1, it will Capture an image of the element.
 
@@ -60,10 +69,10 @@ def web_element_regression(
     Args:
         element: the webelement for the regression
         name: the image name for the regression
-        wait_time: The waiting time before capturing the image (only effect when UPDATE_BASELINE=1). Defaults to 5.
-        timeout: maximum wait time to match the baseline. Defaults to 5.
+        wait_time: The waiting time before capturing the image (only effect when UPDATE_BASELINE=1). Defaults to 3.
+        timeout: maximum wait time to match the baseline. Defaults to 3.
     """
-    matching_element = _MatchingElement(element, name)
+    matching_element = _MatchingElement(element, name, _get_caller_name())
     if int(os.environ.get('UPDATE_BASELINE', 0)) == 1:
         time.sleep(wait_time_before_capture)
         matching_element.take_baseline_image()

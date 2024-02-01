@@ -6,3 +6,4 @@ tests/current
 __pycache__
 node_modules
 notes.txt
+scratch.py
