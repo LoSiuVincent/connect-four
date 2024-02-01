@@ -12,7 +12,10 @@ test("controller should call the correct dropCoin when receieve the mouse click 
 		addListener: () => {},
 		isInsideCanvas: () => true
 	};
-	const controller = new Controller(mockGame, mockView, jest.fn());
+	const mockServer = {
+		getComputerMove: () => 0,
+	};
+	const controller = new Controller(mockGame, mockView, mockServer);
 
 	for (var i = 0; i < 7; i++) {
 		controller.handleMouseClick(50 + 100 * i, 10);

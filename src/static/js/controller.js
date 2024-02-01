@@ -1,30 +1,27 @@
 export class Controller {
-	constructor(game, view, _fetch = fetch) {
+	constructor(game, view, server) {
 		this.game = game;
 		this.view = view;
-		this.fetch = _fetch
+		this.server = server;
 
 		this.view.addListener("mouseClick", this);
 	}
 
-	update(data) {
-		this.handleMouseClick(data.x, data.y);
+	async update(data) {
+		await this.handleMouseClick(data.x, data.y);
 	}
 
-	handleMouseClick(x, y) {
+	async handleMouseClick(x, y) {
 		if (this.view.isInsideCanvas(x, y)) {
 			const colIndex = Math.floor(x / this.view.getCellLength());
 			this.game.dropCoin(colIndex);
-			this.computerMove();
+			await this.makeComputerMove();
 		}
 	}
 
-	computerMove() {
-		this.fetch("/predict", {
-			method: "POST",
-			body: this._encodeBoard(this.game.board),
-		})
-		this.game.dropCoin(0, "computer");
+	async makeComputerMove() {
+		const computerMove = await this.server.getComputerMove(this._encodeBoard(this.game.board));
+		this.game.dropCoin(computerMove, "computer");
 	}
 
 	_encodeBoard(board) {

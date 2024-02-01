@@ -35,13 +35,19 @@ export class p5View {
 	}
 
 	notify(event, data) {
+
+		const promises = [];
+
 		this.callbacks.forEach((eventCallbackTuple) => {
 			const listenEvent = eventCallbackTuple[0];
 			const listener = eventCallbackTuple[1];
 			if (event === listenEvent) {
-				listener.update(data);
+				const updatePromise = listener.update(data);
+				promises.push(updatePromise);
 			}
 		});
+
+		return Promise.all(promises);
 	}
 
 	_getCell(row, col) {
