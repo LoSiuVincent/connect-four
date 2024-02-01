@@ -1,133 +1,112 @@
 import { p5View } from "view.js";
 import { Server } from "server.js"
 import { Controller } from "controller.js";
+import { Game } from "game.js";
 import { jest, expect, describe } from "@jest/globals";
-import { Game } from "../../src/static/js/game";
 
-describe("when player clicks on the first column", () => {
-	describe("when there are mocks", () => {
-		test("controller should handle mouse click", () => {
-			const mockGame = { dropCoin: jest.fn() };
-			const view = new p5View(mockGame, {}, {});
-			const controller = new Controller(mockGame, view);
-			const spy = jest.spyOn(controller, "handleMouseClick");
+describe("when there are mocks", () => {
 
-			view.notify("mouseClick", { x: 10, y: 10 });
+	let game, view, mockServer, controller;
 
-			expect(spy).toHaveBeenCalledWith(10, 10);
-		});
-
-		test("controller should use the computer move from the server to response player", async () => {
-			const game = new Game();
-			const view = new p5View(game, {}, 100);
-			const mockServer = { getComputerMove: jest.fn().mockResolvedValue(1) };
-			const controller = new Controller(game, view, mockServer);
-
-			await view.notify("mouseClick", { x: 10, y: 100 });
-
-			expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
-			expect(game.getCellState(0, 1)).toEqual("computer");
-		});
-
-		test("computer should not response to non-player move", () => {
-			const game = new Game();
-			const view = new p5View(game, {}, 100);
-			const mockServer = { getComputerMove: () => 1 };
-			const controller = new Controller(game, view, mockServer);
-
-			view.notify("mouseClick", { x: -10, y: 100 });
-
-			const hasComputerMove = () => {
-				for (let i = 0; i < 6; i++) {
-					for (let j = 0; j < 7; j++) {
-						if (game.getCellState(i, j) === "computer") {
-							return true;
-						}
-					}
-				}
-				return false;
-			};
-			expect(hasComputerMove()).toBe(false);
-		});
-
-		test("controller should call getComputerMove from the server", () => {
-			const game = new Game();
-			const view = new p5View(game, {}, 100);
-			const mockServer = { getComputerMove: jest.fn() };
-			const controller = new Controller(game, view, mockServer);
-
-			view.notify("mouseClick", { x: 10, y: 100 });
-
-			expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
-		});
+	beforeEach(() => {
+		game = new Game();
+		view = new p5View(game, {}, 100);
+		mockServer = { getComputerMove: jest.fn().mockResolvedValue(1) };
+		controller = new Controller(game, view, mockServer);
 	})
 
-	describe("when there are no mocks (except p5)", () => {
-		test("computer should response to player move", async () => {
-			const game = new Game();
-			const view = new p5View(game, {}, 100);
-			const server = new Server("http://localhost:8000");
-			const controller = new Controller(game, view, server);
+	test("controller should handle mouse click", () => {
+		const spy = jest.spyOn(controller, "handleMouseClick");
 
-			await view.notify("mouseClick", { x: 10, y: 100 });
+		view.notify("mouseClick", { x: 10, y: 10 });
 
-			const hasComputerMove = () => {
-				for (let i = 0; i < 6; i++) {
-					for (let j = 0; j < 7; j++) {
-						if (game.getCellState(i, j) === "computer") {
-							return true;
-						}
+		expect(spy).toHaveBeenCalledWith(10, 10);
+	});
+
+	test("controller should use the computer move from the server to response player", async () => {
+		await view.notify("mouseClick", { x: 10, y: 100 });
+
+		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
+		expect(game.getCellState(0, 1)).toEqual("computer");
+	});
+
+	test("computer should not response to non-player move", () => {
+		view.notify("mouseClick", { x: -10, y: 100 });
+
+		const hasComputerMove = () => {
+			for (let i = 0; i < 6; i++) {
+				for (let j = 0; j < 7; j++) {
+					if (game.getCellState(i, j) === "computer") {
+						return true;
 					}
 				}
-				return false;
-			};
-			expect(hasComputerMove()).toBe(true);
-		})
+			}
+			return false;
+		};
+		expect(hasComputerMove()).toBe(false);
+	});
 
-		test("the player can win the game", async () => {
-			const game = new Game();
-			const view = new p5View(game, {}, 100);
-			const server = new Server("http://localhost:8000");
-			const controller = new Controller(game, view, server);
+	test("controller should call getComputerMove from the server", () => {
+		view.notify("mouseClick", { x: 10, y: 100 });
 
-			await view.notify("mouseClick", { x: 10, y: 100 });
-			await view.notify("mouseClick", { x: 10, y: 100 });
-			await view.notify("mouseClick", { x: 10, y: 100 });
-			await view.notify("mouseClick", { x: 10, y: 100 });
-
-			expect(game.getWinner()).toEqual("player");
-		})
-
-		test("the computer can win the game", async () => {
-			const game = new Game();
-			const view = new p5View(game, {}, 100);
-			const server = new Server("http://localhost:8000");
-			const controller = new Controller(game, view, server);
-
-			await view.notify("mouseClick", { x: 10, y: 100 });
-			await view.notify("mouseClick", { x: 10, y: 100 });
-			await view.notify("mouseClick", { x: 10, y: 100 });
-			await view.notify("mouseClick", { x: 310, y: 100 });
-
-			expect(game.getWinner()).toEqual("computer");
-		})
-
-	})
+		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
+	});
 })
 
-test("should not response to player's click when the computer is thinking", async () => {
-	const game = new Game();
-	const view = new p5View(game, {}, 100);
-	const server = new Server("http://localhost:8000");
-	const controller = new Controller(game, view, server);
+describe("when there are no mocks (except p5)", () => {
 
-	const firstPromise = view.notify("mouseClick", { x: 10, y: 100 });
-	const secondPromise = view.notify("mouseClick", { x: 210, y: 100 });
-	await secondPromise;
-	await firstPromise;
+	let game, view, server, controller;
 
-	expect(game.getCellState(0, 0)).toEqual("player");
-	expect(game.getCellState(0, 1)).toEqual("computer");
-	expect(game.getCellState(0, 2)).not.toEqual("player");
-	expect(game.getCellState(1, 1)).not.toEqual("computer");
+	beforeEach(() => {
+		game = new Game();
+		view = new p5View(game, {}, 100);
+		server = new Server("http://localhost:8000");
+		controller = new Controller(game, view, server);
+	})
+
+	test("computer should response to player move", async () => {
+		await view.notify("mouseClick", { x: 10, y: 100 });
+
+		const hasComputerMove = () => {
+			for (let i = 0; i < 6; i++) {
+				for (let j = 0; j < 7; j++) {
+					if (game.getCellState(i, j) === "computer") {
+						return true;
+					}
+				}
+			}
+			return false;
+		};
+		expect(hasComputerMove()).toBe(true);
+	})
+
+	test("the player can win the game", async () => {
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+
+		expect(game.getWinner()).toEqual("player");
+	})
+
+	test("the computer can win the game", async () => {
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 310, y: 100 });
+
+		expect(game.getWinner()).toEqual("computer");
+	})
+
+	test("should not response to player's click when the computer is thinking", async () => {
+		const firstPromise = view.notify("mouseClick", { x: 10, y: 100 });
+		const secondPromise = view.notify("mouseClick", { x: 210, y: 100 });
+		await secondPromise;
+		await firstPromise;
+
+		expect(game.getCellState(0, 0)).toEqual("player");
+		expect(game.getCellState(0, 1)).toEqual("computer");
+		expect(game.getCellState(0, 2)).not.toEqual("player");
+		expect(game.getCellState(1, 1)).not.toEqual("computer");
+	})
 })
