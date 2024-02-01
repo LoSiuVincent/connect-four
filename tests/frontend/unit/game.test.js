@@ -1,15 +1,18 @@
 import { Game, make2DBoard } from "game.js";
 import { test, expect, jest, describe } from "@jest/globals";
 
-test("create a Game object without problem", () => {
-	const game = new Game();
+let game, mockServer;
 
+beforeEach(() => {
+	mockServer = { getComputerMove: jest.fn().mockResolvedValue(1) };
+	game = new Game(mockServer);
+})
+
+test("create a Game object without problem", () => {
 	expect(game).toBeDefined();
 });
 
 test("all cell should be emptied on start", () => {
-	const game = new Game();
-
 	for (var i = 0; i < 6; i++) {
 		for (var j = 0; j < 7; j++) {
 			expect(game.getCellState(i, j)).toBe("empty");
@@ -18,8 +21,6 @@ test("all cell should be emptied on start", () => {
 });
 
 test("drop multiple coins should stack up properly", () => {
-	const game = new Game();
-
 	game.dropCoin(0);
 	game.dropCoin(0);
 	game.dropCoin(1);
@@ -32,8 +33,6 @@ test("drop multiple coins should stack up properly", () => {
 });
 
 test("drop a computer coin should change the cell state to 'computer'", () => {
-	const game = new Game();
-
 	game.dropCoin(0, "computer");
 	game.dropCoin(2, "computer");
 
@@ -41,6 +40,20 @@ test("drop a computer coin should change the cell state to 'computer'", () => {
 	expectedBoard[0][0] = "computer";
 	expectedBoard[0][2] = "computer";
 	expect(game.board).toEqual(expectedBoard);
+})
+
+test("should encode board to correct string", () => {
+	game.dropCoin(0);
+	game.dropCoin(0, "computer");
+
+	expect(game._encodeBoard()).toEqual("PEEEEEE|CEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE");
+});
+
+test("should ask the server for a computer move", () => {
+	game.dropCoin(0);
+	game.makeComputerMove();
+
+	expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
 })
 
 test("getWinner returns empty string when there is no winner", () => {

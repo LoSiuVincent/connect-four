@@ -1,6 +1,7 @@
 export class Game {
-	constructor() {
+	constructor(server) {
 		this.board = make2DBoard(6, 7);
+		this.server = server;
 	}
 
 	getCellState(row, col) {
@@ -38,6 +39,11 @@ export class Game {
 		return "";
 	}
 
+	async makeComputerMove() {
+		const computerMove = await this.server.getComputerMove(this._encodeBoard());
+		this.dropCoin(computerMove, "computer");
+	}
+
 	_checkWinningLine(row, col, dx, dy) {
 		const initialCell = this.board[row][col];
 		if (initialCell === "empty") return false;
@@ -53,6 +59,32 @@ export class Game {
 			}
 		}
 		return true;
+	}
+
+	_encodeBoard() {
+		let result = "";
+		for (let row of this.board) {
+			for (let state of row) {
+				let char;
+				switch (state) {
+					case "player":
+						char = "P";
+						break;
+					case "computer":
+						char = "C";
+						break;
+					case "empty":
+						char = "E";
+						break;
+					default:
+						console.error("Got unknown cell state")
+				}
+				result = result.concat(char);
+			}
+			result = result.concat("|");
+		}
+		result = result.slice(0, -1);
+		return result;
 	}
 }
 

@@ -23,7 +23,7 @@ describe("when there is server mock", () => {
 		expect(spy).toHaveBeenCalledWith(10, 10);
 	});
 
-	test("controller should use the computer move from the server to response player", async () => {
+	test("should use the computer move from the server to response player", async () => {
 		await view.notify("mouseClick", { x: 10, y: 100 });
 
 		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
