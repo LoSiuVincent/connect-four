@@ -1,10 +1,7 @@
 export class Controller {
-	constructor(game, view, server, delayComputerMove = false) {
+	constructor(game, view) {
 		this.game = game;
 		this.view = view;
-		this.server = server;
-		this.delayComputerMove = delayComputerMove;
-		this.isComputerThinking = false;
 
 		this.view.addListener("mouseClick", this);
 	}
