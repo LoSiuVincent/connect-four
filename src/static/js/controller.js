@@ -14,50 +14,10 @@ export class Controller {
 	}
 
 	async handleMouseClick(x, y) {
-		if (this.view.isInsideCanvas(x, y) && !this.isComputerThinking) {
+		if (this.view.isInsideCanvas(x, y) && !this.game.isComputerThinking()) {
 			const colIndex = Math.floor(x / this.view.getCellLength());
 			this.game.dropCoin(colIndex);
-			await this.makeComputerMove();
+			this.game.makeComputerMove();
 		}
-	}
-
-	async makeComputerMove() {
-		this.isComputerThinking = true;
-		const computerMove = await this.server.getComputerMove(this._encodeBoard(this.game.board));
-		if (this.delayComputerMove) {
-			await this._sleep(2000);
-		}
-		this.game.dropCoin(computerMove, "computer");
-		this.isComputerThinking = false;
-	}
-
-	async _sleep(ms) {
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	}
-
-	_encodeBoard(board) {
-		let result = "";
-		for (let row of board) {
-			for (let state of row) {
-				let char;
-				switch (state) {
-					case "player":
-						char = "P";
-						break;
-					case "computer":
-						char = "C";
-						break;
-					case "empty":
-						char = "E";
-						break;
-					default:
-						console.error("Got unknown cell state")
-				}
-				result = result.concat(char);
-			}
-			result = result.concat("|");
-		}
-		result = result.slice(0, -1);
-		return result;
 	}
 }
