@@ -64,14 +64,14 @@ def test_drop_coins_to_board(browser):
 
     # He clicks in the first column
     click_column(0)
-    web_element_regression(canvas, "functional_player_first_coin", wait_time=1)
+    web_element_regression(canvas, "functional_player_first_coin", wait_time_before_capture=1)
 
     # He waits for the computer move
     web_element_regression(canvas, "functional_computer_first_coin")
 
     # He clicks another column
     click_column(3)
-    web_element_regression(canvas, "functional_player_second_coin", wait_time=1)
+    web_element_regression(canvas, "functional_player_second_coin", wait_time_before_capture=1)
 
     # He waits for the computer move again
     time.sleep(3)
@@ -79,7 +79,7 @@ def test_drop_coins_to_board(browser):
 
     # He tries to drop a coin in the first column again
     click_column(0)
-    web_element_regression(canvas, "functional_player_third_coin", wait_time=1)
+    web_element_regression(canvas, "functional_player_third_coin", wait_time_before_capture=1)
 
     # He waits for the computer move again
     time.sleep(3)
