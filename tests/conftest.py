@@ -4,6 +4,7 @@ from selenium import webdriver
 BROWSER_WIDTH = 1000
 BROWSER_HEIGHT = 1200
 
+
 @pytest.fixture
 def browser():
     driver = webdriver.Firefox()
