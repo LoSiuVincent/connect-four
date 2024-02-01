@@ -4,6 +4,8 @@ import pytest
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
 
 from tests.conftest import BROWSER_WIDTH
 from tests.visreg import web_element_regression
@@ -42,7 +44,7 @@ def test_board_exists(browser):
 
 
 @pytest.mark.visual
-def test_drop_coins_to_board(browser):
+def test_play_with_the_computer(browser):
     # John sees the canvas for the game
     canvas = browser.find_element(By.TAG_NAME, 'canvas')
     assert canvas is not None
@@ -60,25 +62,57 @@ def test_drop_coins_to_board(browser):
 
         time.sleep(1)
 
-    # He clicks in the first column
-    click_column(0)
-    web_element_regression(canvas, 'player_first_coin', wait_time_before_capture=1)
+    def wait_until_text_appear(text: str):
+        WebDriverWait(browser, 5).until(
+            EC.text_to_be_present_in_element_value('id-game-state-text', text)
+        )
 
-    # He waits for the computer move
-    web_element_regression(canvas, 'computer_first_coin')
+    def wait_until_text_disappear(text: str):
+        WebDriverWait(browser, 5).until_not(
+            EC.text_to_be_present_in_element_value('id-game-state-text', text)
+        )
+
+    state_text = browser.find_element(By.ID, 'id-game-state-text')
+
+    # He sees "Your turn" and he clicks the first column
+    wait_until_text_appear('Your turn')
+    click_column(0)
+
+    # He sees a coin has appear
+    web_element_regression(canvas, 'player_first_move', wait_time_before_capture=1)
+
+    # He sees the text changed and became "Thinking ..." afterward
+    wait_until_text_disappear('Your turn')
+    assert state_text.text == 'Thinking ...'
+
+    # He sees "Your turn" again after a while and the computer has made a move
+    wait_until_text_appear('Your turn')
+    web_element_regression(canvas, 'computer_first_move', wait_time_before_capture=0)
 
     # He clicks another column
     click_column(3)
-    web_element_regression(canvas, 'player_second_coin', wait_time_before_capture=1)
 
-    # He waits for the computer move again
-    time.sleep(3)
-    web_element_regression(canvas, 'computer_second_coin')
+    # He sees a coin has appear
+    web_element_regression(canvas, 'player_second_move', wait_time_before_capture=1)
 
-    # He tries to drop a coin in the first column again
+    # He sees the text changed and became "Thinking ..." afterward
+    wait_until_text_disappear('Your turn')
+    assert state_text.text == 'Thinking ...'
+
+    # He sees "Your turn" again after a while and the computer has made a move
+    wait_until_text_appear('Your turn')
+    web_element_regression(canvas, 'computer_second_move', wait_time_before_capture=0)
+
+    # He clicks the first column again
     click_column(0)
-    web_element_regression(canvas, 'player_third_coin', wait_time_before_capture=1)
 
-    # He waits for the computer move again
-    time.sleep(3)
-    web_element_regression(canvas, 'computer_third_coin')
+    # He sees the coin is stacked above the first coin
+    web_element_regression(canvas, 'player_third_move', wait_time_before_capture=1)
+
+    # He sees the text changed and became "Thinking ..." afterward
+    wait_until_text_disappear('Your turn')
+    assert state_text.text == 'Thinking ...'
+
+    # He sees "Your turn" again after a while and the computer has made a move
+    wait_until_text_appear('Your turn')
+    web_element_regression(canvas, 'computer_third_move', wait_time_before_capture=0)
