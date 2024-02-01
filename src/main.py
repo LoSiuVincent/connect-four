@@ -15,5 +15,5 @@ async def index():
 @app.post('/predict')
 async def predict(request: Request):
     body = await request.body()
-    board_str = body.decode('utf-8')
+    board_str = body.decode('utf-8')  # noqa
     return {'move': 1}

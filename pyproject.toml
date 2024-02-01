@@ -22,6 +22,7 @@ numpy = "^1.26.3"
 autoflake = "^2.2.1"
 isort = "^5.13.2"
 black = "^24.1.1"
+flake8 = "^7.0.0"
 
 [tool.pytest.ini_options]
 markers = [
@@ -34,13 +35,10 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
 [tool.black]
 line-length = 100
-target-version = [
-    'py37',
-    'py38',
-    'py39',
-]
+target-version = ['py37', 'py38', 'py39']
 skip-string-normalization = true
 skip-magic-trailing-comma = false
+
 
 [build-system]
 requires = ["poetry-core"]
