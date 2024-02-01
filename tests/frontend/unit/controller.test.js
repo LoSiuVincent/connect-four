@@ -2,19 +2,28 @@ import { test, expect, jest } from "@jest/globals";
 import { Controller } from "controller.js";
 import { make2DBoard } from "game.js";
 
-test("controller should call the correct dropCoin when receieve the mouse click event", async () => {
+// Helper function to create mocks
+function createMocks() {
 	const mockGame = {
 		dropCoin: jest.fn(),
 		board: [[]],
 	};
 	const mockView = {
-		getCellLength: () => 100,
-		addListener: () => { },
-		isInsideCanvas: () => true
+		getCellLength: jest.fn().mockReturnValue(100),
+		addListener: jest.fn(),
+		isInsideCanvas: jest.fn().mockReturnValue(true),
+		notify: jest.fn(),
 	};
 	const mockServer = {
-		getComputerMove: () => 0,
+		getComputerMove: jest.fn().mockResolvedValue(0),
 	};
+
+	return { mockGame, mockView, mockServer };
+}
+
+// Tests using the helper function
+test("controller should call the correct dropCoin when receive the mouse click event", async () => {
+	const { mockGame, mockView, mockServer } = createMocks();
 	const controller = new Controller(mockGame, mockView, mockServer);
 
 	for (let i = 0; i < 7; i++) {
@@ -24,35 +33,24 @@ test("controller should call the correct dropCoin when receieve the mouse click 
 });
 
 test("controller should add itself to listen on View", () => {
-	const mockGame = {};
-	const mockView = { addListener: jest.fn() };
+	const { mockGame, mockView } = createMocks();
 	const controller = new Controller(mockGame, mockView);
 
 	expect(mockView.addListener).toHaveBeenCalledWith("mouseClick", controller);
-})
+});
 
 test("controller encode board to correct string", () => {
-	const mockGame = {};
-	const mockView = { addListener: jest.fn() };
+	const { mockGame, mockView } = createMocks();
 	const controller = new Controller(mockGame, mockView);
 	const board = make2DBoard(6, 7);
 	board[0][0] = "player";
 	board[1][0] = "computer";
 
 	expect(controller._encodeBoard(board)).toEqual("PEEEEEE|CEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE");
-})
+});
 
 test("controller should not make computer move when it is thinking", async () => {
-	const mockGame = {
-		dropCoin: jest.fn(),
-		board: [[]],
-	};
-	const mockView = {
-		getCellLength: () => 100,
-		addListener: () => { },
-		isInsideCanvas: () => true
-	};
-	const mockServer = { getComputerMove: () => 1 };
+	const { mockGame, mockView, mockServer } = createMocks();
 	const controller = new Controller(mockGame, mockView, mockServer);
 	const spy = jest.spyOn(controller, "makeComputerMove");
 
@@ -62,4 +60,4 @@ test("controller should not make computer move when it is thinking", async () =>
 	await firstPromise;
 
 	expect(spy).toHaveBeenCalledTimes(1);
-})
+});
