@@ -3,7 +3,8 @@ export class Controller {
 		this.game = game;
 		this.view = view;
 		this.server = server;
-		this.delayComputerMove = delayComputerMove
+		this.delayComputerMove = delayComputerMove;
+		this.isComputerThinking = false;
 
 		this.view.addListener("mouseClick", this);
 	}
@@ -13,7 +14,7 @@ export class Controller {
 	}
 
 	async handleMouseClick(x, y) {
-		if (this.view.isInsideCanvas(x, y)) {
+		if (this.view.isInsideCanvas(x, y) && !this.isComputerThinking) {
 			const colIndex = Math.floor(x / this.view.getCellLength());
 			this.game.dropCoin(colIndex);
 			await this.makeComputerMove();
@@ -21,11 +22,13 @@ export class Controller {
 	}
 
 	async makeComputerMove() {
+		this.isComputerThinking = true;
 		const computerMove = await this.server.getComputerMove(this._encodeBoard(this.game.board));
 		if (this.delayComputerMove) {
 			await this._sleep(2000);
 		}
 		this.game.dropCoin(computerMove, "computer");
+		this.isComputerThinking = false;
 	}
 
 	async _sleep(ms) {

@@ -111,5 +111,23 @@ describe("when player clicks on the first column", () => {
 
 			expect(game.getWinner()).toEqual("computer");
 		})
+
 	})
+})
+
+test("should not response to player's click when the computer is thinking", async () => {
+	const game = new Game();
+	const view = new p5View(game, {}, 100);
+	const server = new Server("http://localhost:8000");
+	const controller = new Controller(game, view, server);
+
+	const firstPromise = view.notify("mouseClick", { x: 10, y: 100 });
+	const secondPromise = view.notify("mouseClick", { x: 210, y: 100 });
+	await secondPromise;
+	await firstPromise;
+
+	expect(game.getCellState(0, 0)).toEqual("player");
+	expect(game.getCellState(0, 1)).toEqual("computer");
+	expect(game.getCellState(0, 2)).not.toEqual("player");
+	expect(game.getCellState(1, 1)).not.toEqual("computer");
 })
