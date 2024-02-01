@@ -9,10 +9,10 @@ describe("when there is server mock", () => {
 	let game, view, mockServer, controller;
 
 	beforeEach(() => {
-		game = new Game();
-		view = new p5View(game, {}, 100);
 		mockServer = { getComputerMove: jest.fn().mockResolvedValue(1) };
-		controller = new Controller(game, view, mockServer);
+		game = new Game(mockServer);
+		view = new p5View(game, {}, 100);
+		controller = new Controller(game, view);
 	})
 
 	test("controller should handle mouse click", () => {
@@ -58,10 +58,10 @@ describe("when there are no mocks (except p5)", () => {
 	let game, view, server, controller;
 
 	beforeEach(() => {
-		game = new Game();
-		view = new p5View(game, {}, 100);
 		server = new Server("http://localhost:8000");
-		controller = new Controller(game, view, server);
+		game = new Game(server);
+		view = new p5View(game, {}, 100);
+		controller = new Controller(game, view);
 	})
 
 	test("computer should response to player move", async () => {

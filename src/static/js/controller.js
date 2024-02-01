@@ -17,7 +17,7 @@ export class Controller {
 		if (this.view.isInsideCanvas(x, y) && !this.game.isComputerThinking()) {
 			const colIndex = Math.floor(x / this.view.getCellLength());
 			this.game.dropCoin(colIndex);
-			this.game.makeComputerMove();
+			await this.game.makeComputerMove();
 		}
 	}
 }
