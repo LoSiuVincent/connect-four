@@ -1,52 +1,54 @@
 import { p5View } from "view.js";
-import { jest, expect, test} from "@jest/globals";
+import { jest, expect, test } from "@jest/globals";
 
-test("View has the correct cell length", () => {
-	const dummyObject = {};
-	const view = new p5View(dummyObject, dummyObject, 100);
+describe("p5View tests", () => {
+	const createView = (cellLength = 100) => {
+		const dummyObject = {};
+		return new p5View(dummyObject, dummyObject, cellLength);
+	};
 
-	expect(view.getCellLength()).toBe(100);
+	test("View has the correct cell length", () => {
+		const cellLength = 100;
+		const view = createView(cellLength);
+		expect(view.getCellLength()).toBe(cellLength);
+	});
+
+	describe("Canvas dimensions based on cell length", () => {
+		test("View has the correct canvas width", () => {
+			const view = createView(100);
+			const biggerView = createView(150);
+			expect(view.getCanvasWidth()).toBe(700);
+			expect(biggerView.getCanvasWidth()).toBe(1050);
+		});
+
+		test("View has the correct canvas height", () => {
+			const view = createView(100);
+			const biggerView = createView(150);
+			expect(view.getCanvasHeight()).toBe(800);
+			expect(biggerView.getCanvasHeight()).toBe(1200);
+		});
+	});
+
+	test("View should notify listeners when they subscribe to it", () => {
+		const view = createView();
+		const listenerOne = { update: jest.fn() };
+		const listenerTwo = { update: jest.fn() };
+		const listenerThree = { update: jest.fn() };
+		view.addListener("mouseClick", listenerOne);
+		view.addListener("mouseClick", listenerTwo);
+		view.addListener("otherEvent", listenerThree);
+
+		view.notify("mouseClick", { x: 10, y: 10 });
+
+		expect(listenerOne.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+		expect(listenerTwo.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+		expect(listenerThree.update).not.toHaveBeenCalled();
+	});
+
+	test("isInsideCanvas should return correct value", () => {
+		const view = createView();
+		expect(view.isInsideCanvas(-10, 400)).toBe(false);
+		expect(view.isInsideCanvas(200, 400)).toBe(true);
+		expect(view.isInsideCanvas(800, 900)).toBe(false);
+	});
 });
-
-test("View has the correct canvas width", () => {
-	const dummyObject = {};
-	const view = new p5View(dummyObject, dummyObject, 100);
-	const biggerView = new p5View(dummyObject, dummyObject, 150);
-
-	expect(view.getCanvasWidth()).toBe(700);
-	expect(biggerView.getCanvasWidth()).toBe(1050);
-});
-
-test("View has the correct canvas height", () => {
-	const dummyObject = {};
-	const view = new p5View(dummyObject, dummyObject, 100);
-	const biggerView = new p5View(dummyObject, dummyObject, 150);
-
-	expect(view.getCanvasHeight()).toBe(800);
-	expect(biggerView.getCanvasHeight()).toBe(1200);
-});
-
-test("View should notify listeners when they subscribe to it", () => {
-	const dummyObject = {};
-	const view = new p5View(dummyObject, dummyObject, dummyObject);
-	const listenerOne = {update: jest.fn()};
-	const listenerTwo = {update: jest.fn()};
-	const listenerThree = {update: jest.fn()};
-	view.addListener("mouseClick", listenerOne);
-	view.addListener("mouseClick", listenerTwo);
-	view.addListener("otherEvent", listenerThree);
-
-	view.notify("mouseClick", { x: 10, y: 10 });
-
-	expect(listenerOne.update).toHaveBeenCalledWith({ x: 10, y: 10 });
-	expect(listenerTwo.update).toHaveBeenCalledWith({ x: 10, y: 10 });
-	expect(listenerThree.update).not.toHaveBeenCalled();
-});
-
-test("isInsideCanvas should return correct value", () => {
-	const view = new p5View({}, {}, 100);
-
-	expect(view.isInsideCanvas(-10, 400)).toBe(false);
-	expect(view.isInsideCanvas(200, 400)).toBe(true);
-	expect(view.isInsideCanvas(800, 900)).toBe(false);
-})
