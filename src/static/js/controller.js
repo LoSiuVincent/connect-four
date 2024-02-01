@@ -7,20 +7,20 @@ export class Controller {
 		this.view.addListener("mouseClick", this);
 	}
 
-	update(data) {
-		this.handleMouseClick(data.x, data.y);
+	async update(data) {
+		await this.handleMouseClick(data.x, data.y);
 	}
 
-	handleMouseClick(x, y) {
+	async handleMouseClick(x, y) {
 		if (this.view.isInsideCanvas(x, y)) {
 			const colIndex = Math.floor(x / this.view.getCellLength());
 			this.game.dropCoin(colIndex);
-			this.computerMove();
+			await this.makeComputerMove();
 		}
 	}
 
-	computerMove() {
-		const computerMove = this.server.getComputerMove(this._encodeBoard(this.game.board));
+	async makeComputerMove() {
+		const computerMove = await this.server.getComputerMove(this._encodeBoard(this.game.board));
 		this.game.dropCoin(computerMove, "computer");
 	}
 

@@ -17,13 +17,13 @@ describe("when player clicks on the first column", () => {
 			expect(spy).toHaveBeenCalledWith(10, 10);
 		});
 
-		test("controller should use the computer move from the server to response player", () => {
+		test("controller should use the computer move from the server to response player", async () => {
 			const game = new Game();
 			const view = new p5View(game, {}, 100);
-			const mockServer = { getComputerMove: () => 1 };
+			const mockServer = { getComputerMove: jest.fn().mockResolvedValue(1) };
 			const controller = new Controller(game, view, mockServer);
 
-			view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 10, y: 100 });
 
 			expect(game.getCellState(0, 1)).toEqual("computer");
 		});
@@ -62,13 +62,13 @@ describe("when player clicks on the first column", () => {
 	})
 
 	describe("when there are no mocks (except p5)", () => {
-		test("computer should response to player move", () => {
+		test("computer should response to player move", async () => {
 			const game = new Game();
 			const view = new p5View(game, {}, 100);
 			const server = new Server("http://localhost:8000");
 			const controller = new Controller(game, view, server);
 
-			view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 10, y: 100 });
 
 			const hasComputerMove = () => {
 				for (let i = 0; i < 6; i++) {
