@@ -16,6 +16,8 @@ functional-test:
 	$(RUN) pytest tests/test_functionals.py
 
 update-baseline:
+	rm -r tests/baseline
+	mkdir tests/baseline
 	UPDATE_BASELINE=1 $(RUN) pytest -m visual
 
 linter:
