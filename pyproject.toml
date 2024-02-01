@@ -39,7 +39,7 @@ target-version = [
     'py38',
     'py39',
 ]
-skip-string-normalization = false
+skip-string-normalization = true
 skip-magic-trailing-comma = false
 
 [build-system]
