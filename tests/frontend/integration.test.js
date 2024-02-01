@@ -83,5 +83,33 @@ describe("when player clicks on the first column", () => {
 			};
 			expect(hasComputerMove()).toBe(true);
 		})
+
+		test("the player can win the game", async () => {
+			const game = new Game();
+			const view = new p5View(game, {}, 100);
+			const server = new Server("http://localhost:8000");
+			const controller = new Controller(game, view, server);
+
+			await view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 10, y: 100 });
+
+			expect(game.getWinner()).toEqual("player");
+		})
+
+		test("the computer can win the game", async () => {
+			const game = new Game();
+			const view = new p5View(game, {}, 100);
+			const server = new Server("http://localhost:8000");
+			const controller = new Controller(game, view, server);
+
+			await view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 10, y: 100 });
+			await view.notify("mouseClick", { x: 310, y: 100 });
+
+			expect(game.getWinner()).toEqual("computer");
+		})
 	})
 })

@@ -1,5 +1,5 @@
 import { Game, make2DBoard } from "game.js";
-import { test, expect, jest } from "@jest/globals";
+import { test, expect, jest, describe } from "@jest/globals";
 
 test("create a Game object without problem", () => {
 	const game = new Game();
@@ -42,3 +42,143 @@ test("drop a computer coin should change the cell state to 'computer'", () => {
 	expectedBoard[0][2] = "computer";
 	expect(game.board).toEqual(expectedBoard);
 })
+
+test("getWinner returns empty string when there is no winner", () => {
+	const game = new Game();
+
+	game.dropCoin(0);
+
+	expect(game.getWinner()).toEqual("");
+})
+
+describe("when player wins", () => {
+	test("by four vertical coins", () => {
+		const game = new Game();
+
+		game.dropCoin(3);
+		game.dropCoin(2, "computer");
+		game.dropCoin(3);
+		game.dropCoin(2, "computer");
+		game.dropCoin(3);
+		game.dropCoin(2, "computer");
+		game.dropCoin(3);
+
+		expect(game.getWinner()).toEqual("player");
+	})
+
+	test("by four horizontal coins", () => {
+		const game = new Game();
+
+		game.dropCoin(0);
+		game.dropCoin(0, "computer");
+		game.dropCoin(1);
+		game.dropCoin(1, "computer");
+		game.dropCoin(2);
+		game.dropCoin(2, "computer");
+		game.dropCoin(3);
+
+		expect(game.getWinner()).toEqual("player");
+	});
+
+	test("by four diagonal coins (bottom left to top right)", () => {
+		const game = new Game();
+
+		game.dropCoin(0);
+		game.dropCoin(1, "computer");
+		game.dropCoin(1);
+		game.dropCoin(2, "computer");
+		game.dropCoin(2);
+		game.dropCoin(3, "computer");
+		game.dropCoin(2);
+		game.dropCoin(3, "computer");
+		game.dropCoin(3);
+		game.dropCoin(4, "computer");
+		game.dropCoin(3);
+
+		expect(game.getWinner()).toEqual("player");
+	});
+
+	test("by four off-diagonal coins (top left to bottom right)", () => {
+		const game = new Game();
+
+		game.dropCoin(3);
+		game.dropCoin(2, "computer");
+		game.dropCoin(2);
+		game.dropCoin(1, "computer");
+		game.dropCoin(1);
+		game.dropCoin(0, "computer");
+		game.dropCoin(1);
+		game.dropCoin(0, "computer");
+		game.dropCoin(0);
+		game.dropCoin(3, "computer");
+		game.dropCoin(0);
+
+		expect(game.getWinner()).toEqual("player");
+	});
+})
+
+describe("when computer wins", () => {
+	test("by four vertical coins", () => {
+		const game = new Game();
+
+		game.dropCoin(3, "computer");
+		game.dropCoin(2);
+		game.dropCoin(3, "computer");
+		game.dropCoin(2);
+		game.dropCoin(3, "computer");
+		game.dropCoin(2);
+		game.dropCoin(3, "computer");
+
+		expect(game.getWinner()).toEqual("computer");
+	});
+
+	test("by four horizontal coins", () => {
+		const game = new Game();
+
+		game.dropCoin(0, "computer");
+		game.dropCoin(0);
+		game.dropCoin(1, "computer");
+		game.dropCoin(1);
+		game.dropCoin(2, "computer");
+		game.dropCoin(2);
+		game.dropCoin(3, "computer");
+
+		expect(game.getWinner()).toEqual("computer");
+	});
+
+	test("by four diagonal coins (bottom left to top right)", () => {
+		const game = new Game();
+
+		game.dropCoin(0, "computer");
+		game.dropCoin(1);
+		game.dropCoin(1, "computer");
+		game.dropCoin(2);
+		game.dropCoin(2, "computer");
+		game.dropCoin(3);
+		game.dropCoin(2, "computer");
+		game.dropCoin(3);
+		game.dropCoin(3, "computer");
+		game.dropCoin(4);
+		game.dropCoin(3, "computer");
+
+		expect(game.getWinner()).toEqual("computer");
+	});
+
+	test("by four off-diagonal coins (top left to bottom right)", () => {
+		const game = new Game();
+
+		game.dropCoin(3, "computer");
+		game.dropCoin(2);
+		game.dropCoin(2, "computer");
+		game.dropCoin(1);
+		game.dropCoin(1, "computer");
+		game.dropCoin(0);
+		game.dropCoin(1, "computer");
+		game.dropCoin(0);
+		game.dropCoin(0, "computer");
+		game.dropCoin(3);
+		game.dropCoin(0, "computer");
+
+		expect(game.getWinner()).toEqual("computer");
+	});
+});
