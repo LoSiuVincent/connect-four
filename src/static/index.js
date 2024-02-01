@@ -1,7 +1,7 @@
-import { Game } from "./game.js";
-import { p5View } from "./view.js";
-import { Controller } from "./controller.js";
-import { Server } from "./server.js";
+import { Game } from "./js/game.js";
+import { p5View } from "./js/view.js";
+import { Controller } from "./js/controller.js";
+import { Server } from "./js/server.js";
 
 new p5((p5) => {
 	p5.setup = () => {
