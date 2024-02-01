@@ -4,7 +4,7 @@ import { Controller } from "controller.js";
 import { Game } from "game.js";
 import { jest, expect, describe } from "@jest/globals";
 
-describe("when there are mocks", () => {
+describe("when there is server mock", () => {
 
 	let game, view, mockServer, controller;
 
