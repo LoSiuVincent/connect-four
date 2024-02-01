@@ -64,12 +64,12 @@ def test_play_with_the_computer(browser):
 
     def wait_until_text_appear(text: str):
         WebDriverWait(browser, 5).until(
-            EC.text_to_be_present_in_element_value('id-game-state-text', text)
+            EC.text_to_be_present_in_element((By.ID, 'id-game-state-text'), text)
         )
 
     def wait_until_text_disappear(text: str):
         WebDriverWait(browser, 5).until_not(
-            EC.text_to_be_present_in_element_value('id-game-state-text', text)
+            EC.text_to_be_present_in_element((By.ID, 'id-game-state-text'), text)
         )
 
     state_text = browser.find_element(By.ID, 'id-game-state-text')
