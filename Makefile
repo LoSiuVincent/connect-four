@@ -9,14 +9,14 @@ unit-test:
 	npm test tests/javascripts/unit
 
 integration-test:
-	pytest tests/test_integrations.py
+	$(RUN) pytest tests/test_integrations.py
 	npm test tests/javascripts/integration.test.js
 
 functional-test:
-	pytest tests/test_functionals.py
+	$(RUN) pytest tests/test_functionals.py
 
 update-baseline:
-	UPDATE_BASELINE=1 pytest -m visual
+	UPDATE_BASELINE=1 $(RUN) pytest -m visual
 
 linter:
 	poetry run autoflake -i -r .
