@@ -57,8 +57,6 @@ test("should ask the server for a computer move", () => {
 })
 
 test("getWinner returns empty string when there is no winner", () => {
-	const game = new Game();
-
 	game.dropCoin(0);
 
 	expect(game.getWinner()).toEqual("");
@@ -66,8 +64,6 @@ test("getWinner returns empty string when there is no winner", () => {
 
 describe("when player wins", () => {
 	test("by four vertical coins", () => {
-		const game = new Game();
-
 		game.dropCoin(3);
 		game.dropCoin(2, "computer");
 		game.dropCoin(3);
@@ -80,8 +76,6 @@ describe("when player wins", () => {
 	})
 
 	test("by four horizontal coins", () => {
-		const game = new Game();
-
 		game.dropCoin(0);
 		game.dropCoin(0, "computer");
 		game.dropCoin(1);
@@ -94,8 +88,6 @@ describe("when player wins", () => {
 	});
 
 	test("by four diagonal coins (bottom left to top right)", () => {
-		const game = new Game();
-
 		game.dropCoin(0);
 		game.dropCoin(1, "computer");
 		game.dropCoin(1);
@@ -112,8 +104,6 @@ describe("when player wins", () => {
 	});
 
 	test("by four off-diagonal coins (top left to bottom right)", () => {
-		const game = new Game();
-
 		game.dropCoin(3);
 		game.dropCoin(2, "computer");
 		game.dropCoin(2);
@@ -132,8 +122,6 @@ describe("when player wins", () => {
 
 describe("when computer wins", () => {
 	test("by four vertical coins", () => {
-		const game = new Game();
-
 		game.dropCoin(3, "computer");
 		game.dropCoin(2);
 		game.dropCoin(3, "computer");
@@ -146,8 +134,6 @@ describe("when computer wins", () => {
 	});
 
 	test("by four horizontal coins", () => {
-		const game = new Game();
-
 		game.dropCoin(0, "computer");
 		game.dropCoin(0);
 		game.dropCoin(1, "computer");
@@ -160,8 +146,6 @@ describe("when computer wins", () => {
 	});
 
 	test("by four diagonal coins (bottom left to top right)", () => {
-		const game = new Game();
-
 		game.dropCoin(0, "computer");
 		game.dropCoin(1);
 		game.dropCoin(1, "computer");
@@ -178,8 +162,6 @@ describe("when computer wins", () => {
 	});
 
 	test("by four off-diagonal coins (top left to bottom right)", () => {
-		const game = new Game();
-
 		game.dropCoin(3, "computer");
 		game.dropCoin(2);
 		game.dropCoin(2, "computer");
