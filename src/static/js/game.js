@@ -2,6 +2,7 @@ export class Game {
 	constructor(server) {
 		this.board = make2DBoard(6, 7);
 		this.server = server;
+		this._isComputerThinking = false;
 	}
 
 	getCellState(row, col) {
@@ -40,8 +41,14 @@ export class Game {
 	}
 
 	async makeComputerMove() {
+		this._isComputerThinking = true;
 		const computerMove = await this.server.getComputerMove(this._encodeBoard());
 		this.dropCoin(computerMove, "computer");
+		this._isComputerThinking = false;
+	}
+
+	isComputerThinking() {
+		return this._isComputerThinking;
 	}
 
 	_checkWinningLine(row, col, dx, dy) {

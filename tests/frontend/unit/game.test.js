@@ -62,6 +62,22 @@ test("getWinner returns empty string when there is no winner", () => {
 	expect(game.getWinner()).toEqual("");
 })
 
+describe("isComputerThinking", () => {
+	test("should return true when it is not resolved", () => {
+		game.makeComputerMove();
+
+		expect(game.isComputerThinking()).toEqual(true);
+	})
+
+	test("should return false when it is resolved", async () => {
+		const promise = game.makeComputerMove();
+		expect(game.isComputerThinking()).toEqual(true);
+
+		await promise;
+		expect(game.isComputerThinking()).toEqual(false);
+	})
+})
+
 describe("when player wins", () => {
 	test("by four vertical coins", () => {
 		game.dropCoin(3);
