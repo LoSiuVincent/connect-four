@@ -2,7 +2,6 @@ import { test, expect, jest } from "@jest/globals";
 import { Controller } from "controller.js";
 import { make2DBoard } from "game.js";
 
-// Helper function to create mocks
 function createMocks() {
 	const mockGame = {
 		dropCoin: jest.fn(),
@@ -21,7 +20,6 @@ function createMocks() {
 	return { mockGame, mockView, mockServer };
 }
 
-// Tests using the helper function
 test("controller should call the correct dropCoin when receive the mouse click event", async () => {
 	const { mockGame, mockView, mockServer } = createMocks();
 	const controller = new Controller(mockGame, mockView, mockServer);
