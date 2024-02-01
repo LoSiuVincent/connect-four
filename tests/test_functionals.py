@@ -50,9 +50,7 @@ def test_drop_coins_to_board(browser):
     def click_column(column_index):
         cell_width = browser.execute_script("return view.getCellLength();")
 
-        click_x = (
-            column_index * cell_width + 0.5 * cell_width - canvas.size["width"] / 2
-        )
+        click_x = column_index * cell_width + 0.5 * cell_width - canvas.size["width"] / 2
         click_y = 100 - canvas.size["height"] / 2
 
         action = webdriver.common.action_chains.ActionChains(browser)

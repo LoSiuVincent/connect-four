@@ -54,6 +54,7 @@ def web_element_regression(
     element: WebElement, name: str, wait_time_before_capture: float = 5, timeout: float = 5
 ):
     """When the environment variable UPDATE_BASELINE=1, it will Capture an image of the element.
+
     Otherwise it will check whether the element matches the latest image
 
     Args:
