@@ -50,7 +50,7 @@ class _MatchingElement:
         return _are_images_the_same(base, current)
 
 
-def web_element_image_regression(
+def web_element_regression(
     element: WebElement, name: str, wait_time: float = 5, timeout: float = 5
 ):
     """

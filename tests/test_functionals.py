@@ -6,7 +6,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 from tests.conftest import BROWSER_WIDTH
-from tests.visreg import web_element_image_regression
+from tests.visreg import web_element_regression
 
 
 def test_canvas_exists(browser):
@@ -38,7 +38,7 @@ def test_board_exists(browser):
     # John sees a board drawn on the page
     canvas = browser.find_element(By.TAG_NAME, "canvas")
 
-    web_element_image_regression(canvas, "board")
+    web_element_regression(canvas, "board")
 
 
 @pytest.mark.visual
@@ -64,23 +64,23 @@ def test_drop_coins_to_board(browser):
 
     # He clicks in the first column
     click_column(0)
-    web_element_image_regression(canvas, "functional_player_first_coin", wait_time=1)
+    web_element_regression(canvas, "functional_player_first_coin", wait_time=1)
 
     # He waits for the computer move
-    web_element_image_regression(canvas, "functional_computer_first_coin")
+    web_element_regression(canvas, "functional_computer_first_coin")
 
     # He clicks another column
     click_column(3)
-    web_element_image_regression(canvas, "functional_player_second_coin", wait_time=1)
+    web_element_regression(canvas, "functional_player_second_coin", wait_time=1)
 
     # He waits for the computer move again
     time.sleep(3)
-    web_element_image_regression(canvas, "functional_computer_second_coin")
+    web_element_regression(canvas, "functional_computer_second_coin")
 
     # He tries to drop a coin in the first column again
     click_column(0)
-    web_element_image_regression(canvas, "functional_player_third_coin", wait_time=1)
+    web_element_regression(canvas, "functional_player_third_coin", wait_time=1)
 
     # He waits for the computer move again
     time.sleep(3)
-    web_element_image_regression(canvas, "functional_computer_third_coin")
+    web_element_regression(canvas, "functional_computer_third_coin")
