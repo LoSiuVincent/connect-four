@@ -25,6 +25,7 @@ describe("when player clicks on the first column", () => {
 
 			await view.notify("mouseClick", { x: 10, y: 100 });
 
+			expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
 			expect(game.getCellState(0, 1)).toEqual("computer");
 		});
 

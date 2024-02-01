@@ -1,6 +1,12 @@
 main {
     display: flex;
-    height: 100vh;
+    height: 80vh;
     justify-content: center;
     align-items: center;
+}
+
+p {
+    font-size: 3rem;
+    text-align: center;
+    margin-top: 0;
 }
