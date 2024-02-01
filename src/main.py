@@ -4,16 +4,16 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="src/static"), name="static")
+app.mount('/static', StaticFiles(directory='src/static'), name='static')
 
 
-@app.get("/")
+@app.get('/')
 async def index():
-    return FileResponse("src/static/index.html")
+    return FileResponse('src/static/index.html')
 
 
-@app.post("/predict")
+@app.post('/predict')
 async def predict(request: Request):
     body = await request.body()
-    board_str = body.decode("utf-8")
-    return {"move": 1}
+    board_str = body.decode('utf-8')
+    return {'move': 1}
