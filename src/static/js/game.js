@@ -1,8 +1,9 @@
 export class Game {
-	constructor(server) {
+	constructor(server, computerMoveDelay = 0) {
 		this.board = make2DBoard(6, 7);
 		this.server = server;
 		this._isComputerThinking = false;
+		this._computerMoveDelay = computerMoveDelay;
 	}
 
 	getCellState(row, col) {
@@ -43,6 +44,7 @@ export class Game {
 	async makeComputerMove() {
 		this._isComputerThinking = true;
 		const computerMove = await this.server.getComputerMove(this._encodeBoard());
+		await new Promise(resolve => setTimeout(resolve, this._computerMoveDelay));
 		this.dropCoin(computerMove, "computer");
 		this._isComputerThinking = false;
 	}
