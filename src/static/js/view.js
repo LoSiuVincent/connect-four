@@ -55,12 +55,7 @@ export class p5View {
 		const cornerY = (7 - row) * this.cellLength;
 		const centerX = cornerX + this.cellLength / 2;
 		const centerY = cornerY + this.cellLength / 2;
-		return {
-			cornerX: cornerX,
-			cornerY: cornerY,
-			centerX: centerX,
-			centerY: centerY,
-		};
+		return { cornerX, cornerY, centerX, centerY, };
 	}
 
 	_drawCell(row, col) {
