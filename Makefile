@@ -6,17 +6,17 @@ run-dev:
 all-test: unit-test integration-test functional-test
 
 unit-test:
-	npm test tests/javascripts/unit
+	npm test tests/frontend/unit
 
 integration-test:
 	$(RUN) pytest tests/test_integrations.py
-	npm test tests/javascripts/integration.test.js
+	npm test tests/frontend/integration.test.js
 
 functional-test:
 	$(RUN) pytest tests/test_functionals.py
 
 update-baseline:
-	rm baseline/*
+	rm tests/baseline/*
 	UPDATE_BASELINE=1 $(RUN) pytest -m visual
 
 linter:
