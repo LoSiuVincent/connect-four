@@ -48,8 +48,8 @@ export class Game {
 		this._subject.addListener(event, listener);
 	}
 
-	notify(event, data) {
-		this._subject.notify(event, data);
+	async notify(event, data) {
+		return this._subject.notify(event, data);
 	}
 
 	async makeComputerMove() {
