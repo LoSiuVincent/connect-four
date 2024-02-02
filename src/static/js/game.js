@@ -1,9 +1,12 @@
+import { Subject } from "subject.js"
+
 export class Game {
 	constructor(server, computerMoveDelay = 0) {
 		this.board = make2DBoard(6, 7);
 		this.server = server;
 		this._isComputerThinking = false;
 		this._computerMoveDelay = computerMoveDelay;
+		this._subject = new Subject();
 	}
 
 	getCellState(row, col) {
@@ -39,6 +42,14 @@ export class Game {
 		}
 
 		return "";
+	}
+
+	addListener(event, listener) {
+		this._subject.addListener(event, listener);
+	}
+
+	notify(event, data) {
+		this._subject.notify(event, data);
 	}
 
 	async makeComputerMove() {

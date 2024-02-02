@@ -62,6 +62,22 @@ test("getWinner returns empty string when there is no winner", () => {
 	expect(game.getWinner()).toEqual("");
 })
 
+test("Game should notify listeners when they subscribe to it", () => {
+	const listenerOne = { update: jest.fn() };
+	const listenerTwo = { update: jest.fn() };
+	const listenerThree = { update: jest.fn() };
+	game.addListener("computerStartThinking", listenerOne);
+	game.addListener("computerStopThinking", listenerTwo);
+	game.addListener("otherEvent", listenerThree);
+
+	game.notify("computerStartThinking", { x: 10, y: 10 });
+	game.notify("computerStopThinking", { x: 10, y: 10 });
+
+	expect(listenerOne.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+	expect(listenerTwo.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+	expect(listenerThree.update).not.toHaveBeenCalled();
+});
+
 describe("isComputerThinking", () => {
 	test("should return true when it is not resolved", () => {
 		game.makeComputerMove();
