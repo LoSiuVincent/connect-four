@@ -36,8 +36,8 @@ export class p5View {
 		this.subject.addListener(event, listener);
 	}
 
-	notify(event, data) {
-		this.subject.notify(event, data);
+	async notify(event, data) {
+		return this.subject.notify(event, data);
 	}
 
 	_getCell(row, col) {
