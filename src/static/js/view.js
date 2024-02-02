@@ -10,6 +10,8 @@ export class p5View {
 		this._p5.mouseClicked = () => {
 			this.notify("mouseClick", { x: this._p5.mouseX, y: this._p5.mouseY });
 		};
+		this._game.addListener("computerStartThinking", this);
+		this._game.addListener("computerStopThinking", this);
 	}
 
 	getCellLength() {
@@ -26,6 +28,18 @@ export class p5View {
 
 	isInsideCanvas(x, y) {
 		return (0 <= x && x <= this.getCanvasWidth()) && (0 <= y && y <= this.getCanvasHeight());
+	}
+
+	changeStateText(text) {
+
+	}
+
+	async update(event, data) {
+		if (event === "computerStartThinking") {
+			this.changeStateText("Thinking ...");
+		} else if (event === "computerStopThinking") {
+			this.changeStateText("Your turn");
+		}
 	}
 
 	draw() {

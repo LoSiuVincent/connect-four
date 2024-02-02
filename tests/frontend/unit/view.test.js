@@ -3,8 +3,9 @@ import { jest, expect, test } from "@jest/globals";
 
 describe("p5View tests", () => {
 	const createView = (cellLength = 100) => {
+		const mockGame = { addListener: jest.fn() }
 		const dummyObject = {};
-		return new p5View(dummyObject, dummyObject, cellLength);
+		return new p5View(mockGame, dummyObject, cellLength);
 	};
 
 	test("View has the correct cell length", () => {
@@ -40,8 +41,8 @@ describe("p5View tests", () => {
 
 		view.notify("mouseClick", { x: 10, y: 10 });
 
-		expect(listenerOne.update).toHaveBeenCalledWith({ x: 10, y: 10 });
-		expect(listenerTwo.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+		expect(listenerOne.update).toHaveBeenCalledWith("mouseClick", { x: 10, y: 10 });
+		expect(listenerTwo.update).toHaveBeenCalledWith("mouseClick", { x: 10, y: 10 });
 		expect(listenerThree.update).not.toHaveBeenCalled();
 	});
 
@@ -51,4 +52,22 @@ describe("p5View tests", () => {
 		expect(view.isInsideCanvas(200, 400)).toBe(true);
 		expect(view.isInsideCanvas(800, 900)).toBe(false);
 	});
+
+	test("should change state text when the computer starts thinking", () => {
+		const view = createView();
+		const spy = jest.spyOn(view, "changeStateText");
+
+		view.update("computerStartThinking", {});
+
+		expect(spy).toHaveBeenCalledWith("Thinking ...")
+	})
+
+	test("should change state text when the computer stops thinking", () => {
+		const view = createView();
+		const spy = jest.spyOn(view, "changeStateText");
+
+		view.update("computerStopThinking", {});
+
+		expect(spy).toHaveBeenCalledWith("Your turn")
+	})
 });
