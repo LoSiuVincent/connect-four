@@ -39,6 +39,10 @@ export class p5View {
 			this.changeStateText("Thinking ...");
 		} else if (event === "computerStopThinking") {
 			this.changeStateText("Your turn");
+		} else if (event === "hasWinner") {
+			if (data.winner === "player") {
+				this.changeStateText("You win!");
+			}
 		}
 	}
 

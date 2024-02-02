@@ -57,21 +57,28 @@ describe("p5View tests", () => {
 		expect(view.isInsideCanvas(800, 900)).toBe(false);
 	});
 
-	test("should change state text when the computer starts thinking", () => {
-		const view = createView();
-		const spy = jest.spyOn(view, "changeStateText");
+	describe("change state text", () => {
+		let view, spy;
 
-		view.update("computerStartThinking", {});
+		view = createView();
+		spy = jest.spyOn(view, "changeStateText");
 
-		expect(spy).toHaveBeenCalledWith("Thinking ...")
-	})
+		test("should change state text when the computer starts thinking", () => {
+			view.update("computerStartThinking", {});
 
-	test("should change state text when the computer stops thinking", () => {
-		const view = createView();
-		const spy = jest.spyOn(view, "changeStateText");
+			expect(spy).toHaveBeenCalledWith("Thinking ...")
+		})
 
-		view.update("computerStopThinking", {});
+		test("should change state text when the computer stops thinking", () => {
+			view.update("computerStopThinking", {});
 
-		expect(spy).toHaveBeenCalledWith("Your turn")
+			expect(spy).toHaveBeenCalledWith("Your turn")
+		})
+
+		test("should show 'You win!' when the player has won", () => {
+			view.update("hasWinner", { winner: "player" });
+
+			expect(spy).toHaveBeenCalledWith("You win!")
+		})
 	})
 });
