@@ -73,8 +73,8 @@ test("Game should notify listeners when they subscribe to it", () => {
 	game.notify("computerStartThinking", { x: 10, y: 10 });
 	game.notify("computerStopThinking", { x: 10, y: 10 });
 
-	expect(listenerOne.update).toHaveBeenCalledWith({ x: 10, y: 10 });
-	expect(listenerTwo.update).toHaveBeenCalledWith({ x: 10, y: 10 });
+	expect(listenerOne.update).toHaveBeenCalledWith("computerStartThinking", { x: 10, y: 10 });
+	expect(listenerTwo.update).toHaveBeenCalledWith("computerStopThinking", { x: 10, y: 10 });
 	expect(listenerThree.update).not.toHaveBeenCalled();
 });
 
