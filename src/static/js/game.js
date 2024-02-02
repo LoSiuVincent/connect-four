@@ -54,10 +54,14 @@ export class Game {
 
 	async makeComputerMove() {
 		this._isComputerThinking = true;
+		this.notify("computerStartThinking", {});
+
 		const computerMove = await this._server.getComputerMove(this._encodeBoard());
 		await new Promise(resolve => setTimeout(resolve, this._computerMoveDelay));
 		this.dropCoin(computerMove, "computer");
+
 		this._isComputerThinking = false;
+		this.notify("computerStopThinking", {});
 	}
 
 	isComputerThinking() {
