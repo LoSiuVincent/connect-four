@@ -109,4 +109,14 @@ describe("when there are no mocks (except p5)", () => {
 		expect(game.getCellState(0, 2)).not.toEqual("player");
 		expect(game.getCellState(1, 1)).not.toEqual("computer");
 	})
+
+	test("View should change state text when the computer start and stop thinking", async () => {
+		const spy = jest.spyOn(view, "changeStateText");
+
+		const playerClick = view.notify("mouseClick", { x: 10, y: 100});
+		expect(spy).toHaveBeenCalledWith("Thinking ...");
+
+		await playerClick;
+		expect(spy).toHaveBeenCalledWith("Your turn");
+	})
 })
