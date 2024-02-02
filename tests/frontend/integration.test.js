@@ -8,6 +8,10 @@ import { Controller } from "controller.js";
 import { Game } from "game.js";
 import { jest, expect, describe } from "@jest/globals";
 
+async function notifyClickColumn(view, colIndex) {
+	return view.notify("mouseClick", { x: 10 + colIndex * 100, y: 10 });
+}
+
 describe("when there is server mock", () => {
 
 	let game, view, mockServer, controller;
@@ -22,20 +26,20 @@ describe("when there is server mock", () => {
 	test("controller should handle mouse click", () => {
 		const spy = jest.spyOn(controller, "handleMouseClick");
 
-		view.notify("mouseClick", { x: 10, y: 10 });
+		notifyClickColumn(view, 0);
 
 		expect(spy).toHaveBeenCalledWith(10, 10);
 	});
 
 	test("should use the computer move from the server to response player", async () => {
-		await view.notify("mouseClick", { x: 10, y: 100 });
+		await notifyClickColumn(view, 0);
 
 		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
 		expect(game.getCellState(0, 1)).toEqual("computer");
 	});
 
 	test("computer should not response to non-player move", () => {
-		view.notify("mouseClick", { x: -10, y: 100 });
+		notifyClickColumn(view, -1);
 
 		const hasComputerMove = () => {
 			for (let i = 0; i < 6; i++) {
@@ -51,7 +55,7 @@ describe("when there is server mock", () => {
 	});
 
 	test("controller should call getComputerMove from the server", () => {
-		view.notify("mouseClick", { x: 10, y: 100 });
+		notifyClickColumn(view, 0);
 
 		expect(mockServer.getComputerMove).toHaveBeenCalledWith("PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE")
 	});
@@ -69,7 +73,7 @@ describe("when there are no mocks (except p5)", () => {
 	})
 
 	test("computer should response to player move", async () => {
-		await view.notify("mouseClick", { x: 10, y: 100 });
+		await notifyClickColumn(view, 0);
 
 		const hasComputerMove = () => {
 			for (let i = 0; i < 6; i++) {
@@ -85,26 +89,26 @@ describe("when there are no mocks (except p5)", () => {
 	})
 
 	test("the player can win the game", async () => {
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
 
 		expect(game.getWinner()).toEqual("player");
 	})
 
 	test("the computer can win the game", async () => {
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 310, y: 100 });
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 3);
 
 		expect(game.getWinner()).toEqual("computer");
 	})
 
 	test("should not response to player's click when the computer is thinking", async () => {
-		const firstPromise = view.notify("mouseClick", { x: 10, y: 100 });
-		const secondPromise = view.notify("mouseClick", { x: 210, y: 100 });
+		const firstPromise = notifyClickColumn(view, 0);
+		const secondPromise = notifyClickColumn(view, 2);
 		await secondPromise;
 		await firstPromise;
 
@@ -117,23 +121,23 @@ describe("when there are no mocks (except p5)", () => {
 	test("View should change state text when the computer start and stop thinking", async () => {
 		const spy = jest.spyOn(view, "changeStateText");
 
-		const playerClick = view.notify("mouseClick", { x: 10, y: 100});
+		const playerClick = notifyClickColumn(view, 0, false);
 		expect(spy).toHaveBeenCalledWith("Thinking ...");
 
 		await playerClick;
 		expect(spy).toHaveBeenCalledWith("Your turn");
 	})
-	
+
 	test("Game can announce player wins and stop", async () => {
 		const spy = jest.spyOn(view, "changeStateText");
 
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
 
 		expect(spy).toHaveBeenLastCalledWith("You win!")
-		
+
 		const totalComputerMove = () => {
 			let count = 0
 			for (let i = 0; i < 6; i++) {
@@ -151,10 +155,10 @@ describe("when there are no mocks (except p5)", () => {
 	test("Game can announce player loses and stop", async () => {
 		const spy = jest.spyOn(view, "changeStateText");
 
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 10, y: 100 });
-		await view.notify("mouseClick", { x: 310, y: 100 });
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 3);
 
 		expect(spy).toHaveBeenLastCalledWith("You lose, try again!")
 	})
