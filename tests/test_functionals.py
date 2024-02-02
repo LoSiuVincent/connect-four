@@ -10,24 +10,30 @@ from selenium.webdriver.support.wait import WebDriverWait
 from tests.conftest import BROWSER_WIDTH
 from tests.visreg import web_element_regression
 
+
 def find_canvas(browser):
     return browser.find_element(By.TAG_NAME, 'canvas')
+
 
 def find_state_text(browser):
     return browser.find_element(By.ID, 'id-game-state-text')
 
+
 def get_cell_length(browser):
     return browser.execute_script('return view.getCellLength();')
+
 
 def wait_until_text_appear(browser, text: str, timeout=5):
     WebDriverWait(browser, timeout).until(
         EC.text_to_be_present_in_element((By.ID, 'id-game-state-text'), text)
     )
 
+
 def wait_until_text_disappear(browser, text: str, timeout=5):
     WebDriverWait(browser, timeout).until_not(
         EC.text_to_be_present_in_element((By.ID, 'id-game-state-text'), text)
     )
+
 
 def click_column(browser, column_index):
     canvas = find_canvas(browser)
@@ -41,6 +47,7 @@ def click_column(browser, column_index):
     action.perform()
 
     time.sleep(1)
+
 
 def test_canvas_exists(browser):
     # He sees a canvas where he can play the game
@@ -72,6 +79,24 @@ def test_board_exists(browser):
     canvas = find_canvas(browser)
 
     web_element_regression(canvas, 'board')
+
+
+@pytest.mark.visual
+def test_player_coins_show_up_when_the_game_drops_the_coins(browser):
+    canvas = find_canvas(browser)
+    time.sleep(1)
+
+    browser.execute_script('game.dropCoin(0);')
+    web_element_regression(canvas, 'player_coin')
+
+
+@pytest.mark.visual
+def test_computer_coins_show_up_when_the_game_drops_the_coins(browser):
+    canvas = find_canvas(browser)
+    time.sleep(1)
+
+    browser.execute_script("game.dropCoin(0, 'computer');")
+    web_element_regression(canvas, 'computer_coin')
 
 
 @pytest.mark.visual
@@ -125,9 +150,10 @@ def test_play_with_the_computer(browser):
     wait_until_text_appear(browser, 'Your turn')
     web_element_regression(canvas, 'computer_third_move', wait_time_before_capture=0)
 
+
 def test_player_wins_game(browser):
     state_text = find_state_text(browser)
-    
+
     # John plays three moves to set up three in a row
     for _ in range(3):
         wait_until_text_appear(browser, 'Your turn')
