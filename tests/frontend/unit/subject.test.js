@@ -18,3 +18,13 @@ test("subject should notify to the observers", async () => {
     expect(listenerTwo.update).toHaveBeenCalledWith("eventTwo", { a: 10, b: 20 });
     expect(listenerThree.update).not.toHaveBeenCalled();
 });
+
+test("notify can pass no data", async () => {
+    const subject = new Subject();
+    const listener = { update: jest.fn() };
+    subject.addListener("event", listener);
+
+    await subject.notify("event");
+
+    expect(listener.update).toHaveBeenCalledWith("event", {});
+})

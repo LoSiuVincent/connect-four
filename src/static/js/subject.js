@@ -7,7 +7,7 @@ export class Subject {
         this._callbacks.push([event, listener]);
     }
 
-    async notify(event, data) {
+    async notify(event, data = {}) {
 
         const promises = [];
 

@@ -96,8 +96,8 @@ test("Game should notify listeners when they subscribe to it", () => {
 	game.addListener("computerStopThinking", listenerTwo);
 	game.addListener("otherEvent", listenerThree);
 
-	game.notify("computerStartThinking", {});
-	game.notify("computerStopThinking", {});
+	game.notify("computerStartThinking");
+	game.notify("computerStopThinking");
 
 	expect(listenerOne.update).toHaveBeenCalledWith("computerStartThinking", {});
 	expect(listenerTwo.update).toHaveBeenCalledWith("computerStopThinking", {});
