@@ -1,17 +1,17 @@
 export class Subject {
     constructor() {
-        this.callbacks = [];
+        this._callbacks = [];
     }
 
     addListener(event, listener) {
-        this.callbacks.push([event, listener]);
+        this._callbacks.push([event, listener]);
     }
 
     async notify(event, data) {
 
         const promises = [];
 
-        this.callbacks.forEach((eventCallbackTuple) => {
+        this._callbacks.forEach((eventCallbackTuple) => {
             const listenEvent = eventCallbackTuple[0];
             const listener = eventCallbackTuple[1];
             if (event === listenEvent) {

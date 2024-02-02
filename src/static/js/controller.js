@@ -1,9 +1,9 @@
 export class Controller {
 	constructor(game, view) {
-		this.game = game;
-		this.view = view;
+		this._game = game;
+		this._view = view;
 
-		this.view.addListener("mouseClick", this);
+		this._view.addListener("mouseClick", this);
 	}
 
 	async update(data) {
@@ -11,10 +11,10 @@ export class Controller {
 	}
 
 	async handleMouseClick(x, y) {
-		if (this.view.isInsideCanvas(x, y) && !this.game.isComputerThinking()) {
-			const colIndex = Math.floor(x / this.view.getCellLength());
-			this.game.dropCoin(colIndex);
-			await this.game.makeComputerMove();
+		if (this._view.isInsideCanvas(x, y) && !this._game.isComputerThinking()) {
+			const colIndex = Math.floor(x / this._view.getCellLength());
+			this._game.dropCoin(colIndex);
+			await this._game.makeComputerMove();
 		}
 	}
 }

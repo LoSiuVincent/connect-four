@@ -2,22 +2,22 @@ import { Subject } from "subject.js"
 
 export class Game {
 	constructor(server, computerMoveDelay = 0) {
-		this.board = make2DBoard(6, 7);
-		this.server = server;
+		this._board = make2DBoard(6, 7);
+		this._server = server;
 		this._isComputerThinking = false;
 		this._computerMoveDelay = computerMoveDelay;
 		this._subject = new Subject();
 	}
 
 	getCellState(row, col) {
-		return this.board[row][col];
+		return this._board[row][col];
 	}
 
 	dropCoin(colIndex, whoseMove) {
 		whoseMove = (whoseMove === undefined) ? "player" : whoseMove;
 		for (let i = 0; i < 6; i++) {
-			if (this.board[i][colIndex] === "empty") {
-				this.board[i][colIndex] = whoseMove;
+			if (this._board[i][colIndex] === "empty") {
+				this._board[i][colIndex] = whoseMove;
 				break;
 			}
 		}
@@ -31,11 +31,11 @@ export class Game {
 			{ x: 1, y: -1 }
 		];
 
-		for (let row = 0; row < this.board.length; row++) {
-			for (let col = 0; col < this.board[row].length; col++) {
+		for (let row = 0; row < this._board.length; row++) {
+			for (let col = 0; col < this._board[row].length; col++) {
 				for (const direction of directions) {
 					if (this._checkWinningLine(row, col, direction.x, direction.y)) {
-						return this.board[row][col];
+						return this._board[row][col];
 					}
 				}
 			}
@@ -54,7 +54,7 @@ export class Game {
 
 	async makeComputerMove() {
 		this._isComputerThinking = true;
-		const computerMove = await this.server.getComputerMove(this._encodeBoard());
+		const computerMove = await this._server.getComputerMove(this._encodeBoard());
 		await new Promise(resolve => setTimeout(resolve, this._computerMoveDelay));
 		this.dropCoin(computerMove, "computer");
 		this._isComputerThinking = false;
@@ -65,16 +65,16 @@ export class Game {
 	}
 
 	_checkWinningLine(row, col, dx, dy) {
-		const initialCell = this.board[row][col];
+		const initialCell = this._board[row][col];
 		if (initialCell === "empty") return false;
 
 		for (let i = 1; i < 4; i++) {
 			const newRow = row + i * dx;
 			const newCol = col + i * dy;
-			if (newRow < 0 || newRow >= this.board.length || newCol < 0 || newCol >= this.board[row].length) {
+			if (newRow < 0 || newRow >= this._board.length || newCol < 0 || newCol >= this._board[row].length) {
 				return false;
 			}
-			if (this.board[newRow][newCol] !== initialCell) {
+			if (this._board[newRow][newCol] !== initialCell) {
 				return false;
 			}
 		}
@@ -83,7 +83,7 @@ export class Game {
 
 	_encodeBoard() {
 		let result = "";
-		for (let row of this.board) {
+		for (let row of this._board) {
 			for (let state of row) {
 				let char;
 				switch (state) {
