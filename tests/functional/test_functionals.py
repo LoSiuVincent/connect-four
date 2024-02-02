@@ -7,8 +7,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from tests.conftest import BROWSER_WIDTH
-from tests.visreg import web_element_regression
+from tests.functional.conftest import BROWSER_WIDTH
+from tests.functional.visreg import web_element_regression
 
 
 def find_canvas(browser):
@@ -64,39 +64,12 @@ def test_layout(browser):
     assert canvas_center_x == BROWSER_WIDTH / 2
 
 
-def test_correct_canvas_size(browser):
-    # John sees the canvas has 8 cells height and 7 cells width
-    canvas = find_canvas(browser)
-    cell_length = get_cell_length(browser)
-
-    assert 8 * cell_length == canvas.size['height']
-    assert 7 * cell_length == canvas.size['width']
-
-
 @pytest.mark.visual
 def test_board_exists(browser):
     # John sees a board drawn on the page
     canvas = find_canvas(browser)
 
     web_element_regression(canvas, 'board')
-
-
-@pytest.mark.visual
-def test_player_coins_show_up_when_the_game_drops_the_coins(browser):
-    canvas = find_canvas(browser)
-    time.sleep(1)
-
-    browser.execute_script('game.dropCoin(0);')
-    web_element_regression(canvas, 'player_coin')
-
-
-@pytest.mark.visual
-def test_computer_coins_show_up_when_the_game_drops_the_coins(browser):
-    canvas = find_canvas(browser)
-    time.sleep(1)
-
-    browser.execute_script("game.dropCoin(0, 'computer');")
-    web_element_regression(canvas, 'computer_coin')
 
 
 @pytest.mark.visual

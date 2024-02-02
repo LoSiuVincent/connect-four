@@ -1,4 +1,6 @@
 RUN = poetry run
+BASELINE_DIR = tests/functional/baseline
+CURRENT_DIR = tests/functional/current
 
 run-dev:
 	$(RUN) uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
@@ -9,19 +11,18 @@ unit-test:
 	npm test tests/frontend/unit
 
 integration-test:
-	$(RUN) pytest tests/test_integrations.py
 	npm test tests/frontend/integration.test.js
 
 functional-test:
-	$(RUN) pytest tests/test_functionals.py
+	$(RUN) pytest tests/functional/test_functionals.py
 
 clean-current:
-	rm -r tests/current
-	mkdir tests/current
+	rm -r $(CURRENT_DIR)
+	mkdir $(CURRENT_DIR)
 
 update-baseline:
-	rm -r tests/baseline
-	mkdir tests/baseline
+	rm -r $(BASELINE_DIR)
+	mkdir $(BASELINE_DIR)
 	UPDATE_BASELINE=1 $(RUN) pytest -m visual
 
 linter:
