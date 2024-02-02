@@ -21,6 +21,10 @@ export class Game {
 				break;
 			}
 		}
+		
+		if (this.getWinner() != "") {
+			this.notify("hasWinner", { winner: this.getWinner() });
+		}
 	}
 
 	getWinner() {

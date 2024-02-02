@@ -62,6 +62,32 @@ test("getWinner returns empty string when there is no winner", () => {
 	expect(game.getWinner()).toEqual("");
 })
 
+describe("notification when there is a winner", () => {
+	test("should notify when player wins", () => {
+		const spy = jest.spyOn(game, "notify");
+
+		for (let i = 0; i < 3; i++) {
+			game.dropCoin(0);
+			game.dropCoin(1, "computer");
+		}
+		game.dropCoin(0);
+
+		expect(spy).toHaveBeenCalledWith("hasWinner", { winner: "player" })
+	})
+
+	test("should notify when computer wins", () => {
+		const spy = jest.spyOn(game, "notify");
+
+		for (let i = 0; i < 3; i++) {
+			game.dropCoin(0, "computer");
+			game.dropCoin(1);
+		}
+		game.dropCoin(0, "computer");
+
+		expect(spy).toHaveBeenCalledWith("hasWinner", { winner: "computer" })
+	})
+})
+
 test("Game should notify listeners when they subscribe to it", () => {
 	const listenerOne = { update: jest.fn() };
 	const listenerTwo = { update: jest.fn() };
