@@ -141,3 +141,25 @@ def test_player_wins_game(browser):
     # He sees "You win!" in the state text
     wait_until_text_disappear(browser, 'Your turn')
     assert 'You win!' in state_text.text
+
+def test_player_loses_game(browser):
+    state_text = find_state_text(browser)
+
+    # John plays three moves to set up three in a row
+    for _ in range(3):
+        wait_until_text_appear(browser, 'Your turn')
+        click_column(browser, 0)
+        wait_until_text_disappear(browser, 'Your turn')
+        assert state_text.text == 'Thinking ...'
+        wait_until_text_appear(browser, 'Your turn')
+
+    # He makes the losing move by placing the fourth disc in new column
+    click_column(browser, 3)
+
+    # He waits for the computer to make a move
+    wait_until_text_disappear(browser, 'Your turn')
+    assert state_text.text == 'Thinking ...'
+
+    # He sees "You lose, try again!" in the state text
+    wait_until_text_disappear(browser, 'Thinking ...')
+    assert 'You lose, try again!' in state_text.text
