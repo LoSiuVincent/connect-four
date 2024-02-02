@@ -14,12 +14,18 @@
 		"transform": {},
 		"modulePaths": [
 			"<rootDir>/src/static/js"
+		],
+		"setupFiles": [
+			"<rootDir>/jest.setup.js"
 		]
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
-		"jest": "^29.7.0"
+		"jest": "^29.7.0",
+		"jest-environment-jsdom": "^29.7.0",
+		"jquery": "^3.7.1",
+		"node-fetch": "^3.3.2"
 	}
 }

@@ -31,7 +31,7 @@ export class p5View {
 	}
 
 	changeStateText(text) {
-
+		$("p").text(text);
 	}
 
 	async update(event, data) {

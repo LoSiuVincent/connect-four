@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { p5View } from "view.js";
 import { Server } from "server.js"
 import { Controller } from "controller.js";

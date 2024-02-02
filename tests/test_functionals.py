@@ -79,7 +79,7 @@ def test_play_with_the_computer(browser):
     click_column(0)
 
     # He sees a coin has appear
-    web_element_regression(canvas, 'player_first_move', wait_time_before_capture=1)
+    web_element_regression(canvas, 'player_first_move', wait_time_before_capture=0)
 
     # He sees the text changed and became "Thinking ..." afterward
     wait_until_text_disappear('Your turn')
@@ -93,7 +93,7 @@ def test_play_with_the_computer(browser):
     click_column(3)
 
     # He sees a coin has appear
-    web_element_regression(canvas, 'player_second_move', wait_time_before_capture=1)
+    web_element_regression(canvas, 'player_second_move', wait_time_before_capture=0)
 
     # He sees the text changed and became "Thinking ..." afterward
     wait_until_text_disappear('Your turn')
@@ -107,7 +107,7 @@ def test_play_with_the_computer(browser):
     click_column(0)
 
     # He sees the coin is stacked above the first coin
-    web_element_regression(canvas, 'player_third_move', wait_time_before_capture=1)
+    web_element_regression(canvas, 'player_third_move', wait_time_before_capture=0)
 
     # He sees the text changed and became "Thinking ..." afterward
     wait_until_text_disappear('Your turn')

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { p5View } from "view.js";
 import { jest, expect, test } from "@jest/globals";
 
