@@ -14,7 +14,7 @@ test("subject should notify to the observers", async () => {
     await subject.notify("eventOne", { a: 1, b: 2 });
     await subject.notify("eventTwo", { a: 10, b: 20 });
 
-    expect(listenerOne.update).toHaveBeenCalledWith({ a: 1, b: 2 });
-    expect(listenerTwo.update).toHaveBeenCalledWith({ a: 10, b: 20 });
+    expect(listenerOne.update).toHaveBeenCalledWith("eventOne", { a: 1, b: 2 });
+    expect(listenerTwo.update).toHaveBeenCalledWith("eventTwo", { a: 10, b: 20 });
     expect(listenerThree.update).not.toHaveBeenCalled();
 });
