@@ -119,3 +119,23 @@ def test_play_with_the_computer(browser):
     # He sees "Your turn" again after a while and the computer has made a move
     wait_until_text_appear(browser, 'Your turn')
     web_element_regression(canvas, 'computer_third_move', wait_time_before_capture=0)
+
+def test_player_wins_game(browser):
+    canvas = browser.find_element(By.TAG_NAME, 'canvas')
+    state_text = browser.find_element(By.ID, 'id-game-state-text')
+    
+    # John plays three moves to set up three in a row
+    for _ in range(3):
+        wait_until_text_appear(browser, 'Your turn')
+        click_column(browser, canvas, 0)
+        wait_until_text_disappear(browser, 'Your turn')
+        assert state_text.text == 'Thinking ...'
+        wait_until_text_appear(browser, 'Your turn')
+
+    # He makes the winning move by placing the fourth disc in the same column
+    click_column(browser, canvas, 0)
+
+    # He sees "You win!" in the state text
+    wait_until_text_disappear(browser, 'Your turn')
+    state_text = browser.find_element(By.ID, 'id-game-state-text')
+    assert 'You win!' in state_text.text
