@@ -21,7 +21,7 @@ export class Game {
 				break;
 			}
 		}
-		
+
 		if (this.getWinner() != "") {
 			this.notify("hasWinner", { winner: this.getWinner() });
 		}
@@ -63,6 +63,10 @@ export class Game {
 		const computerMove = await this._server.getComputerMove(this._encodeBoard());
 		await new Promise(resolve => setTimeout(resolve, this._computerMoveDelay));
 		this.dropCoin(computerMove, "computer");
+
+		if (this.getWinner() === "computer") {
+			return
+		}
 
 		this._isComputerThinking = false;
 		this.notify("computerStopThinking", {});
