@@ -6,7 +6,7 @@ export class Controller {
 		this._view.addListener("mouseClick", this);
 	}
 
-	async update(data) {
+	async update(event, data) {
 		await this.handleMouseClick(data.x, data.y);
 	}
 
