@@ -43,6 +43,8 @@ export class p5View {
 		} else if (event === "hasWinner") {
 			if (data.winner === "player") {
 				this.changeStateText("You win!");
+			} else {
+				this.changeStateText("You lose, try again!");
 			}
 		}
 	}

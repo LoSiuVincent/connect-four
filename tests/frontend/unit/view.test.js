@@ -80,5 +80,11 @@ describe("p5View tests", () => {
 
 			expect(spy).toHaveBeenCalledWith("You win!")
 		})
+
+		test("should show 'You lose, try again!' when the player has losed", () => {
+			view.update("hasWinner", { winner: "computer" });
+
+			expect(spy).toHaveBeenCalledWith("You lose, try again!");
+		})
 	})
 });

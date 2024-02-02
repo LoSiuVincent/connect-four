@@ -147,4 +147,15 @@ describe("when there are no mocks (except p5)", () => {
 		};
 		expect(totalComputerMove()).toBe(3);
 	})
+
+	test("Game can announce player loses and stop", async () => {
+		const spy = jest.spyOn(view, "changeStateText");
+
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 310, y: 100 });
+
+		expect(spy).toHaveBeenLastCalledWith("You lose, try again!")
+	})
 })
