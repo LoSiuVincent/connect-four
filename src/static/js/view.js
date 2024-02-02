@@ -1,9 +1,11 @@
+import { Subject } from "subject.js";
+
 export class p5View {
 	constructor(game, p5, cellLength) {
 		this.game = game;
 		this.p5 = p5;
 		this.cellLength = cellLength === undefined ? 100 : cellLength;
-		this.callbacks = [];
+		this.subject = new Subject();
 
 		this.p5.mouseClicked = () => {
 			this.notify("mouseClick", { x: this.p5.mouseX, y: this.p5.mouseY });
@@ -31,23 +33,11 @@ export class p5View {
 	}
 
 	addListener(event, listener) {
-		this.callbacks.push([event, listener]);
+		this.subject.addListener(event, listener);
 	}
 
 	notify(event, data) {
-
-		const promises = [];
-
-		this.callbacks.forEach((eventCallbackTuple) => {
-			const listenEvent = eventCallbackTuple[0];
-			const listener = eventCallbackTuple[1];
-			if (event === listenEvent) {
-				const updatePromise = listener.update(data);
-				promises.push(updatePromise);
-			}
-		});
-
-		return Promise.all(promises);
+		this.subject.notify(event, data);
 	}
 
 	_getCell(row, col) {
