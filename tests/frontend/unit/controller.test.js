@@ -6,6 +6,7 @@ function createMocks() {
 		dropCoin: jest.fn(),
 		makeComputerMove: jest.fn(),
 		isComputerThinking: jest.fn().mockReturnValue(false),
+		getWinner: jest.fn().mockReturnValue(""),
 		board: [[]],
 	};
 	const mockView = {
@@ -60,3 +61,12 @@ test("controller should add itself to listen on View", () => {
 
 	expect(mockView.addListener).toHaveBeenCalledWith("mouseClick", controller);
 });
+
+test("should not make a computer move when the player has won", async () => {
+	const { mockGame, mockView } = createMocks();
+	mockGame.getWinner = jest.fn().mockReturnValue("player");
+	const controller = new Controller(mockGame, mockView);
+
+	await controller.handleMouseClick(10, 10);
+	expect(mockGame.makeComputerMove).not.toHaveBeenCalled();
+})

@@ -12,6 +12,7 @@ export class p5View {
 		};
 		this._game.addListener("computerStartThinking", this);
 		this._game.addListener("computerStopThinking", this);
+		this._game.addListener("hasWinner", this);
 	}
 
 	getCellLength() {

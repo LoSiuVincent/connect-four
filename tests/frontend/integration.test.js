@@ -123,4 +123,28 @@ describe("when there are no mocks (except p5)", () => {
 		await playerClick;
 		expect(spy).toHaveBeenCalledWith("Your turn");
 	})
+	
+	test("Game can announce player wins and stop", async () => {
+		const spy = jest.spyOn(view, "changeStateText");
+
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+		await view.notify("mouseClick", { x: 10, y: 100 });
+
+		expect(spy).toHaveBeenLastCalledWith("You win!")
+		
+		const totalComputerMove = () => {
+			let count = 0
+			for (let i = 0; i < 6; i++) {
+				for (let j = 0; j < 7; j++) {
+					if (game.getCellState(i, j) === "computer") {
+						count++;
+					}
+				}
+			}
+			return count;
+		};
+		expect(totalComputerMove()).toBe(3);
+	})
 })
