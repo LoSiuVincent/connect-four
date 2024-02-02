@@ -12,8 +12,7 @@ export class Subject {
         const promises = [];
 
         this._callbacks.forEach((eventCallbackTuple) => {
-            const listenEvent = eventCallbackTuple[0];
-            const listener = eventCallbackTuple[1];
+            const [listenEvent, listener] = eventCallbackTuple;
             if (event === listenEvent) {
                 const updatePromise = listener.update(data);
                 promises.push(updatePromise);
