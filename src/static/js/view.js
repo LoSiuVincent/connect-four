@@ -1,4 +1,4 @@
-import { Subject } from "subject.js";
+import { Subject } from "./subject.js";
 
 export class p5View {
 	constructor(game, p5, cellLength) {

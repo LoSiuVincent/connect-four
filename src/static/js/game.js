@@ -1,4 +1,4 @@
-import { Subject } from "subject.js"
+import { Subject } from "./subject.js"
 
 export class Game {
 	constructor(server, computerMoveDelay = 0) {
