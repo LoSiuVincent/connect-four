@@ -6,6 +6,7 @@ function createMocks() {
 		dropCoin: jest.fn(),
 		makeComputerMove: jest.fn(),
 		isComputerThinking: jest.fn().mockReturnValue(false),
+		isEnded: jest.fn().mockReturnValue(false),
 		getWinner: jest.fn().mockReturnValue(""),
 		board: [[]],
 	};
@@ -69,4 +70,15 @@ test("should not make a computer move when the player has won", async () => {
 
 	await controller.handleMouseClick(10, 10);
 	expect(mockGame.makeComputerMove).not.toHaveBeenCalled();
+})
+
+test("should not response to moves when the game is ended", () => {
+	const { mockGame, mockView } = createMocks();
+	mockGame.isEnded = jest.fn().mockReturnValue(true);
+	const controller = new Controller(mockGame, mockView);
+	const spy = jest.spyOn(controller, "handleMouseClick");
+
+	controller.update("mouseClick", { x: 10, y: 10 });
+
+	expect(spy).not.toHaveBeenCalled();
 })

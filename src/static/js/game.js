@@ -7,6 +7,7 @@ export class Game {
 		this._isComputerThinking = false;
 		this._computerMoveDelay = computerMoveDelay;
 		this._subject = new Subject();
+		this._isEnd = false;
 	}
 
 	getCellState(row, col) {
@@ -24,6 +25,7 @@ export class Game {
 
 		if (this.getWinner() != "") {
 			this.notify("hasWinner", { winner: this.getWinner() });
+			this._isEnd = true;
 		}
 	}
 
@@ -74,6 +76,10 @@ export class Game {
 
 	isComputerThinking() {
 		return this._isComputerThinking;
+	}
+
+	isEnded() {
+		return this._isEnd;
 	}
 
 	_checkWinningLine(row, col, dx, dy) {

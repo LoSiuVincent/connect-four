@@ -62,6 +62,15 @@ test("getWinner returns empty string when there is no winner", () => {
 	expect(game.getWinner()).toEqual("");
 })
 
+test("should end the game where there is a winner", () => {
+	game.getWinner = jest.fn().mockReturnValue("player");
+	expect(game.isEnded()).toEqual(false);
+	
+	game.dropCoin(0);
+
+	expect(game.isEnded()).toEqual(true);
+})
+
 describe("notification when there is a winner", () => {
 	test("should notify when player wins", () => {
 		const spy = jest.spyOn(game, "notify");

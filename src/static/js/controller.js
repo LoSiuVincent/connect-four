@@ -7,7 +7,9 @@ export class Controller {
 	}
 
 	async update(event, data) {
-		await this.handleMouseClick(data.x, data.y);
+		if (!this._game.isEnded()) {
+			await this.handleMouseClick(data.x, data.y);
+		}
 	}
 
 	async handleMouseClick(x, y) {

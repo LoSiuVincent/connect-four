@@ -62,7 +62,7 @@ class _MatchingElement:
 
 
 def web_element_regression(
-    element: WebElement, name: str, wait_time_before_capture: float = 3, timeout: float = 3
+    element: WebElement, name: str, wait_time_before_capture: float = 0, timeout: float = 3
 ):
     """When the environment variable UPDATE_BASELINE=1, it will Capture an image of the element.
 
@@ -71,7 +71,7 @@ def web_element_regression(
     Args:
         element: the webelement for the regression
         name: the image name for the regression
-        wait_time: The waiting time before capturing the image (only effect when UPDATE_BASELINE=1). Defaults to 3.
+        wait_time: The waiting time before capturing the image (only effect when UPDATE_BASELINE=1). Defaults to 0.
         timeout: maximum wait time to match the baseline. Defaults to 3.
     """
     matching_element = _MatchingElement(element, name, _get_caller_name())

@@ -69,7 +69,7 @@ def test_board_exists(browser):
     # John sees a board drawn on the page
     canvas = find_canvas(browser)
 
-    web_element_regression(canvas, 'board')
+    web_element_regression(canvas, 'board', wait_time_before_capture=1)
 
 
 @pytest.mark.visual
@@ -85,7 +85,7 @@ def test_play_with_the_computer(browser):
     click_column(browser, 0)
 
     # He sees a coin has appear
-    web_element_regression(canvas, 'player_first_move', wait_time_before_capture=0)
+    web_element_regression(canvas, 'player_first_move')
 
     # He sees the text changed and became "Thinking ..." afterward
     wait_until_text_disappear(browser, 'Your turn')
@@ -93,13 +93,13 @@ def test_play_with_the_computer(browser):
 
     # He sees "Your turn" again after a while and the computer has made a move
     wait_until_text_appear(browser, 'Your turn')
-    web_element_regression(canvas, 'computer_first_move', wait_time_before_capture=0)
+    web_element_regression(canvas, 'computer_first_move')
 
     # He clicks another column
     click_column(browser, 3)
 
     # He sees a coin has appear
-    web_element_regression(canvas, 'player_second_move', wait_time_before_capture=0)
+    web_element_regression(canvas, 'player_second_move')
 
     # He sees the text changed and became "Thinking ..." afterward
     wait_until_text_disappear(browser, 'Your turn')
@@ -107,13 +107,13 @@ def test_play_with_the_computer(browser):
 
     # He sees "Your turn" again after a while and the computer has made a move
     wait_until_text_appear(browser, 'Your turn')
-    web_element_regression(canvas, 'computer_second_move', wait_time_before_capture=0)
+    web_element_regression(canvas, 'computer_second_move')
 
     # He clicks the first column again
     click_column(browser, 0)
 
     # He sees the coin is stacked above the first coin
-    web_element_regression(canvas, 'player_third_move', wait_time_before_capture=0)
+    web_element_regression(canvas, 'player_third_move')
 
     # He sees the text changed and became "Thinking ..." afterward
     wait_until_text_disappear(browser, 'Your turn')
@@ -121,7 +121,7 @@ def test_play_with_the_computer(browser):
 
     # He sees "Your turn" again after a while and the computer has made a move
     wait_until_text_appear(browser, 'Your turn')
-    web_element_regression(canvas, 'computer_third_move', wait_time_before_capture=0)
+    web_element_regression(canvas, 'computer_third_move')
 
 
 def test_player_wins_game(browser):
@@ -141,6 +141,12 @@ def test_player_wins_game(browser):
     # He sees "You win!" in the state text
     wait_until_text_disappear(browser, 'Your turn')
     assert 'You win!' in state_text.text
+
+    # He clicks the first column again and confirms that the game is ended
+    click_column(browser, 0)
+    canvas = find_canvas(browser)
+    web_element_regression(canvas, 'game_end_after_winning')
+    
 
 def test_player_loses_game(browser):
     state_text = find_state_text(browser)
@@ -163,3 +169,8 @@ def test_player_loses_game(browser):
     # He sees "You lose, try again!" in the state text
     wait_until_text_disappear(browser, 'Thinking ...')
     assert 'You lose, try again!' in state_text.text
+    
+    # He clicks the first column again and confirms that the game is ended
+    click_column(browser, 0)
+    canvas = find_canvas(browser)
+    web_element_regression(canvas, 'game_end_after_losing')
