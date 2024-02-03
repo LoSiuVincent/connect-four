@@ -1,28 +1,32 @@
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from src.bot import Bot
 
-
-class Predict(BaseModel):
-    board: str
-    test: bool
-
-
 app = FastAPI()
 
 app.mount('/static', StaticFiles(directory='src/static'), name='static')
+
+templates = Jinja2Templates(directory='src/templates')
 
 
 @app.get('/')
 async def index():
     return FileResponse('src/static/index.html')
 
-@app.get('/test')
-async def test_index():
-    return FileResponse('src/static/test.index.html')
+
+@app.get('/test', response_class=HTMLResponse)
+async def test_index(request: Request):
+    return templates.TemplateResponse(request, 'index.html', {'test': True})
+
+
+class Predict(BaseModel):
+    board: str
+    test: bool
+
 
 @app.post('/predict')
 async def predict(predict: Predict):

@@ -47,7 +47,7 @@ class ConnectFourTestDriver(webdriver.Firefox):
 @pytest.fixture
 def browser():
     driver = ConnectFourTestDriver()
-    driver.get('http://localhost:8000')
+    driver.get('http://localhost:8000/test')
     driver.set_window_size(BROWSER_WIDTH, BROWSER_HEIGHT)
     yield driver
     driver.quit()
