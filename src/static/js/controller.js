@@ -7,18 +7,21 @@ export class Controller {
 	}
 
 	async update(event, data) {
-		if (!this._game.isEnded()) {
+		if (this._shouldResponseClick(data.x, data.y)) {
 			await this.handleMouseClick(data.x, data.y);
 		}
 	}
 
+
 	async handleMouseClick(x, y) {
-		if (this._view.isInsideCanvas(x, y) && !this._game.isComputerThinking()) {
-			const colIndex = Math.floor(x / this._view.getCellLength());
-			this._game.dropCoin(colIndex);
-			if (this._game.getWinner() != "player") {
-				await this._game.makeComputerMove();
-			}
+		const colIndex = Math.floor(x / this._view.getCellLength());
+		this._game.dropCoin(colIndex);
+		if (this._game.getWinner() != "player") {
+			await this._game.makeComputerMove();
 		}
+	}
+
+	_shouldResponseClick(x, y) {
+		return (!this._game.isEnded() && !this._game.isComputerThinking() && this._view.isInsideCanvas(x, y));
 	}
 }

@@ -43,7 +43,8 @@ test("controller should not ask for a computer move when the player does not mak
 	mockView.isInsideCanvas = jest.fn().mockReturnValue(false);
 	const controller = new Controller(mockGame, mockView);
 
-	await controller.handleMouseClick(-10, 10);
+	await controller.update("mouseClick", { x: 10, y: 10 });
+
 	expect(mockGame.makeComputerMove).not.toHaveBeenCalled();
 });
 
@@ -52,7 +53,8 @@ test("controller should not ask for a computer move when it is thinking", async 
 	mockGame.isComputerThinking = jest.fn().mockReturnValue(true);
 	const controller = new Controller(mockGame, mockView);
 
-	await controller.handleMouseClick(10, 10);
+	await controller.update("mouseClick", { x: 10, y: 10 });
+
 	expect(mockGame.makeComputerMove).not.toHaveBeenCalled();
 });
 

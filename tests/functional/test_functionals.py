@@ -146,7 +146,7 @@ def test_player_wins_game(browser):
     click_column(browser, 0)
     canvas = find_canvas(browser)
     web_element_regression(canvas, 'game_end_after_winning')
-    
+
 
 def test_player_loses_game(browser):
     state_text = find_state_text(browser)
@@ -169,7 +169,7 @@ def test_player_loses_game(browser):
     # He sees "You lose, try again!" in the state text
     wait_until_text_disappear(browser, 'Thinking ...')
     assert 'You lose, try again!' in state_text.text
-    
+
     # He clicks the first column again and confirms that the game is ended
     click_column(browser, 0)
     canvas = find_canvas(browser)
