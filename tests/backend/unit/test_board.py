@@ -1,0 +1,47 @@
+import pytest
+
+from src.board import Board
+
+
+def test_parse_board_str():
+    board_str = 'CPEEEEE|ECEEEEE|EPEEEEE|ECEEEEE|EPEEEEE|ECEEEEE'
+
+    expected_board = [
+        ['computer', 'player', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'computer', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'player', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'computer', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'player', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'computer', 'empty', 'empty', 'empty', 'empty', 'empty'],
+    ]
+
+    assert Board._parse_board_str(board_str) == expected_board
+
+
+def test_create_board_object():
+    board = Board.create('CPEEEEE|ECEEEEE|EPEEEEE|ECEEEEE|EPEEEEE|ECEEEEE')
+
+    assert isinstance(board, Board)
+
+    expected_board = [
+        ['computer', 'player', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'computer', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'player', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'computer', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'player', 'empty', 'empty', 'empty', 'empty', 'empty'],
+        ['empty', 'computer', 'empty', 'empty', 'empty', 'empty', 'empty'],
+    ]
+    assert board._board == expected_board
+
+
+@pytest.mark.parametrize(
+    'board_str,next_available_column',
+    [
+        ('CPEEEEE|ECEEEEE|EPEEEEE|ECEEEEE|EPEEEEE|ECEEEEE', 0),
+        ('CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE', 2),
+    ],
+)
+def test_get_next_available_column(board_str, next_available_column):
+    board = Board.create(board_str)
+
+    assert board.get_next_available_column() == next_available_column
