@@ -9,9 +9,11 @@ all-test: clean-current unit-test integration-test functional-test
 
 unit-test:
 	npm test tests/frontend/unit
+	$(RUN) pytest tests/backend/unit
 
 integration-test:
 	npm test tests/frontend/integration.test.js
+	$(RUN) pytest tests/backend/test_integration.py
 
 functional-test:
 	$(RUN) pytest tests/functional/test_functionals.py
