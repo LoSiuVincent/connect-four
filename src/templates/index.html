@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Connect 4</title>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"
+			integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"></script>
+		<script
+			src="https://code.jquery.com/jquery-3.7.1.min.js"
+			integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+			crossorigin="anonymous"></script>
+		{% if test %}
+		<script>
+			var TEST = true;
+		</script>
+		{% else %}
+		<script>
+			var TEST = false;
+		</script>
+		{% endif %}
+		<script type="module" src="static/index.js"></script>
+		<link rel="stylesheet" href="static/style.css" />
+	</head>
+	<body>
+		<main></main>
+		<p id="id-game-state-text">Your turn</p>
+	</body>
+</html>
