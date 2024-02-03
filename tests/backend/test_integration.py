@@ -9,6 +9,14 @@ def test_getting_random_move():
     assert isinstance(prediction, int)
 
 
+def test_getting_random_move_when_only_one_column_left():
+    bot = Bot(strategy='random')
+
+    prediction = bot.predict('PCPCPCE|PCPCPCE|PCPCPCE|PCPCPCE|PCPCPCE|PCPCPCE')
+
+    assert prediction == 6
+
+
 def test_getting_fixed_move():
     bot = Bot(strategy='fixed')
 

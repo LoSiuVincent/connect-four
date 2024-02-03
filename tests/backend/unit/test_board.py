@@ -57,3 +57,9 @@ def test_check_full_column():
     assert not board.is_column_full(4)
     assert not board.is_column_full(5)
     assert not board.is_column_full(6)
+
+
+def test_get_available_columns():
+    board = Board.create('CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE')
+
+    assert board.get_available_columns() == [2, 3, 4, 5, 6]
