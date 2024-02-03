@@ -6,7 +6,7 @@ import { Server } from "./js/server.js";
 new p5((p5) => {
 	p5.setup = () => {
 		const CELL_SIZE = 100;
-		const server = new Server();
+		const server = new Server("", false);
 		const game = new Game(server, 2000);
 		const view = new p5View(game, p5, CELL_SIZE);
 		p5.createCanvas(view.getCanvasWidth(), view.getCanvasHeight());
