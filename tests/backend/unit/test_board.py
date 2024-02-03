@@ -45,3 +45,14 @@ def test_get_next_available_column(board_str, next_available_column):
     board = Board.create(board_str)
 
     assert board.get_next_available_column() == next_available_column
+
+def test_check_full_column():
+    board = Board.create('CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE')
+    
+    assert board.is_column_full(0)
+    assert board.is_column_full(1)
+    assert not board.is_column_full(2)
+    assert not board.is_column_full(3)
+    assert not board.is_column_full(4)
+    assert not board.is_column_full(5)
+    assert not board.is_column_full(6)

@@ -21,3 +21,6 @@ class Board:
                 if self._board[i][j] == 'empty':
                     return j
         return None
+
+    def is_column_full(self, column_idx):
+        return self._board[-1][column_idx] != 'empty'
