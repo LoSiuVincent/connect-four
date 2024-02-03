@@ -1,6 +1,6 @@
 import pytest
 
-from src.board import Board
+from src.bot.board import Board
 
 
 def test_parse_board_str():

@@ -28,11 +28,15 @@ class Predict(BaseModel):
     test: bool
 
 
+def create_bot(is_testing: bool):
+    if is_testing:
+        return Bot(strategy='fixed')
+    else:
+        return Bot(strategy='random')
+
+
 @app.post('/predict')
 async def predict(predict: Predict):
-    if predict.test:
-        bot = Bot(strategy='fixed')
-    else:
-        bot = Bot(strategy='random')
+    bot = create_bot(predict.test)
     prediction = bot.predict(predict.board)
     return {'move': prediction}
