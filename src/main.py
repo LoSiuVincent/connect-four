@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from src.bot import Bot
+
 app = FastAPI()
 
 app.mount('/static', StaticFiles(directory='src/static'), name='static')
@@ -15,5 +17,7 @@ async def index():
 @app.post('/predict')
 async def predict(request: Request):
     body = await request.body()
-    board_str = body.decode('utf-8')  # noqa
-    return {'move': 1}
+    board_str = body.decode('utf-8')
+    bot = Bot(strategy='fixed')
+    prediction = bot.predict(board_str)
+    return {'move': prediction}
