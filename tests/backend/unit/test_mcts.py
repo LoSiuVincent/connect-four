@@ -9,7 +9,7 @@ def test_create_root_node():
     game_state = Mock()
     mcts = MCTS(game_state)
 
-    assert mcts._root._state == game_state
+    assert mcts._root._game == game_state
     assert mcts._root.n == 0
     assert mcts._root.v == 0
 

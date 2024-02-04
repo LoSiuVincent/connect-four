@@ -1,11 +1,14 @@
-class Board:
+from src.bot.mcts import Game
+
+
+class Board(Game):
     def __init__(self, board: list[list[str]]):
         self._board = board
         self._num_cols = len(board[0])
         self._num_rows = len(board)
 
     @staticmethod
-    def create(board_str: str):
+    def create(board_str: str) -> 'Board':
         return Board(Board._parse_board_str(board_str))
 
     @staticmethod
