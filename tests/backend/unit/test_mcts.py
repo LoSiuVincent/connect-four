@@ -41,7 +41,7 @@ def test_select_child_node_with_higher_UCB(children_n_v, select_child, C):
         child.v = v
         children.append(child)
     root.add_children(children)
-    root.n = len(children)
+    root.n = len(children) - 1
     mcts = MCTS(some_game_state, C=C)
     mcts._root = root
 

@@ -28,6 +28,19 @@ class Node:
     def get_parent(self) -> 'Node':
         return self._parent
 
+    def get_best_child(self, C) -> 'Node':
+        UCBs = [child._calculate_UCB(C) for child in self._children]
+        max_UCB = max(UCBs)
+        for idx, value in enumerate(UCBs):
+            if value == max_UCB:
+                return self._children[idx]
+
+    def _calculate_UCB(self, C) -> float:
+        if self.n == 0:
+            return math.inf
+        else:
+            return self.v / self.n + C * math.sqrt(math.log(self._parent.n) / self.n)
+
     def __repr__(self) -> str:
         return f'Node(n={self.n}, v={self.v})'
 
@@ -42,17 +55,4 @@ class MCTS:
         if current.is_leaf():
             return current
         else:
-            return self._get_best_child(current)
-
-    def _get_best_child(self, parent: Node) -> Node:
-        UCBs = [self._calculate_UCB(child) for child in parent.get_children()]
-        max_UCB = max(UCBs)
-        for idx, value in enumerate(UCBs):
-            if value == max_UCB:
-                return parent.get_children()[idx]
-
-    def _calculate_UCB(self, node: Node) -> float:
-        if node.n == 0:
-            return math.inf
-        else:
-            return node.v / node.n + self._C * math.sqrt(math.log(node.get_parent().n) / node.n)
+            return current.get_best_child(self._C)
