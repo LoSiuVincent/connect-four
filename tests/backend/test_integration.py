@@ -38,10 +38,10 @@ def test_getting_fixed_move_when_column_full():
 @pytest.mark.parametrize(
     'board_str,prediction',
     [
-        ('CCCEEEE|PPPEEEE|PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 3), # Horizontal win
-        ('CPEEEEE|CPEEEEE|CPEEEEE|CEEEEEE|EEPEEEE|EEEEEEE', 0), # Vertical win
-        ('CPCEEEE|PCCEEEE|EPPCEEE|EEECPEE|EEEEEEP|EEEEEEE', 0), # Major diagonal win
-        ('EEECPEE|EEEPCEP|EEECPPE|EEPPCEE|EPCPEEE|CPCEEEE', 3), # Minor diagonal win
+        ('CCCEEEE|PPPEEEE|PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 3),  # Horizontal win
+        ('CPEEEEE|CPEEEEE|CPEEEEE|CEEEEEE|EEPEEEE|EEEEEEE', 0),  # Vertical win
+        ('CPCEEEE|PCCEEEE|EPPCEEE|EEECPEE|EEEEEEP|EEEEEEE', 0),  # Major diagonal win
+        ('EEECPEE|EEEPCEP|EEECPPE|EEPPCEE|EPCPEEE|CPCEEEE', 3),  # Minor diagonal win
     ],
 )
 def test_getting_MCTS_move(board_str, prediction):
