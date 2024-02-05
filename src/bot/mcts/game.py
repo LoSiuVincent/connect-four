@@ -14,8 +14,8 @@ class Game(Protocol):
 
 
 class ConnectFour(Game):
-    def __init__(self, board_str: str, player_first=True):
-        self._board = Board.create(board_str)
+    def __init__(self, board: Board, player_first=True):
+        self._board = board
         self._player_first = player_first
 
     def step(self, action: int) -> None:

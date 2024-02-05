@@ -39,9 +39,9 @@ def test_getting_fixed_move_when_column_full():
     'board_str,prediction',
     [
         ('CCCEEEE|PPPEEEE|PEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 3),  # Horizontal win
-        ('CPEEEEE|CPEEEEE|CPEEEEE|CEEEEEE|EEPEEEE|EEEEEEE', 0),  # Vertical win
-        ('CPCEEEE|PCCEEEE|EPPCEEE|EEECPEE|EEEEEEP|EEEEEEE', 0),  # Major diagonal win
-        ('EEECPEE|EEEPCEP|EEECPPE|EEPPCEE|EPCPEEE|CPCEEEE', 3),  # Minor diagonal win
+        ('CPPEEEE|CPEEEEE|CPEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 0),  # Vertical win
+        ('ECPPPEE|EECPPEE|EEECPEE|EEEEEEE|EEEEEEE|EEEEEEE', 4),  # / diagonal win
+        ('EPPPCEE|EPPCEEE|EPCEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 1),  # \ diagonal win
     ],
 )
 def test_getting_MCTS_move(board_str, prediction):

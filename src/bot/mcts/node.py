@@ -45,7 +45,9 @@ class Node:
         return self._children[_argmax(UCBs)]
 
     def get_best_action(self) -> int:
-        average_values = [child.v / child.n if child.n != 0 else -math.inf for child in self._children]
+        average_values = [
+            child.v / child.n if child.n != 0 else -math.inf for child in self._children
+        ]
         return _argmax(average_values)
 
     def expand(self) -> None:
