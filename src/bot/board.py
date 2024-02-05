@@ -31,3 +31,29 @@ class Board:
             if not self.is_column_full(j):
                 cols.append(j)
         return cols
+
+    def get_winner(self):
+        directions = [(1, 0), (0, 1), (1, 1), (1, -1)]
+
+        for row in range(self._num_rows):
+            for col in range(self._num_cols):
+                for dx, dy in directions:
+                    if self._check_winning_line(row, col, dx, dy):
+                        return self._board[row][col]
+
+        return None
+
+    def _check_winning_line(self, row, col, dx, dy):
+        initial_cell = self._board[row][col]
+        if initial_cell == 'empty':
+            return False
+
+        for i in range(1, 4):
+            new_row = row + i * dx
+            new_col = col + i * dy
+            if new_row < 0 or new_row >= self._num_rows or new_col < 0 or new_col >= self._num_cols:
+                return False
+            if self._board[new_row][new_col] != initial_cell:
+                return False
+
+        return True

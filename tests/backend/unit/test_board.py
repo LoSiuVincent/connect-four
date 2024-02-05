@@ -63,3 +63,28 @@ def test_get_available_columns():
     board = Board.create('CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE|CPEEEEE|PCEEEEE')
 
     assert board.get_available_columns() == [2, 3, 4, 5, 6]
+
+
+@pytest.mark.parametrize(
+    "board_str,winner",
+    [
+        # Horizontal wins
+        ('PPPPEEE|CCCEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 'player'),
+        ('EEECCCC|EEEEPPP|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 'computer'),
+        # Vertical wins
+        ('PEEEEEE|PEEEEEE|PEEEEEE|PEECEEE|CEEEEEE|CEEEEEE', 'player'),
+        ('CEEEEEE|CEEEEEE|CEEEEEE|CEEPEEE|PEEEEEE|PEEEEEE', 'computer'),
+        # Diagonal descending wins (/)
+        ('PCCCEEE|EPCCEEE|EEPCEEE|EEEPEEE|EEEEEEE|EEEEEEE', 'player'),
+        ('CPPPEEE|ECPPEEE|EECPEEE|EEECEEE|EEEEEEE|EEEEEEE', 'computer'),
+        # Diagonal ascending wins (\)
+        ('CCCPEEE|CCPEEEE|CPEEEEE|PEEEEEE|EEEEEEE|EEEEEEE', 'player'),
+        ('PPPCEEE|PPCEEEE|PCEEEEE|CEEEEEE|EEEEEEE|EEEEEEE', 'computer'),
+        # No one wins
+        ('EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', None),
+    ],
+)
+def test_win_conditions(board_str, winner):
+    board = Board.create(board_str)
+
+    assert board.get_winner() == winner
