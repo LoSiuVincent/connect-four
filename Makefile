@@ -13,7 +13,7 @@ unit-test:
 
 integration-test:
 	npm test tests/frontend/integration.test.js
-	$(RUN) pytest tests/backend/test_integration.py
+	$(RUN) pytest tests/backend/integration
 
 functional-test:
 	$(RUN) pytest tests/functional/test_functionals.py
