@@ -1,10 +1,11 @@
 import random
+import time
+from unittest.mock import patch
 
 import pytest
 
 from src.bot.board import Board
-from src.bot.mcts.game import ConnectFour
-from src.bot.mcts.mcts import MCTS
+from src.bot.mcts import MCTS, ConnectFour
 
 
 @pytest.mark.parametrize(
@@ -23,3 +24,28 @@ def test_getting_winning_move(board_str, prediction):
     mcts = MCTS(game)
 
     assert mcts.get_next_move() == prediction
+
+
+def test_running_within_time_budget():
+    random.seed(10)
+    board = Board.create('EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
+    game = ConnectFour(board)
+    mcts = MCTS(game, limit='budget', time_budget=1)
+
+    start_time = time.time()
+    mcts.get_next_move()
+    end_time = time.time()
+
+    assert end_time - start_time == pytest.approx(1, rel=0.1)
+
+
+def test_run_with_fix_iteration():
+    random.seed(10)
+    board = Board.create('EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
+    game = ConnectFour(board)
+    mcts = MCTS(game, limit='iter', iterations=500)
+
+    with patch('src.bot.mcts.MCTS.run_iteration') as mock_run_iteration:
+        with patch('src.bot.mcts.node.Node.get_best_action'):
+            mcts.get_next_move()
+            assert mock_run_iteration.call_count == 500

@@ -1,11 +1,16 @@
+import time
+
 from .game import Game
 from .node import Node
 
 
 class MCTS:
-    def __init__(self, game: Game, C: float = 1):
+    def __init__(self, game: Game, C: float = 1, limit='iter', time_budget=None, iterations=1000):
         self._root = Node(game)
         self._C = C
+        self._limit = limit
+        self._time_budget = time_budget
+        self._iterations = iterations
 
     def select(self) -> Node:
         current = self._root
@@ -22,7 +27,14 @@ class MCTS:
         selected_node.backprop(rollout_value)
 
     def get_next_move(self):
-        for _ in range(1000):
-            self.run_iteration()
+        if self._limit == 'budget':
+            start_time = time.time()
+            elapsed_time = 0
+            while elapsed_time < self._time_budget:
+                self.run_iteration()
+                elapsed_time = time.time() - start_time
+        else:
+            for _ in range(self._iterations):
+                self.run_iteration()
 
         return self._root.get_best_action()
