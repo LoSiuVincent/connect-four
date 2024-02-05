@@ -13,15 +13,6 @@ class MCTS:
             current = current.get_child_with_highest_UCB(self._C)
         return current
 
-    def expand(self, node: Node) -> None:
-        node.expand()
-
-    def rollout(self, node: Node) -> float:
-        return node.rollout()
-
-    def backprop(self, node: Node, value: float) -> None:
-        node.backprop(value)
-
     def run_iteration(self):
         selected_node = self.select()
         if selected_node.n != 0:
