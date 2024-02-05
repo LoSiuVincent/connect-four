@@ -1,4 +1,6 @@
 import math
+import random
+from copy import deepcopy
 from typing import Protocol
 
 
@@ -16,6 +18,9 @@ class Node:
 
     def get_game(self) -> Game:
         return self._game
+    
+    def get_available_actions(self) -> int:
+        return self._game.get_available_actions()
 
     def is_leaf(self) -> bool:
         return len(self._children) == 0
@@ -64,3 +69,10 @@ class MCTS:
         game = node.get_game()
         new_nodes = [Node(game.step(action)) for action in game.get_available_actions()]
         node.add_children(new_nodes)
+
+    def rollout(self, node: Node) -> float:
+        game_copy = deepcopy(node.get_game())
+        while not game_copy.is_terminal():
+            random_action = random.choice(node.get_available_actions())
+            game_copy.step(random_action)
+        return game_copy.get_value()

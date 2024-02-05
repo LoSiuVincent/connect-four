@@ -82,3 +82,15 @@ class TestMCTS:
         mcts.expand(mcts._root)
 
         assert len(mcts._root.get_children()) == 3
+
+    def test_rollout(self):
+        actual_game = Mock()
+        actual_game.get_available_actions.return_value = [0, 1]
+        actual_game.is_terminal.side_effect = [False, False, True]
+        actual_game.get_value.return_value = 10
+        mcts = MCTS(actual_game)
+        
+        rollout_value = mcts.rollout(mcts._root)
+        
+        actual_game.is_terminal.assert_not_called()
+        assert rollout_value == 10
