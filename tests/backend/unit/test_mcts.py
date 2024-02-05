@@ -49,6 +49,18 @@ def test_select_child_node_with_higher_UCB(children_n_v, select_child, C):
 
     assert mcts.select() == children[select_child]
 
+def test_select_node_with_depth_two():
+    some_game_state = Mock()
+    root = Node(some_game_state)
+    child = Node(some_game_state)
+    grandchild = Node(some_game_state)
+    root.add_children([child])
+    child.add_children([grandchild])
+
+    mcts = MCTS(some_game_state)
+    mcts._root = root
+    
+    assert mcts.select() == grandchild
 
 def test_expand_node():
     game = Mock()

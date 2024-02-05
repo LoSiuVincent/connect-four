@@ -9,11 +9,10 @@ class MCTS:
 
     def select(self) -> Node:
         current = self._root
-        if current.is_leaf():
-            return current
-        else:
-            return current.get_child_with_highest_UCB(self._C)
-
+        while not current.is_leaf():
+            current = current.get_child_with_highest_UCB(self._C)
+        return current
+        
     def expand(self, node: Node) -> None:
         node.expand()
 
