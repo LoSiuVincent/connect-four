@@ -134,3 +134,25 @@ def test_backprop_node(mcts):
     mcts.backprop(backprop_node, value=10)
 
     assert get_n_v_lists(root) == [(2, 11), (2, 10), (1, -1), (1, 10)]
+
+
+def test_run_four_times(game_mock):
+    game_mock.get_available_actions.return_value = [0, 1]
+    game_mock.get_value.return_value = 10
+    game_mock.step.return_value = game_mock
+    game_mock.is_terminal.return_value = True
+
+    mcts = MCTS(game_mock)
+    assert get_n_v_lists(mcts._root) == [(0, 0)]
+
+    mcts.run_iteration()
+    assert get_n_v_lists(mcts._root) == [(1, 10)]
+
+    mcts.run_iteration()
+    assert get_n_v_lists(mcts._root) == [(2, 20), (1, 10), (0, 0)]
+
+    mcts.run_iteration()
+    assert get_n_v_lists(mcts._root) == [(3, 30), (1, 10), (1, 10)]
+
+    mcts.run_iteration()
+    assert get_n_v_lists(mcts._root) == [(4, 40), (2, 20), (1, 10), (1, 10), (0, 0)]

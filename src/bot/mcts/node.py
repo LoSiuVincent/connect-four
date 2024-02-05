@@ -47,9 +47,8 @@ class Node:
             return self.v / self.n + C * math.sqrt(math.log(self._parent.n) / self.n)
 
     def expand(self) -> None:
-        self._children = [
-            Node(self._game.step(action)) for action in self._game.get_available_actions()
-        ]
+        children = [Node(self._game.step(action)) for action in self._game.get_available_actions()]
+        self.add_children(children)
 
     def rollout(self) -> float:
         game_copy = deepcopy(self._game)

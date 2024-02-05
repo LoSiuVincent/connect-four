@@ -73,6 +73,8 @@ def test_expand():
     node.expand()
 
     assert len(node.get_children()) == 3
+    for child in node.get_children():
+        assert child._parent == node
 
 
 def test_rollout():

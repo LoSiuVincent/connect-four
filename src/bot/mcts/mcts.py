@@ -21,3 +21,11 @@ class MCTS:
 
     def backprop(self, node: Node, value: float) -> None:
         node.backprop(value)
+
+    def run_iteration(self):
+        selected_node = self.select()
+        if selected_node.n != 0:
+            selected_node.expand()
+            selected_node = selected_node.get_children()[0]
+        rollout_value = selected_node.rollout()
+        selected_node.backprop(rollout_value)
