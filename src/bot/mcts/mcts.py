@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import Literal
 
@@ -38,11 +39,16 @@ class MCTS:
         if self._limit == 'budget':
             start_time = time.time()
             elapsed_time = 0
+            num_iter = 0
             while elapsed_time < self._time_budget:
                 self.run_iteration()
                 elapsed_time = time.time() - start_time
+                num_iter += 1
+            logging.info(f'Ran {num_iter} iterations in {elapsed_time} s')
         else:
             for _ in range(self._iterations):
                 self.run_iteration()
 
+        best_action = self._root.get_best_action()
+        logging.info(f'Best action: {best_action}')
         return self._root.get_best_action()

@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -5,6 +7,8 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 from src.bot import Bot
+
+logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 
 app = FastAPI()
 

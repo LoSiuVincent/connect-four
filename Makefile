@@ -3,7 +3,10 @@ BASELINE_DIR = tests/functional/baseline
 CURRENT_DIR = tests/functional/current
 
 run-dev:
-	$(RUN) uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+	$(RUN) uvicorn src.main:app --reload --host 0.0.0.0 --port 8000 --log-level 'info'
+
+run-prod:
+	$(RUN) uvicorn src.main:app --host 0.0.0.0 --port 8000 --log-level 'info'
 
 all-test: clean-current unit-test integration-test functional-test
 
