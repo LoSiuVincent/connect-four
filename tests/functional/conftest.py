@@ -1,5 +1,3 @@
-import time
-
 import pytest
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -21,12 +19,12 @@ class ConnectFourTestDriver(webdriver.Firefox):
         return self.execute_script('return view.getCellLength();')
 
     def wait_until_text_appear(self, text: str, timeout=5):
-        WebDriverWait(self, timeout).until(
+        WebDriverWait(self, timeout, poll_frequency=0.1).until(
             EC.text_to_be_present_in_element((By.ID, 'id-game-state-text'), text)
         )
 
     def wait_until_text_disappear(self, text: str, timeout=5):
-        WebDriverWait(self, timeout).until_not(
+        WebDriverWait(self, timeout, poll_frequency=0.1).until_not(
             EC.text_to_be_present_in_element((By.ID, 'id-game-state-text'), text)
         )
 
@@ -40,8 +38,6 @@ class ConnectFourTestDriver(webdriver.Firefox):
         action.move_to_element_with_offset(canvas, click_x, click_y)
         action.click()
         action.perform()
-
-        time.sleep(1)
 
 
 @pytest.fixture
