@@ -1,5 +1,6 @@
-import pytest
 import random
+
+import pytest
 
 from src.bot.board import Board
 from src.bot.mcts.game import ConnectFour
