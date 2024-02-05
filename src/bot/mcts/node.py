@@ -16,6 +16,9 @@ class Node:
     def get_available_actions(self) -> int:
         return self._game.get_available_actions()
 
+    def is_root(self) -> bool:
+        return self._parent == self
+
     def is_leaf(self) -> bool:
         return len(self._children) == 0
 
@@ -54,6 +57,12 @@ class Node:
             random_action = random.choice(self._game.get_available_actions())
             game_copy.step(random_action)
         return game_copy.get_value()
+
+    def backprop(self, value: float) -> None:
+        self.n += 1
+        self.v += value
+        if not self.is_root():
+            self._parent.backprop(value)
 
     def __repr__(self) -> str:
         return f'Node(n={self.n}, v={self.v})'

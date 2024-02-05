@@ -34,6 +34,21 @@ def create_tree_bfs(game_state, depth, branching_factor, n_v_list):
     return root
 
 
+def get_n_v_lists(root: Node):
+    output = []
+
+    queue = deque([root])
+
+    while queue:
+        current = queue.popleft()
+        for child in current.get_children():
+            queue.append(child)
+
+        output.append((current.n, current.v))
+
+    return output
+
+
 @pytest.fixture
 def game_mock():
     return Mock()
@@ -99,7 +114,7 @@ def test_expand_node(mcts):
     node.expand.assert_called_once()
 
 
-def test_rollout(mcts):
+def test_rollout_node(mcts):
     node = Mock()
     node.rollout.return_value = 10
     mcts._root = node
@@ -107,3 +122,15 @@ def test_rollout(mcts):
     result = mcts.rollout(mcts._root)
 
     assert result == 10
+
+
+def test_backprop_node(mcts):
+    root = create_tree_bfs(
+        game_mock, depth=2, branching_factor=2, n_v_list=[(1, 1), (1, 0), (1, -1), (0, 0)]
+    )
+    mcts._root = root
+    backprop_node = root.get_children()[0].get_children()[0]
+
+    mcts.backprop(backprop_node, value=10)
+
+    assert get_n_v_lists(root) == [(2, 11), (2, 10), (1, -1), (1, 10)]

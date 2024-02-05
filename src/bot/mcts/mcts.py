@@ -18,3 +18,6 @@ class MCTS:
 
     def rollout(self, node: Node) -> float:
         return node.rollout()
+
+    def backprop(self, node: Node, value: float) -> None:
+        node.backprop(value)

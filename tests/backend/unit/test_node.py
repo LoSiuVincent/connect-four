@@ -5,6 +5,11 @@ import pytest
 from src.bot.mcts.node import Node
 
 
+@pytest.fixture
+def game_mock():
+    return Mock()
+
+
 def test_is_leaf_node_returns_true():
     node = Node()
 
@@ -58,7 +63,7 @@ def test_get_child_with_highest_UCB(children_n_v, select_child, C):
     assert node.get_child_with_highest_UCB(C) == children[select_child]
 
 
-def test_expand_node():
+def test_expand():
     game = Mock()
     game.get_available_actions.return_value = [0, 1, 2]
     game.step.return_value = Mock()
@@ -70,7 +75,7 @@ def test_expand_node():
     assert len(node.get_children()) == 3
 
 
-def test_rollout_node():
+def test_rollout():
     actual_game = Mock()
     actual_game.get_available_actions.return_value = [0, 1]
     actual_game.is_terminal.side_effect = [False, False, True]
@@ -81,3 +86,22 @@ def test_rollout_node():
 
     actual_game.is_terminal.assert_not_called()
     assert rollout_value == 10
+
+
+def test_backprop(game_mock):
+    root = Node(game_mock, 1, 1)
+    child = Node(game_mock, 1, 0)
+    grandchild = Node(game_mock, 0, 0)
+    root.add_children([child])
+    child.add_children([grandchild])
+
+    grandchild.backprop(10)
+
+    assert grandchild.n == 1
+    assert grandchild.v == 10
+
+    assert child.n == 2
+    assert child.v == 10
+
+    assert root.n == 2
+    assert root.v == 11
