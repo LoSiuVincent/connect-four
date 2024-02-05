@@ -113,6 +113,20 @@ test("Game should notify listeners when they subscribe to it", () => {
 	expect(listenerThree.update).not.toHaveBeenCalled();
 });
 
+test("makeComputerMove takes the specified time", async () => {
+	mockServer = {getComputerMove: async () => {
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		return 1;
+	}}
+	game = new Game(mockServer, 2000);
+
+	const startTime = Date.now()
+	await game.makeComputerMove();
+	const timeUsed = Date.now() - startTime;
+
+	expect(timeUsed).toBeLessThanOrEqual(2050);
+})
+
 describe("isComputerThinking", () => {
 	test("should return true when it is not resolved", () => {
 		game.makeComputerMove();

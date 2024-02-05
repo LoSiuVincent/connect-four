@@ -62,8 +62,13 @@ export class Game {
 		this._isComputerThinking = true;
 		this.notify("computerStartThinking", {});
 
+		const startTime = Date.now()
 		const computerMove = await this._server.getComputerMove(this._encodeBoard());
-		await new Promise(resolve => setTimeout(resolve, this._computerMoveDelay));
+		const timeElapsed = Date.now() - startTime;
+		const remainingTime = this._computerMoveDelay - timeElapsed;
+		if (remainingTime > 0) {
+			await new Promise(resolve => setTimeout(resolve, remainingTime));
+		}
 		this.dropCoin(computerMove, "computer");
 
 		if (this.getWinner() === "computer") {

@@ -1,11 +1,19 @@
 import time
+from typing import Literal
 
 from .game import Game
 from .node import Node
 
 
 class MCTS:
-    def __init__(self, game: Game, C: float = 1, limit='iter', time_budget=None, iterations=1000):
+    def __init__(
+        self,
+        game: Game,
+        C: float = 1,
+        limit: Literal['iter', 'budget'] = 'iter',
+        time_budget: float = None,
+        iterations: int = 1000,
+    ):
         self._root = Node(game)
         self._C = C
         self._limit = limit

@@ -29,7 +29,7 @@ class RandomStrategy:
 class MCTSStrategy:
     def predict(self, board: Board):
         game = ConnectFour(board)
-        mcts = MCTS(game)
+        mcts = MCTS(game, limit='budget', time_budget=2)
         return mcts.get_next_move()
 
 
