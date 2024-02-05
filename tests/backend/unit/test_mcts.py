@@ -49,6 +49,7 @@ def test_select_child_node_with_higher_UCB(children_n_v, select_child, C):
 
     assert mcts.select() == children[select_child]
 
+
 def test_expand_node():
     game = Mock()
     mcts = MCTS(game)
@@ -56,14 +57,15 @@ def test_expand_node():
     mcts._root = node
 
     mcts.expand(node)
-    
+
     node.expand.assert_called_once()
-    
+
+
 def test_rollout():
     game = Mock()
     mcts = MCTS(game)
     node = Mock()
     node.rollout.return_value = 10
     mcts._root = node
-    
+
     assert mcts.rollout(mcts._root) == 10

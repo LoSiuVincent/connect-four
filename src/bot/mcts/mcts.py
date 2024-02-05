@@ -1,6 +1,3 @@
-import random
-from copy import deepcopy
-
 from .game import Game
 from .node import Node
 
@@ -19,6 +16,6 @@ class MCTS:
 
     def expand(self, node: Node) -> None:
         node.expand()
-        
+
     def rollout(self, node: Node) -> float:
         return node.rollout()

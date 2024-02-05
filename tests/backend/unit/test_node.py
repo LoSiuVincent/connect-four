@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import Mock
+
+import pytest
 
 from src.bot.mcts.node import Node
 
@@ -31,6 +32,7 @@ def test_root_get_parent_node():
 
     assert root.get_parent() == root
 
+
 @pytest.mark.parametrize(
     'children_n_v,select_child,C',
     [
@@ -54,6 +56,7 @@ def test_get_child_with_highest_UCB(children_n_v, select_child, C):
     node.n = len(children) - 1
 
     assert node.get_child_with_highest_UCB(C) == children[select_child]
+
 
 def test_expand_node():
     game = Mock()
