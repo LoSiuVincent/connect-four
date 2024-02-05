@@ -29,6 +29,7 @@ flake8 = "^7.0.0"
 [tool.pytest.ini_options]
 markers = [
     'visual: marks as visual regression tests. The tests will capture images when the environment variable UPDATE_BASELINE=1',
+    'regression: marks as regression tests, reproducing bugs in the earlier versions.'
 ]
 log_cli = true
 log_cli_level = "INFO"

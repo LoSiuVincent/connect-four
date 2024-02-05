@@ -49,3 +49,13 @@ def test_run_with_fix_iteration():
         with patch('src.bot.mcts.node.Node.get_best_action'):
             mcts.get_next_move()
             assert mock_run_iteration.call_count == 500
+
+
+@pytest.mark.regression
+def test_should_not_stop_player_when_column_full():
+    random.seed(10)
+    board = Board.create('EECPCEE|EEPCEEE|EECEEEE|EEPEEEE|EEPEEEE|EEPEEEE')
+    game = ConnectFour(board)
+    mcts = MCTS(game, limit='iter', iterations=2000)
+
+    assert not mcts.get_next_move() == 2
