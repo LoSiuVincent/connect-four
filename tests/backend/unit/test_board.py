@@ -102,3 +102,15 @@ def test_drop_coins():
 
     assert board.get_available_columns() == [i for i in range(1, 7)]
     assert board.get_winner() == 'player'
+
+
+def test_get_number_of_player_moves():
+    board = Board.create('PPPPEEE|CCCEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
+
+    assert board.get_num_player_moves() == 4
+
+
+def test_get_number_of_computer_moves():
+    board = Board.create('PPPPEEE|CCCEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
+
+    assert board.get_num_computer_moves() == 3

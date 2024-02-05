@@ -15,6 +15,12 @@ class Board:
         board = [[symbol_to_word[cell] for cell in row] for row in rows]
         return board
 
+    def get_num_player_moves(self):
+        return self._count_coin('player')
+
+    def get_num_computer_moves(self):
+        return self._count_coin('computer')
+
     def drop_coin(self, col_idx: int, whose_move: str = 'player') -> None:
         for i in range(self._num_rows):
             if self._board[i][col_idx] == 'empty':
@@ -48,6 +54,14 @@ class Board:
                         return self._board[row][col]
 
         return None
+
+    def _count_coin(self, whose: str):
+        count = 0
+        for row in self._board:
+            for cell in row:
+                if cell == whose:
+                    count += 1
+        return count
 
     def _check_winning_line(self, row, col, dx, dy):
         initial_cell = self._board[row][col]
