@@ -47,6 +47,6 @@ def test_getting_fixed_move_when_column_full():
 def test_getting_MCTS_move(board_str, prediction):
     bot = Bot(strategy='mcts')
 
-    prediction = bot.predict(board_str)
+    bot_prediction = bot.predict(board_str)
 
-    assert prediction == prediction
+    assert bot_prediction == prediction
