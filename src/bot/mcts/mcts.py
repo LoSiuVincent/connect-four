@@ -20,3 +20,9 @@ class MCTS:
             selected_node = selected_node.get_children()[0]
         rollout_value = selected_node.rollout()
         selected_node.backprop(rollout_value)
+
+    def get_next_move(self):
+        for _ in range(1000):
+            self.run_iteration()
+        
+        return self._root.get_best_action()

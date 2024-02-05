@@ -5,6 +5,13 @@ from copy import deepcopy
 from .game import Game
 
 
+def _argmax(list_: list):
+    max_value = max(list_)
+    for idx, value in enumerate(list_):
+        if value == max_value:
+            return idx
+
+
 class Node:
     def __init__(self, game: Game = None, n: int = 0, v: float = 0):
         self._parent = self
@@ -35,19 +42,19 @@ class Node:
 
     def get_child_with_highest_UCB(self, C) -> 'Node':
         UCBs = [child._calculate_UCB(C) for child in self._children]
-        max_UCB = max(UCBs)
-        for idx, value in enumerate(UCBs):
-            if value == max_UCB:
-                return self._children[idx]
+        return self._children[_argmax(UCBs)]
 
-    def _calculate_UCB(self, C) -> float:
-        if self.n == 0:
-            return math.inf
-        else:
-            return self.v / self.n + C * math.sqrt(math.log(self._parent.n) / self.n)
+    def get_best_action(self) -> int:
+        average_values = [child.v / child.n if child.n != 0 else -math.inf for child in self._children]
+        return _argmax(average_values)
 
     def expand(self) -> None:
-        children = [Node(self._game.step(action)) for action in self._game.get_available_actions()]
+        children = []
+        for action in self._game.get_available_actions():
+            game_copy = deepcopy(self._game)
+            game_copy.step(action)
+            child_node = Node(game_copy)
+            children.append(child_node)
         self.add_children(children)
 
     def rollout(self) -> float:
@@ -62,6 +69,12 @@ class Node:
         self.v += value
         if not self.is_root():
             self._parent.backprop(value)
+
+    def _calculate_UCB(self, C) -> float:
+        if self.n == 0:
+            return math.inf
+        else:
+            return self.v / self.n + C * math.sqrt(math.log(self._parent.n) / self.n)
 
     def __repr__(self) -> str:
         return f'Node(n={self.n}, v={self.v})'

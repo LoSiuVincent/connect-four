@@ -63,10 +63,29 @@ def test_get_child_with_highest_UCB(children_n_v, select_child, C):
     assert node.get_child_with_highest_UCB(C) == children[select_child]
 
 
+@pytest.mark.parametrize(
+    'children_n_v,best_action',
+    [([(1, 1), (2, 1)], 0), ([(10, 5), (5, 5)], 1), ([(1, 1), (5, 10)], 1), ([(1, 1), (0, 0)], 0)],
+)
+def test_get_action_with_highest_average_value(children_n_v, best_action):
+    some_game_state = Mock()
+    node = Node(some_game_state)
+    children = []
+    for n, v in children_n_v:
+        child = Node(some_game_state)
+        child.n = n
+        child.v = v
+        children.append(child)
+    node.add_children(children)
+    node.n = len(children) - 1
+
+    assert node.get_best_action() == best_action
+
+
 def test_expand():
     game = Mock()
     game.get_available_actions.return_value = [0, 1, 2]
-    game.step.return_value = Mock()
+    game.step.return_value = None
     node = Node(game)
     assert len(node.get_children()) == 0
 
@@ -75,6 +94,8 @@ def test_expand():
     assert len(node.get_children()) == 3
     for child in node.get_children():
         assert child._parent == node
+        assert child._game is not None
+        assert child._game is not game
 
 
 def test_rollout():
