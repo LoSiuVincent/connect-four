@@ -1,4 +1,5 @@
 import pytest
+import random
 
 from src.bot.board import Board
 from src.bot.mcts.game import ConnectFour
@@ -15,6 +16,7 @@ from src.bot.mcts.mcts import MCTS
     ],
 )
 def test_getting_winning_move(board_str, prediction):
+    random.seed(10)
     board = Board.create(board_str)
     game = ConnectFour(board)
     mcts = MCTS(game)

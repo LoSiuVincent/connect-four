@@ -32,7 +32,7 @@ def create_bot(is_testing: bool):
     if is_testing:
         return Bot(strategy='fixed')
     else:
-        return Bot(strategy='random')
+        return Bot(strategy='mcts')
 
 
 @app.post('/predict')

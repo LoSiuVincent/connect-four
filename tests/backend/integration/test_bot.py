@@ -1,4 +1,5 @@
 import pytest
+import random
 
 from src.bot import Bot
 
@@ -45,6 +46,7 @@ def test_getting_fixed_move_when_column_full():
     ],
 )
 def test_getting_MCTS_move(board_str, prediction):
+    random.seed(10)
     bot = Bot(strategy='mcts')
 
     bot_prediction = bot.predict(board_str)
