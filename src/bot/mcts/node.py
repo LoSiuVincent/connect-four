@@ -1,11 +1,8 @@
 import math
 import random
 from copy import deepcopy
-from typing import Protocol
 
-
-class Game(Protocol):
-    pass
+from .game import Game
 
 
 class Node:
@@ -16,9 +13,6 @@ class Node:
         self.n = 0
         self.v = 0
 
-    def get_game(self) -> Game:
-        return self._game
-    
     def get_available_actions(self) -> int:
         return self._game.get_available_actions()
 
@@ -36,7 +30,7 @@ class Node:
     def get_parent(self) -> 'Node':
         return self._parent
 
-    def get_best_child(self, C) -> 'Node':
+    def get_child_with_highest_UCB(self, C) -> 'Node':
         UCBs = [child._calculate_UCB(C) for child in self._children]
         max_UCB = max(UCBs)
         for idx, value in enumerate(UCBs):
@@ -49,30 +43,17 @@ class Node:
         else:
             return self.v / self.n + C * math.sqrt(math.log(self._parent.n) / self.n)
 
-    def __repr__(self) -> str:
-        return f'Node(n={self.n}, v={self.v})'
+    def expand(self) -> None:
+        self._children = [
+            Node(self._game.step(action)) for action in self._game.get_available_actions()
+        ]
 
-
-class MCTS:
-    def __init__(self, game: Game, C: float = 1):
-        self._root = Node(game)
-        self._C = C
-
-    def select(self) -> Node:
-        current = self._root
-        if current.is_leaf():
-            return current
-        else:
-            return current.get_best_child(self._C)
-
-    def expand(self, node: Node) -> None:
-        game = node.get_game()
-        new_nodes = [Node(game.step(action)) for action in game.get_available_actions()]
-        node.add_children(new_nodes)
-
-    def rollout(self, node: Node) -> float:
-        game_copy = deepcopy(node.get_game())
+    def rollout(self) -> float:
+        game_copy = deepcopy(self._game)
         while not game_copy.is_terminal():
-            random_action = random.choice(node.get_available_actions())
+            random_action = random.choice(self._game.get_available_actions())
             game_copy.step(random_action)
         return game_copy.get_value()
+
+    def __repr__(self) -> str:
+        return f'Node(n={self.n}, v={self.v})'

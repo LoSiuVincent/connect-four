@@ -1,7 +1,4 @@
-from src.bot.mcts import Game
-
-
-class Board(Game):
+class Board:
     def __init__(self, board: list[list[str]]):
         self._board = board
         self._num_cols = len(board[0])
