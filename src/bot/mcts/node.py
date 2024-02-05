@@ -13,10 +13,11 @@ def _argmax(list_: list):
 
 
 class Node:
-    def __init__(self, game: Game = None, n: int = 0, v: float = 0):
+    def __init__(self, game: Game = None, action: int = -1, n: int = 0, v: float = 0):
         self._parent = self
         self._children = []
         self._game = game
+        self._action = action
         self.n = n
         self.v = v
 
@@ -48,14 +49,16 @@ class Node:
         average_values = [
             child.v / child.n if child.n != 0 else -math.inf for child in self._children
         ]
-        return _argmax(average_values)
+        best_child_idx = _argmax(average_values)
+        best_child = self._children[best_child_idx]
+        return best_child._action
 
     def expand(self) -> None:
         children = []
         for action in self._game.get_available_actions():
             game_copy = deepcopy(self._game)
             game_copy.step(action)
-            child_node = Node(game_copy)
+            child_node = Node(game_copy, action=action)
             children.append(child_node)
         self.add_children(children)
 

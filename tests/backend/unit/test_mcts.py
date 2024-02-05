@@ -22,10 +22,10 @@ def create_tree_bfs(game_state, depth, branching_factor, n_v_list):
         current_node, current_depth = queue.popleft()
 
         if current_depth < depth:
-            for _ in range(branching_factor):
+            for action in range(branching_factor):
                 if n_v_list:
                     child_n, child_v = n_v_list.pop(0)
-                    child = Node(game_state, child_n, child_v)
+                    child = Node(game_state, n=child_n, v=child_v, action=action)
                     current_node.add_children([child])
                     queue.append((child, current_depth + 1))
                 else:

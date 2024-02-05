@@ -69,17 +69,17 @@ def test_get_child_with_highest_UCB(children_n_v, select_child, C):
 )
 def test_get_action_with_highest_average_value(children_n_v, best_action):
     some_game_state = Mock()
-    node = Node(some_game_state)
+    root = Node(some_game_state)
     children = []
-    for n, v in children_n_v:
-        child = Node(some_game_state)
+    for action, (n, v) in enumerate(children_n_v):
+        child = Node(some_game_state, action=action)
         child.n = n
         child.v = v
         children.append(child)
-    node.add_children(children)
-    node.n = len(children) - 1
+    root.add_children(children)
+    root.n = len(children) - 1
 
-    assert node.get_best_action() == best_action
+    assert root.get_best_action() == best_action
 
 
 def test_expand():
@@ -112,9 +112,9 @@ def test_rollout():
 
 
 def test_backprop(game_mock):
-    root = Node(game_mock, 1, 1)
-    child = Node(game_mock, 1, 0)
-    grandchild = Node(game_mock, 0, 0)
+    root = Node(game_mock, n=1, v=1)
+    child = Node(game_mock, n=1, v=0)
+    grandchild = Node(game_mock, n=0, v=0)
     root.add_children([child])
     child.add_children([grandchild])
 
