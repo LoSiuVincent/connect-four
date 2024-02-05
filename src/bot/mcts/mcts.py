@@ -12,7 +12,7 @@ class MCTS:
         while not current.is_leaf():
             current = current.get_child_with_highest_UCB(self._C)
         return current
-        
+
     def expand(self, node: Node) -> None:
         node.expand()
 

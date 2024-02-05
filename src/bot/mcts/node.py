@@ -6,12 +6,12 @@ from .game import Game
 
 
 class Node:
-    def __init__(self, game: Game = None):
+    def __init__(self, game: Game = None, n: int = 0, v: float = 0):
         self._parent = self
         self._children = []
         self._game = game
-        self.n = 0
-        self.v = 0
+        self.n = n
+        self.v = v
 
     def get_available_actions(self) -> int:
         return self._game.get_available_actions()
