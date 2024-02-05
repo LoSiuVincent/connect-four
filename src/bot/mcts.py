@@ -14,6 +14,9 @@ class Node:
         self.n = 0
         self.v = 0
 
+    def get_game(self) -> Game:
+        return self._game
+
     def is_leaf(self) -> bool:
         return len(self._children) == 0
 
@@ -56,3 +59,8 @@ class MCTS:
             return current
         else:
             return current.get_best_child(self._C)
+
+    def expand(self, node: Node) -> None:
+        game = node.get_game()
+        new_nodes = [Node(game.step(action)) for action in game.get_available_actions()]
+        node.add_children(new_nodes)

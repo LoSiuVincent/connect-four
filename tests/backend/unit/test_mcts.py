@@ -30,22 +30,21 @@ class TestNode:
 
         assert root.get_parent() == root
 
+
 class TestMCTS:
     def test_create_root_node(self):
-        game_state = Mock()
-        mcts = MCTS(game_state)
+        game = Mock()
+        mcts = MCTS(game)
 
-        assert mcts._root._game == game_state
+        assert mcts._root._game == game
         assert mcts._root.n == 0
         assert mcts._root.v == 0
 
-
     def test_select_root_node(self):
-        game_state = Mock()
-        mcts = MCTS(game_state)
+        game = Mock()
+        mcts = MCTS(game)
 
         assert mcts.select() == mcts._root
-
 
     @pytest.mark.parametrize(
         'children_n_v,select_child,C',
@@ -72,3 +71,14 @@ class TestMCTS:
         mcts._root = root
 
         assert mcts.select() == children[select_child]
+
+    def test_expand_root_node(self):
+        game = Mock()
+        game.get_available_actions.return_value = [0, 1, 2]
+        game.step.return_value = Mock()
+        mcts = MCTS(game)
+        assert len(mcts._root.get_children()) == 0
+
+        mcts.expand(mcts._root)
+
+        assert len(mcts._root.get_children()) == 3
