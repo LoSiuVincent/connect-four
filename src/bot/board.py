@@ -15,6 +15,12 @@ class Board:
         board = [[symbol_to_word[cell] for cell in row] for row in rows]
         return board
 
+    def drop_coin(self, col_idx: int, whose_move: str = 'player') -> None:
+        for i in range(self._num_rows):
+            if self._board[i][col_idx] == 'empty':
+                self._board[i][col_idx] = whose_move
+                return
+
     def get_next_available_column(self) -> int | None:
         for j in range(self._num_cols):
             for i in range(self._num_rows):

@@ -88,3 +88,17 @@ def test_win_conditions(board_str, winner):
     board = Board.create(board_str)
 
     assert board.get_winner() == winner
+
+
+def test_drop_coins():
+    board = Board.create('EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
+
+    board.drop_coin(0, 'computer')
+    board.drop_coin(0, 'computer')
+    board.drop_coin(0)
+    board.drop_coin(0)
+    board.drop_coin(0)
+    board.drop_coin(0)
+
+    assert board.get_available_columns() == [i for i in range(1, 7)]
+    assert board.get_winner() == 'player'
