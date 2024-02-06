@@ -27,8 +27,20 @@ class ConnectFourTestDriver(webdriver.Firefox):
         WebDriverWait(self, timeout, poll_frequency=0.1).until_not(
             EC.text_to_be_present_in_element((By.ID, 'id-game-state-text'), text)
         )
+        
+    def wait_until_player_turn_start(self, timeout=5):
+        self.wait_until_text_appear('Your turn', timeout)
 
-    def click_column(self, column_index):
+    def wait_until_player_turn_done(self, timeout=5):
+        self.wait_until_text_disappear('Your turn', timeout)
+
+    def wait_until_computer_turn_done(self, timeout=5):
+        self.wait_until_text_disappear('Thinking ...', timeout)
+
+    def click_column(self, column_index, wait_before_player_turn_start=True):
+        if wait_before_player_turn_start:
+            self.wait_until_player_turn_start()
+        
         canvas = self.find_canvas()
         cell_width = self.get_cell_length()
         click_x = column_index * cell_width + 0.5 * cell_width - canvas.size['width'] / 2

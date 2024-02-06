@@ -45,7 +45,7 @@ def test_run_with_fix_iteration():
     game = ConnectFour(board)
     mcts = MCTS(game, limit='iter', iterations=500)
 
-    with patch('src.bot.mcts.MCTS.run_iteration') as mock_run_iteration:
+    with patch('src.bot.mcts.MCTS._run_iteration') as mock_run_iteration:
         with patch('src.bot.mcts.node.Node.get_best_action'):
             mcts.get_next_move()
             assert mock_run_iteration.call_count == 500

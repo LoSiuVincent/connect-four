@@ -2,7 +2,7 @@
 .venv
 .vscode
 .tests
-tests/current
+tests/functional/current
 __pycache__
 node_modules
 notes.txt

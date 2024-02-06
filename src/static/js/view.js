@@ -1,10 +1,11 @@
+import { Graphics } from "./graphics.js";
 import { Subject } from "./subject.js";
 
 export class p5View {
 	constructor(game, p5, cellLength) {
 		this._game = game;
 		this._p5 = p5;
-		this._cellLength = cellLength === undefined ? 100 : cellLength;
+		this._graphics = new Graphics(p5, cellLength, game);
 		this._subject = new Subject();
 
 		this._p5.mouseClicked = () => {
@@ -16,19 +17,19 @@ export class p5View {
 	}
 
 	getCellLength() {
-		return this._cellLength;
+		return this._graphics.getCellLength();
 	}
 
 	getCanvasWidth() {
-		return this._cellLength * 7;
+		return this._graphics.getCanvasWidth();
 	}
 
 	getCanvasHeight() {
-		return this._cellLength * 8;
+		return this._graphics.getCanvasHeight();
 	}
 
 	isInsideCanvas(x, y) {
-		return 0 <= x && x <= this.getCanvasWidth() && 0 <= y && y <= this.getCanvasHeight();
+		return 0 <= x && x <= this._graphics.getCanvasWidth() && 0 <= y && y <= this._graphics.getCanvasHeight();
 	}
 
 	changeStateText(text) {
@@ -58,69 +59,10 @@ export class p5View {
 	}
 
 	setup() {
-		this._canvas = this._p5.createCanvas(this.getCanvasWidth(), this.getCanvasHeight());
-		this._pg = this._p5.createGraphics(this.getCanvasWidth(), this._cellLength * 6);
+		this._graphics.setup();
 	}
 
 	draw() {
-		this._drawAllCoins();
-		this._drawBoard();
-		this._p5.image(this._pg, 0, 2 * this._cellLength);
-	}
-
-	_getCell(row, col) {
-		const cornerX = col * this._cellLength;
-		const cornerY = (7 - row) * this._cellLength;
-		const centerX = cornerX + this._cellLength / 2;
-		const centerY = cornerY + this._cellLength / 2;
-		return { cornerX, cornerY, centerX, centerY };
-	}
-
-	_drawCell(row, col) {
-		const cell = this._getCell(row, col);
-
-		this._p5.fill(255, 255, 255);
-		this._p5.stroke(0, 0, 0);
-		this._p5.strokeWeight(4);
-		this._p5.square(cell.cornerX, cell.cornerY, this._cellLength);
-	}
-
-	_drawAllCoins() {
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 7; j++) {
-				if (this._game.getCellState(i, j) === "player" || this._game.getCellState(i, j) === "computer") {
-					this._drawCoin(i, j);
-				}
-			}
-		}
-	}
-
-	_drawCoin(row, col) {
-		const cell = this._getCell(row, col);
-		const diameter = this._cellLength * 0.75;
-
-		const cellState = game.getCellState(row, col);
-		if (cellState === "player") {
-			this._p5.fill(255, 0, 0);
-		} else if (cellState === "computer") {
-			this._p5.fill(255, 204, 0);
-		}
-		this._p5.noStroke();
-		this._p5.circle(cell.centerX, cell.centerY, diameter);
-	}
-
-	_drawBoard() {
-		const diameter = this._cellLength * 0.7;
-
-		this._pg.background(0, 0, 255);
-		for (let row = 0; row < 6; row++) {
-			for (let col = 0; col < 7; col++) {
-				const centerX = col * this._cellLength + this._cellLength / 2;
-				const centerY = (5 - row) * this._cellLength + this._cellLength / 2;
-				this._pg.erase();
-				this._pg.circle(centerX, centerY, diameter);
-				this._pg.noErase();
-			}
-		}
+		this._graphics.draw();
 	}
 }
