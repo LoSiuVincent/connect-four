@@ -9,14 +9,15 @@ new p5((p5) => {
 		const server = new Server("", TEST);
 		const game = new Game(server, TEST ? 800 : 2000);
 		const view = new p5View(game, p5, CELL_SIZE);
-		p5.createCanvas(view.getCanvasWidth(), view.getCanvasHeight());
-
+		
 		window.game = game;
 		window.view = view;
 		window.controller = new Controller(game, view);
+
+		view.setup();
 	};
 
 	p5.draw = () => {
 		window.view.draw();
 	};
-});
+}, document.getElementById('game-canvas'));

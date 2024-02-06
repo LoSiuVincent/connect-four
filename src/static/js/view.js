@@ -28,7 +28,7 @@ export class p5View {
 	}
 
 	isInsideCanvas(x, y) {
-		return (0 <= x && x <= this.getCanvasWidth()) && (0 <= y && y <= this.getCanvasHeight());
+		return 0 <= x && x <= this.getCanvasWidth() && 0 <= y && y <= this.getCanvasHeight();
 	}
 
 	changeStateText(text) {
@@ -49,10 +49,6 @@ export class p5View {
 		}
 	}
 
-	draw() {
-		this._drawBoard();
-	}
-
 	addListener(event, listener) {
 		this._subject.addListener(event, listener);
 	}
@@ -61,12 +57,23 @@ export class p5View {
 		return this._subject.notify(event, data);
 	}
 
+	setup() {
+		this._canvas = this._p5.createCanvas(this.getCanvasWidth(), this.getCanvasHeight());
+		this._pg = this._p5.createGraphics(this.getCanvasWidth(), this._cellLength * 6);
+	}
+
+	draw() {
+		this._drawAllCoins();
+		this._drawBoard();
+		this._p5.image(this._pg, 0, 2 * this._cellLength);
+	}
+
 	_getCell(row, col) {
 		const cornerX = col * this._cellLength;
 		const cornerY = (7 - row) * this._cellLength;
 		const centerX = cornerX + this._cellLength / 2;
 		const centerY = cornerY + this._cellLength / 2;
-		return { cornerX, cornerY, centerX, centerY, };
+		return { cornerX, cornerY, centerX, centerY };
 	}
 
 	_drawCell(row, col) {
@@ -76,6 +83,16 @@ export class p5View {
 		this._p5.stroke(0, 0, 0);
 		this._p5.strokeWeight(4);
 		this._p5.square(cell.cornerX, cell.cornerY, this._cellLength);
+	}
+
+	_drawAllCoins() {
+		for (let i = 0; i < 6; i++) {
+			for (let j = 0; j < 7; j++) {
+				if (this._game.getCellState(i, j) === "player" || this._game.getCellState(i, j) === "computer") {
+					this._drawCoin(i, j);
+				}
+			}
+		}
 	}
 
 	_drawCoin(row, col) {
@@ -93,12 +110,16 @@ export class p5View {
 	}
 
 	_drawBoard() {
-		for (let i = 0; i < 6; i++) {
-			for (let j = 0; j < 7; j++) {
-				this._drawCell(i, j);
-				if (this._game.getCellState(i, j) === "player" || this._game.getCellState(i, j) === "computer") {
-					this._drawCoin(i, j);
-				}
+		const diameter = this._cellLength * 0.7;
+
+		this._pg.background(0, 0, 255);
+		for (let row = 0; row < 6; row++) {
+			for (let col = 0; col < 7; col++) {
+				const centerX = col * this._cellLength + this._cellLength / 2;
+				const centerY = (5 - row) * this._cellLength + this._cellLength / 2;
+				this._pg.erase();
+				this._pg.circle(centerX, centerY, diameter);
+				this._pg.noErase();
 			}
 		}
 	}

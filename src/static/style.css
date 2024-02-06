@@ -17,7 +17,7 @@ body {
 	border-radius: 10px;
 }
 
-main {
+#game-canvas {
 	margin: 0 auto;
 	background-color: #ebebeb; /* Placeholder until the game canvas is drawn */
 	position: relative;
