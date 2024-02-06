@@ -1,12 +1,30 @@
-main {
-    display: flex;
-    height: 80vh;
-    justify-content: center;
-    align-items: center;
+body {
+	font-family: "Arial", sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f7f7f7;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	text-align: center;
 }
 
-p {
-    font-size: 3rem;
-    text-align: center;
-    margin-top: 1rem;
+#game-container {
+	background-color: #fff;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	border-radius: 10px;
+}
+
+main {
+	margin: 0 auto;
+	background-color: #ebebeb; /* Placeholder until the game canvas is drawn */
+	position: relative;
+}
+
+#id-game-state-text {
+	margin-top: 20px;
+	font-size: 1.5em;
+	color: #333;
 }
