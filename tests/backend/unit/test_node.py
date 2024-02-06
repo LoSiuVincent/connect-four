@@ -24,20 +24,6 @@ def test_is_leaf_node_returns_false():
     assert not node.is_leaf()
 
 
-def test_child_get_parent_node():
-    parent = Node()
-    child = Node()
-    parent.add_children([child])
-
-    assert child.get_parent() == parent
-
-
-def test_root_get_parent_node():
-    root = Node()
-
-    assert root.get_parent() == root
-
-
 @pytest.mark.parametrize(
     'children_n_v,select_child,C',
     [

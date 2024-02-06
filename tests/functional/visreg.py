@@ -37,7 +37,6 @@ def _are_images_the_same(base: Image, other: Image, threshold: float = 0.0) -> b
 class _MatchingElement:
     def __init__(self, element: WebElement, name: str, caller: str):
         self._element = element
-        self._name = name
         self._baseline_path = BASELINE_IMG_DIR / caller / f'{name}.png'
         self._current_path = CURRENT_IMG_DIR / caller / f'{name}.png'
 

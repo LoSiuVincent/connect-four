@@ -35,3 +35,4 @@ linter:
 	poetry run isort .
 	poetry run black .
 	poetry run flake8 src tests
+	poetry run vulture src tests

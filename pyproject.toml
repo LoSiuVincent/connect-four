@@ -25,11 +25,12 @@ autoflake = "^2.2.1"
 isort = "^5.13.2"
 black = "^24.1.1"
 flake8 = "^7.0.0"
+vulture = "^2.11"
 
 [tool.pytest.ini_options]
 markers = [
     'visual: marks as visual regression tests. The tests will capture images when the environment variable UPDATE_BASELINE=1',
-    'regression: marks as regression tests, reproducing bugs in the earlier versions.'
+    'regression: marks as regression tests, reproducing bugs in the earlier versions.',
 ]
 log_cli = true
 log_cli_level = "INFO"
@@ -42,6 +43,9 @@ target-version = ['py37', 'py38', 'py39']
 skip-string-normalization = true
 skip-magic-trailing-comma = false
 
+[tool.vulture]
+exclude = ['*test_*.py', 'conftest.py', 'visreg.py']
+ignore_decorators = ["@app.get"]
 
 [build-system]
 requires = ["poetry-core"]

@@ -21,34 +21,34 @@ class MCTS:
         self._time_budget = time_budget
         self._iterations = iterations
 
-    def select(self) -> Node:
-        current = self._root
-        while not current.is_leaf():
-            current = current.get_child_with_highest_UCB(self._C)
-        return current
-
-    def run_iteration(self):
-        selected_node = self.select()
-        if selected_node.n != 0 and not selected_node.is_terminal():
-            selected_node.expand()
-            selected_node = selected_node.get_children()[0]
-        rollout_value = selected_node.rollout()
-        selected_node.backprop(rollout_value)
-
     def get_next_move(self):
         if self._limit == 'budget':
             start_time = time.time()
             elapsed_time = 0
             num_iter = 0
             while elapsed_time < self._time_budget:
-                self.run_iteration()
+                self._run_iteration()
                 elapsed_time = time.time() - start_time
                 num_iter += 1
             logging.info(f'Ran {num_iter} iterations in {elapsed_time} s')
         else:
             for _ in range(self._iterations):
-                self.run_iteration()
+                self._run_iteration()
 
         best_action = self._root.get_best_action()
         logging.info(f'Best action: {best_action}')
         return self._root.get_best_action()
+
+    def _run_iteration(self):
+        selected_node = self._select()
+        if selected_node.n != 0 and not selected_node.is_terminal():
+            selected_node.expand()
+            selected_node = selected_node.get_children()[0]
+        rollout_value = selected_node.rollout()
+        selected_node.backprop(rollout_value)
+
+    def _select(self) -> Node:
+        current = self._root
+        while not current.is_leaf():
+            current = current.get_child_with_highest_UCB(self._C)
+        return current

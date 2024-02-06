@@ -1,5 +1,5 @@
 from collections import deque
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -66,7 +66,7 @@ def test_create_root_node(mcts, game_mock):
 
 
 def test_select_root_node(mcts):
-    assert mcts.select() == mcts._root
+    assert mcts._select() == mcts._root
 
 
 def test_select_node_with_depth_two():
@@ -76,7 +76,7 @@ def test_select_node_with_depth_two():
         game_mock, depth=2, branching_factor=1, n_v_list=[(2, 2), (1, 2), (0, 2)]
     )
 
-    selected_node = mcts.select()
+    selected_node = mcts._select()
     assert selected_node.n == 0
     assert selected_node.v == 2
 
@@ -100,28 +100,18 @@ def test_select_child_node_with_higher_UCB(mcts, children_n_v, select_child, C):
     mcts._root = root
     mcts._C = C
 
-    selected_node = mcts.select()
+    selected_node = mcts._select()
 
     assert selected_node == root.get_children()[select_child]
 
 
 def test_run_four_times(game_mock):
     game_mock.get_available_actions.return_value = [0, 1]
-    game_mock.get_value.return_value = 10
     game_mock.step.return_value = game_mock
-    game_mock.is_terminal.return_value = True
+    game_mock.is_terminal.return_value = False
 
-    mcts = MCTS(game_mock)
+    mcts = MCTS(game_mock, iterations=4)
     assert get_n_v_lists(mcts._root) == [(0, 0)]
-
-    mcts.run_iteration()
-    assert get_n_v_lists(mcts._root) == [(1, 10)]
-
-    mcts.run_iteration()
-    assert get_n_v_lists(mcts._root) == [(2, 20), (1, 10), (0, 0)]
-
-    mcts.run_iteration()
-    assert get_n_v_lists(mcts._root) == [(3, 30), (1, 10), (1, 10)]
-
-    mcts.run_iteration()
-    assert get_n_v_lists(mcts._root) == [(4, 40), (2, 20), (1, 10), (1, 10), (0, 0)]
+    with patch('src.bot.mcts.node.Node.rollout', return_value=10):
+        mcts.get_next_move()
+        assert get_n_v_lists(mcts._root) == [(4, 40), (2, 20), (1, 10), (1, 10), (0, 0)]

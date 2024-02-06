@@ -21,14 +21,8 @@ class Node:
         self.n = n
         self.v = v
 
-    def get_available_actions(self) -> int:
-        return self._game.get_available_actions()
-    
     def is_terminal(self) -> bool:
         return self._game.is_terminal()
-
-    def is_root(self) -> bool:
-        return self._parent == self
 
     def is_leaf(self) -> bool:
         return len(self._children) == 0
@@ -40,9 +34,6 @@ class Node:
 
     def get_children(self) -> list['Node']:
         return self._children
-
-    def get_parent(self) -> 'Node':
-        return self._parent
 
     def get_child_with_highest_UCB(self, C) -> 'Node':
         UCBs = [child._calculate_UCB(C) for child in self._children]
@@ -75,8 +66,11 @@ class Node:
     def backprop(self, value: float) -> None:
         self.n += 1
         self.v += value
-        if not self.is_root():
+        if not self._is_root():
             self._parent.backprop(value)
+
+    def _is_root(self) -> bool:
+        return self._parent == self
 
     def _calculate_UCB(self, C) -> float:
         if self.n == 0:
