@@ -59,3 +59,13 @@ def test_should_not_stop_player_when_column_full():
     mcts = MCTS(game, limit='iter', iterations=2000)
 
     assert not mcts.get_next_move() == 2
+
+
+@pytest.mark.regression
+def test_list_index_out_of_range():
+    random.seed(3)
+    board = Board.create('EPCCPPE|EPCPCCE|EECPPCE|EEPPPCE|EEPCCPE|EEECEEE')
+    game = ConnectFour(board)
+    mcts = MCTS(game, limit='iter', iterations=20000)
+
+    mcts.get_next_move()
