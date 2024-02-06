@@ -14,6 +14,7 @@ export class p5View {
 		this._game.addListener("computerStartThinking", this);
 		this._game.addListener("computerStopThinking", this);
 		this._game.addListener("hasWinner", this);
+		this._game.addListener("draw", this);
 	}
 
 	getCellLength() {
@@ -47,6 +48,8 @@ export class p5View {
 			} else {
 				this.changeStateText("You lose, try again!");
 			}
+		} else if (event === "draw") {
+			this.changeStateText("Draw!");
 		}
 	}
 

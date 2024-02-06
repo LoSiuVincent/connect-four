@@ -27,11 +27,13 @@ def _get_caller_name():
     function_name = caller_frame.function
     return function_name
 
+
 def _get_average_pixel_diff(base: Image, other: Image) -> float:
     image_ops_diff = ImageChops.difference(base, other).getdata()
     pixel_diff = np.array(image_ops_diff).sum()
     num_pixels = base.size[0] * base.size[1] * len(base.getbands())
     return pixel_diff / num_pixels
+
 
 def _are_images_the_same(base: Image, other: Image, threshold: float = 0.1) -> bool:
     average_pixel_diff = _get_average_pixel_diff(base, other)
@@ -63,7 +65,7 @@ class _MatchingElement:
         base = Image.open(self._baseline_path)
         current = Image.open(self._current_path)
         return _are_images_the_same(base, current)
-    
+
     def get_pixel_diff(self) -> float:
         base = Image.open(self._baseline_path)
         current = Image.open(self._current_path)
@@ -101,7 +103,7 @@ def web_element_regression(
         while not matching_element.match_baseline() and elapsed_time < timeout:
             pixel_diff = matching_element.get_pixel_diff()
             logging.info(f'Image not the same, average pixel diff: {pixel_diff}')
-            
+
             time.sleep(0.1)
             matching_element.take_current_image()
             elapsed_time = time.time() - start_time
@@ -109,4 +111,6 @@ def web_element_regression(
         is_match_baseline = matching_element.match_baseline()
         if not is_match_baseline:
             pixel_diff = matching_element.get_pixel_diff()
-            pytest.fail(f'[Visual Regression "{name}"] Images are not the same, average pixel diff: {pixel_diff}')
+            pytest.fail(
+                f'[Visual Regression "{name}"] Images are not the same, average pixel diff: {pixel_diff}'
+            )

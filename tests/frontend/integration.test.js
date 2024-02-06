@@ -140,6 +140,34 @@ describe("when there are no mocks (except p5)", () => {
 		expect(spy).toHaveBeenCalledWith("Your turn");
 	})
 
+	test("View should change state text to 'Draw!' when draw", () => {
+		const spy = jest.spyOn(view, "changeStateText");
+
+		const makeBoardToDraw = () => {
+			const fillOneColumn = (playerBottom, col) => {
+				for (let row = 0; row < 6; row++) {
+					if (playerBottom) {
+						game.dropCoin(col);
+						game.dropCoin(col, "computer");
+					} else {
+						game.dropCoin(col, "computer");
+						game.dropCoin(col);
+					}
+				}
+			}
+			for (let col = 0; col < 3; col++) {
+				fillOneColumn(true, col)
+			}
+			for (let col = 3; col < 6; col++) {
+				fillOneColumn(false, col)
+			}
+			fillOneColumn(true, 6)
+		}
+		makeBoardToDraw()
+
+		expect(spy).toHaveBeenLastCalledWith("Draw!");
+	})
+
 	test("Game can announce player wins and stop", async () => {
 		const spy = jest.spyOn(view, "changeStateText");
 

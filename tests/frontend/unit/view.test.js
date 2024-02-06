@@ -86,5 +86,11 @@ describe("p5View tests", () => {
 
 			expect(spy).toHaveBeenCalledWith("You lose, try again!");
 		})
+
+		test("should show 'Draw!' when the game is drawn", () => {
+			view.update("draw", {});
+			
+			expect(spy).toHaveBeenCalledWith("Draw!");
+		})
 	})
 });

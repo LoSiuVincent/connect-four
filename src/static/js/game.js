@@ -30,6 +30,9 @@ export class Game {
 		if (this.getWinner() != "") {
 			this.notify("hasWinner", { winner: this.getWinner() });
 			this._isEnd = true;
+		} else if (this._isDraw()) {
+			this.notify("draw")
+			this._isEnd = true;
 		}
 	}
 
@@ -89,6 +92,15 @@ export class Game {
 
 	isEnded() {
 		return this._isEnd;
+	}
+
+	_isDraw() {
+		for (let col = 0; col < 7; col++) {
+			if (!this.isColumnFull(col)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	_checkWinningLine(row, col, dx, dy) {
