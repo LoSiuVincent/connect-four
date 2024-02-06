@@ -23,13 +23,25 @@ describe("when there is server mock", () => {
 		controller = new Controller(game, view);
 	})
 
-	test("controller should handle mouse click", () => {
+	test("controller should handle mouse click", async () => {
 		const spy = jest.spyOn(controller, "handleMouseClick");
 
-		notifyClickColumn(view, 0);
+		await notifyClickColumn(view, 0);
 
 		expect(spy).toHaveBeenCalledWith(10, 10);
 	});
+
+	test("controller should not handle mouse click when the column is full", async () => {
+		const spy = jest.spyOn(controller, "handleMouseClick");
+		for (let i = 0; i < 3; i++) {
+			game.dropCoin(0);
+			game.dropCoin(0, "computer");
+		}
+
+		await notifyClickColumn(view, 0);
+
+		expect(spy).not.toHaveBeenCalled();
+	})
 
 	test("should use the computer move from the server to response player", async () => {
 		await notifyClickColumn(view, 0);

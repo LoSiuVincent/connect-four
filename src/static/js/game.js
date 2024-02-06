@@ -10,6 +10,10 @@ export class Game {
 		this._isEnd = false;
 	}
 
+	isColumnFull(col) {
+		return this._board[5][col] !== "empty";
+	}
+
 	getCellState(row, col) {
 		return this._board[row][col];
 	}

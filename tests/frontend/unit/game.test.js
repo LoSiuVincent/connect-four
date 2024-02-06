@@ -65,10 +65,22 @@ test("getWinner returns empty string when there is no winner", () => {
 test("should end the game where there is a winner", () => {
 	game.getWinner = jest.fn().mockReturnValue("player");
 	expect(game.isEnded()).toEqual(false);
-	
+
 	game.dropCoin(0);
 
 	expect(game.isEnded()).toEqual(true);
+})
+
+test("isColumnFull returns correct value", () => {
+	for (let i = 0; i < 3; i++) {
+		game.dropCoin(0);
+		game.dropCoin(0, "computer");
+	}
+
+	expect(game.isColumnFull(0)).toEqual(true);
+	for (let j = 1; j < 7; j++) {
+		expect(game.isColumnFull(j)).toEqual(false);
+	}
 })
 
 describe("notification when there is a winner", () => {
@@ -114,10 +126,12 @@ test("Game should notify listeners when they subscribe to it", () => {
 });
 
 test("makeComputerMove takes the specified time", async () => {
-	mockServer = {getComputerMove: async () => {
-		await new Promise(resolve => setTimeout(resolve, 1000));
-		return 1;
-	}}
+	mockServer = {
+		getComputerMove: async () => {
+			await new Promise(resolve => setTimeout(resolve, 1000));
+			return 1;
+		}
+	}
 	game = new Game(mockServer, 2000);
 
 	const startTime = Date.now()

@@ -14,7 +14,7 @@ export class Controller {
 
 
 	async handleMouseClick(x, y) {
-		const colIndex = Math.floor(x / this._view.getCellLength());
+		const colIndex = this._getColIndex(x);
 		this._game.dropCoin(colIndex);
 		if (this._game.getWinner() != "player") {
 			await this._game.makeComputerMove();
@@ -22,6 +22,13 @@ export class Controller {
 	}
 
 	_shouldResponseClick(x, y) {
-		return (!this._game.isEnded() && !this._game.isComputerThinking() && this._view.isInsideCanvas(x, y));
+		return (!this._game.isEnded()
+			&& !this._game.isComputerThinking()
+			&& this._view.isInsideCanvas(x, y)
+			&& !this._game.isColumnFull(this._getColIndex(x)));
+	}
+
+	_getColIndex(x) {
+		return Math.floor(x / this._view.getCellLength());
 	}
 }
