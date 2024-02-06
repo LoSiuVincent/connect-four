@@ -23,6 +23,9 @@ class Node:
 
     def get_available_actions(self) -> int:
         return self._game.get_available_actions()
+    
+    def is_terminal(self) -> bool:
+        return self._game.is_terminal()
 
     def is_root(self) -> bool:
         return self._parent == self

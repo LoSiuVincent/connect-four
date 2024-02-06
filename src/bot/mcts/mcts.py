@@ -29,7 +29,7 @@ class MCTS:
 
     def run_iteration(self):
         selected_node = self.select()
-        if selected_node.n != 0:
+        if selected_node.n != 0 and not selected_node.is_terminal():
             selected_node.expand()
             selected_node = selected_node.get_children()[0]
         rollout_value = selected_node.rollout()
