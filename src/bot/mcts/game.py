@@ -22,9 +22,8 @@ class Game(Protocol):
 
 
 class ConnectFour(Game):
-    def __init__(self, board: Board, player_first=True):
+    def __init__(self, board: Board):
         self._board = board
-        self._player_first = player_first
 
     def step(self, action: int, whose_move: Literal['player', 'computer']) -> None:
         self._board.drop_coin(action, whose_move)

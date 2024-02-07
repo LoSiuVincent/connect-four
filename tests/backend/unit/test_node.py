@@ -68,11 +68,12 @@ def test_get_best_action(children_n_v, best_action):
 
     assert root.get_best_action() == best_action
 
+
 def test_get_first_child():
     game = Mock()
     game.get_available_actions.return_value = [0, 1, 2]
     root = Node(game)
-    
+
     root.expand()
 
     first_child = root.get_first_child()
@@ -98,38 +99,35 @@ def test_expand(whose_turn_of_root, whose_turn_of_children):
 
 
 @pytest.mark.parametrize(
-    'whose_turn,last_state,rollout_value',
+    'last_state,rollout_value',
     [
-        ('computer', GameState.PLAYER_WIN, 0),
-        ('computer', GameState.COMPUTER_WIN, 1),
-        ('computer', GameState.DRAW, 0.5),
-        ('player', GameState.PLAYER_WIN, 1),
-        ('player', GameState.COMPUTER_WIN, 0),
-        ('player', GameState.DRAW, 0.5),
+        (GameState.PLAYER_WIN, 'player'),
+        (GameState.COMPUTER_WIN, 'computer'),
+        (GameState.DRAW, 'draw'),
     ],
 )
-def test_rollout(whose_turn, last_state, rollout_value):
+def test_rollout(last_state, rollout_value):
     game_mock = Mock()
     game_mock.get_available_actions.return_value = [0, 1]
     game_mock.is_terminal.side_effect = [False, False, True]
     game_mock.get_state.return_value = last_state
-    node = Node(game_mock, whose_turn=whose_turn)
+    node = Node(game_mock)
 
     assert node.rollout() == rollout_value
 
 
 @pytest.mark.parametrize(
-    'backprop_value,root_v,child_v,grandchild_v',
-    [(1, 2, 0, 1), (0.5, 1.5, 0.5, 0.5), (0, 1, 1, 0)],
+    'rollout,root_v,child_v,grandchild_v',
+    [('computer', 1, 1, 0), ('draw', 1.5, 0.5, 0.5), ('player', 2, 0, 1)],
 )
-def test_backprop(game_mock, backprop_value, root_v, child_v, grandchild_v):
+def test_backprop_when_rollout_node_is_computer(game_mock, rollout, root_v, child_v, grandchild_v):
     root = Node(game_mock, n=2, v=1, whose_turn='computer')
     child = Node(game_mock, n=1, v=0, whose_turn='player')
     grandchild = Node(game_mock, n=0, v=0, whose_turn='computer')
     root._add_children([child])
     child._add_children([grandchild])
 
-    grandchild.backprop(backprop_value)
+    grandchild.backprop(rollout)
     assert root.n == 3
     assert root.v == root_v
 
@@ -138,3 +136,20 @@ def test_backprop(game_mock, backprop_value, root_v, child_v, grandchild_v):
 
     assert grandchild.n == 1
     assert grandchild.v == grandchild_v
+
+
+@pytest.mark.parametrize(
+    'rollout,root_v,child_v',
+    [('computer', 1, 1), ('draw', 1.5, 0.5), ('player', 2, 0)],
+)
+def test_backprop_when_rollout_node_is_player(game_mock, rollout, root_v, child_v):
+    root = Node(game_mock, n=1, v=1, whose_turn='computer')
+    child = Node(game_mock, n=0, v=0, whose_turn='player')
+    root._add_children([child])
+
+    child.backprop(rollout)
+    assert root.n == 2
+    assert root.v == root_v
+
+    assert child.n == 1
+    assert child.v == child_v

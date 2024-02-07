@@ -44,6 +44,10 @@ def test_getting_fixed_move_when_column_full():
         ('CPPEEEE|CPEEEEE|CPEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 0),  # Vertical win
         ('ECPPPEE|EECPPEE|EEECPEE|EEEEEEE|EEEEEEE|EEEEEEE', 4),  # / diagonal win
         ('EPPPCEE|EPPCEEE|EPCEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 1),  # \ diagonal win
+        ('PPPEEEE|CCCEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE', 3),  # Block horizontal win
+        ('EEEPEEE|EECPEEE|EECPCEE|EEEEEEE|EEEEEEE|EEEEEEE', 3),  # Block vertical win
+        ('PPPCEEE|EPCCEEE|EEPPEEE|EEEEEEE|EEEEEEE|EEEEEEE', 3),  # Block / diagonal win
+        ('PCPEEEE|CCPEEEE|CPEEEEE|PEEEEEE|EEEEEEE|EEEEEEE', 3),  # Block \ diagonal win
     ],
 )
 def test_getting_MCTS_move(board_str, prediction):

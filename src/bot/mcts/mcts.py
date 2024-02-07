@@ -36,14 +36,21 @@ class MCTS:
                 self._run_iteration()
 
         best_action = self._root.get_best_action()
-        logging.info(f'Best action: {best_action}')
+
+        if self._root.n != 0:
+            logging.info(
+                f'Best action: {best_action} | Win rate: {self._root.v / self._root.n * 100:.3f}%'
+            )
+        else:
+            logging.info(f'Best action: {best_action} | Win rate: Not available')
+
         return self._root.get_best_action()
 
     def _run_iteration(self):
         selected_node = self._select()
         if selected_node.n != 0 and not selected_node.is_terminal():
             selected_node.expand()
-            selected_node = selected_node.get_children()[0]
+            selected_node = selected_node.get_first_child()
         rollout_value = selected_node.rollout()
         selected_node.backprop(rollout_value)
 

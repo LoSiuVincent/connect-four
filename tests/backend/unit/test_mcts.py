@@ -14,7 +14,7 @@ def create_tree_bfs(game_state, depth, branching_factor, n_v_list):
         )
 
     root_n, root_v = n_v_list.pop(0)
-    root = Node(game_state, root_n, root_v)
+    root = Node(game_state, root_n, root_v, whose_turn='computer')
 
     queue = deque([(root, 0)])  # (node, current_depth)
 
@@ -25,8 +25,10 @@ def create_tree_bfs(game_state, depth, branching_factor, n_v_list):
             for action in range(branching_factor):
                 if n_v_list:
                     child_n, child_v = n_v_list.pop(0)
-                    child = Node(game_state, n=child_n, v=child_v, action=action)
-                    current_node.add_children([child])
+                    child = Node(
+                        game_state, n=child_n, v=child_v, action=action, whose_turn='player'
+                    )
+                    current_node._add_children([child])
                     queue.append((child, current_depth + 1))
                 else:
                     break
@@ -41,7 +43,7 @@ def get_n_v_lists(root: Node):
 
     while queue:
         current = queue.popleft()
-        for child in current.get_children():
+        for child in current._get_children():
             queue.append(child)
 
         output.append((current.n, current.v))
@@ -102,16 +104,17 @@ def test_select_child_node_with_higher_UCB(mcts, children_n_v, select_child, C):
 
     selected_node = mcts._select()
 
-    assert selected_node == root.get_children()[select_child]
+    assert selected_node == root._get_children()[select_child]
 
 
 def test_run_four_times(game_mock):
     game_mock.get_available_actions.return_value = [0, 1]
-    game_mock.step.return_value = game_mock
     game_mock.is_terminal.return_value = False
 
     mcts = MCTS(game_mock, iterations=4)
     assert get_n_v_lists(mcts._root) == [(0, 0)]
-    with patch('src.bot.mcts.node.Node.rollout', return_value=10):
+    with patch(
+        'src.bot.mcts.node.Node.rollout', side_effect=['player', 'player', 'computer', 'draw']
+    ):
         mcts.get_next_move()
-        assert get_n_v_lists(mcts._root) == [(4, 40), (2, 20), (1, 10), (1, 10), (0, 0)]
+        assert get_n_v_lists(mcts._root) == [(4, 2.5), (1, 0), (2, 1.5), (1, 0.5), (0, 0)]

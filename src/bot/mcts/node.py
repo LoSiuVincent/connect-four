@@ -61,7 +61,7 @@ class Node:
             children.append(child_node)
         self._add_children(children)
 
-    def rollout(self) -> float:
+    def rollout(self) -> Literal['player', 'computer', 'draw']:
         game_copy = deepcopy(self._game)
         current_turn = self._whose_turn
         while not game_copy.is_terminal():
@@ -71,20 +71,23 @@ class Node:
 
         terminal_state = game_copy.get_state()
         if terminal_state == GameState.DRAW:
-            return 0.5
+            return 'draw'
         elif terminal_state == GameState.PLAYER_WIN:
-            return 1 if self._whose_turn == 'player' else 0
+            return 'player'
         elif terminal_state == GameState.COMPUTER_WIN:
-            return 1 if self._whose_turn == 'computer' else 0
+            return 'computer'
 
-    def backprop(self, value: float) -> None:
+    def backprop(self, rollout: str) -> None:
         self.n += 1
+        if rollout == 'computer':
+            value = 1 if self._whose_turn == 'player' else 0
+        elif rollout == 'player':
+            value = 1 if self._whose_turn == 'computer' else 0
+        elif rollout == 'draw':
+            value = 0.5
         self.v += value
         if not self._is_root():
-            self._parent.backprop(1 - value)
-
-    def _get_children(self) -> list['Node']:
-        return self._children
+            self._parent.backprop(rollout)
 
     def _add_children(self, children: list['Node']) -> None:
         for child in children:
