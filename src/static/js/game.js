@@ -26,14 +26,9 @@ export class Game {
 				break;
 			}
 		}
+		this.notify("dropCoin", { who: whoseMove })
 
-		if (this.getWinner() != "") {
-			this.notify("hasWinner", { winner: this.getWinner() });
-			this._isEnd = true;
-		} else if (this._isDraw()) {
-			this.notify("draw")
-			this._isEnd = true;
-		}
+		this._checkGameOver();
 	}
 
 	getWinner() {
@@ -92,6 +87,16 @@ export class Game {
 
 	isEnded() {
 		return this._isEnd;
+	}
+
+	_checkGameOver() {
+		if (this.getWinner() != "") {
+			this.notify("hasWinner", { winner: this.getWinner() });
+			this._isEnd = true;
+		} else if (this._isDraw()) {
+			this.notify("draw")
+			this._isEnd = true;
+		}
 	}
 
 	_isDraw() {

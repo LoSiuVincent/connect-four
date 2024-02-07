@@ -157,6 +157,22 @@ describe("isComputerThinking", () => {
 	})
 })
 
+describe("Game notify dropping a coin", () => {
+	test("should notify dropping a player's coin", () => {
+		const spy = jest.spyOn(game, "notify")
+		game.dropCoin(0, "player");
+
+		expect(spy).toHaveBeenCalledWith("dropCoin", { who: "player" });
+	})
+
+	test("should notify dropping a computer's coin", () => {
+		const spy = jest.spyOn(game, "notify")
+		game.dropCoin(0, "computer");
+
+		expect(spy).toHaveBeenCalledWith("dropCoin", { who: "computer" });
+	})
+})
+
 describe("when player wins", () => {
 	test("by four vertical coins", () => {
 		game.dropCoin(3);
