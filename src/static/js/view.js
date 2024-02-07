@@ -15,6 +15,7 @@ export class p5View {
 		this._game.addListener("computerStopThinking", this);
 		this._game.addListener("hasWinner", this);
 		this._game.addListener("draw", this);
+		this._game.addListener("dropCoin", this);
 	}
 
 	getCellLength() {
@@ -50,6 +51,8 @@ export class p5View {
 			}
 		} else if (event === "draw") {
 			this.changeStateText("Draw!");
+		} else if (event === "dropCoin") {
+			this._graphics.addCoin(data.row, data.col, data.whose);
 		}
 	}
 
@@ -65,7 +68,12 @@ export class p5View {
 		this._graphics.setup();
 	}
 
+	updateGraphics() {
+		this._graphics.update();
+	}
+
 	draw() {
 		this._graphics.draw();
 	}
+
 }

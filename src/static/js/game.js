@@ -28,7 +28,7 @@ export class Game {
 				break;
 			}
 		}
-		this.notify("dropCoin", { who: whoseMove, row: coinRow, col: colIndex});
+		this.notify("dropCoin", { whose: whoseMove, row: coinRow, col: colIndex});
 
 		this._checkGameOver();
 	}
