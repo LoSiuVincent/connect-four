@@ -37,17 +37,14 @@ class Node:
         return len(self._children) == 0
 
     def get_first_child(self) -> 'Node':
-        pass
+        return self._children[0]
 
     def get_child_with_highest_UCB(self, C) -> 'Node':
         UCBs = [child._calculate_UCB(C) for child in self._children]
         return self._children[_argmax(UCBs)]
 
     def get_best_action(self) -> int:
-        average_values = [
-            child.v / child.n if child.n != 0 else -math.inf for child in self._children
-        ]
-        best_child_idx = _argmax(average_values)
+        best_child_idx = _argmax([child.n for child in self._children])
         best_child = self._children[best_child_idx]
         return best_child._action
 
