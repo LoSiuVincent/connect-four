@@ -80,7 +80,7 @@ def test_normal_state():
 )
 def test_makes_player_move(board_str):
     board = Board.create(board_str)
-    game = ConnectFour(board, player_first=True)
+    game = ConnectFour(board)
 
     game.step(3, whose_move='player')
 
@@ -97,7 +97,7 @@ def test_makes_player_move(board_str):
 )
 def test_step_makes_computer_move(board_str):
     board = Board.create(board_str)
-    game = ConnectFour(board, player_first=False)
+    game = ConnectFour(board)
 
     game.step(3, whose_move='computer')
 

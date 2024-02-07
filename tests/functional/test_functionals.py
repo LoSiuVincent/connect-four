@@ -47,7 +47,7 @@ def test_player_wins_game(browser):
     # He clicks the first column again and confirms that the game is ended
     browser.click_column(0, wait_before_player_turn_start=False)
     canvas = browser.find_canvas()
-    web_element_regression(canvas, 'game_end_after_winning')
+    web_element_regression(canvas, 'game_end_after_winning', wait_time_before_capture=1)
 
 
 @pytest.mark.visual
@@ -69,4 +69,4 @@ def test_player_loses_game(browser):
     # He clicks the first column again and confirms that the game is ended
     browser.click_column(0, wait_before_player_turn_start=False)
     canvas = browser.find_canvas()
-    web_element_regression(canvas, 'game_end_after_losing')
+    web_element_regression(canvas, 'game_end_after_losing', wait_time_before_capture=1)

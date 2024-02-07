@@ -42,6 +42,7 @@ skip-magic-trailing-comma = false
 [tool.vulture]
 exclude = ['*test_*.py', 'conftest.py', 'visreg.py']
 ignore_decorators = ["@app.get"]
+min_confidence = 80
 
 [build-system]
 requires = ["poetry-core"]

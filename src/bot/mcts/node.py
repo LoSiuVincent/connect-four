@@ -89,6 +89,9 @@ class Node:
         if not self._is_root():
             self._parent.backprop(rollout)
 
+    def _get_children(self) -> list['Node']:
+        return self._children
+
     def _add_children(self, children: list['Node']) -> None:
         for child in children:
             child._parent = self
