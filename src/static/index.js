@@ -18,6 +18,7 @@ new p5((p5) => {
 	};
 
 	p5.draw = () => {
+		window.view.updateGraphics();
 		window.view.draw();
 	};
 }, document.getElementById('game-canvas'));

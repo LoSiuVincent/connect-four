@@ -3,8 +3,11 @@ const CELL_COUNT_Y = 6;
 const BOARD_COLOR = '#007FFF'; // Deep sky blue
 const PLAYER_COLOR = '#FF0000'; // Red
 const COMPUTER_COLOR = '#FFCC00'; // Yellow
+const BACKGROUND_COLOR = '#FFFFFF'; // White
 const DEFAULT_CELL_LENGTH = 100;
 const COIN_SPAWN_Y = DEFAULT_CELL_LENGTH / 2;
+const COIN_DROP_DY = 3;
+const COIN_DROP_ACCELERATION = 1;
 
 export class Graphics {
 	constructor(p5, cellLength, game) {
@@ -21,10 +24,13 @@ export class Graphics {
 	}
 
 	update() {
-
+		for (const coin of this._coins) {
+			coin.update();
+		}
 	}
 
 	draw() {
+		this._p5.background(BACKGROUND_COLOR);
 		this._drawAllCoins();
 		this._drawBoard();
 		this._p5.image(this._pg, 0, 2 * this._cellLength);
@@ -78,8 +84,23 @@ class Coin {
 		this._cellLength = cellLength
 		this._diameter = cellLength * 0.75;
 		this._p5 = p5;
-		this._coinCenterX = this._col * this._cellLength + this._cellLength / 2;
-		this._coinCenterY = (CELL_COUNT_Y + 1 - this._row) * this._cellLength + this._cellLength / 2;
+		this._x = this._col * this._cellLength + this._cellLength / 2;
+		this._y = COIN_SPAWN_Y;
+		this._y_stop = (CELL_COUNT_Y + 1 - this._row) * this._cellLength + this._cellLength / 2;
+		this._isDropping = true;
+		this._dy = COIN_DROP_DY
+	}
+
+	update() {
+		console.log("update coin")
+		if (this._isDropping) {
+			this._y += this._dy;
+			this._dy += COIN_DROP_ACCELERATION;
+			if (this._y > this._y_stop) {
+				this._y = this._y_stop;
+				this._isDropping = false;
+			}
+		}
 	}
 
 	draw() {
@@ -90,6 +111,6 @@ class Coin {
 		}
 		this._p5.noStroke();
 
-		this._p5.circle(this._coinCenterX, this._coinCenterY, this._diameter);
+		this._p5.circle(this._x, this._y, this._diameter);
 	}
 }
