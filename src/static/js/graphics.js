@@ -14,7 +14,7 @@ export class Graphics {
 		this._p5 = p5;
 		this._cellLength = cellLength === undefined ? DEFAULT_CELL_LENGTH : cellLength;
 		this._game = game;
-		this._coins = [];
+		this._coinManager = new CoinManager(this._cellLength, this._p5);
 	}
 
 	setup() {
@@ -24,14 +24,12 @@ export class Graphics {
 	}
 
 	update() {
-		for (const coin of this._coins) {
-			coin.update();
-		}
+		this._coinManager.update();
 	}
 
 	draw() {
 		this._p5.background(BACKGROUND_COLOR);
-		this._drawAllCoins();
+		this._coinManager.draw();
 		this._drawBoard();
 		this._p5.image(this._pg, 0, 2 * this._cellLength);
 	}
@@ -49,14 +47,7 @@ export class Graphics {
 	}
 
 	addCoin(row, col, whose) {
-		const newCoin = new Coin(row, col, whose, this._cellLength, this._p5);
-		this._coins.push(newCoin);
-	}
-
-	_drawAllCoins() {
-		for (const coin of this._coins) {
-			coin.draw();
-		}
+		this._coinManager.addCoin(row, col, whose);
 	}
 
 	_drawBoard() {
@@ -72,6 +63,31 @@ export class Graphics {
 				this._pg.circle(centerX, centerY, diameter);
 				this._pg.noErase();
 			}
+		}
+	}
+}
+
+class CoinManager {
+	constructor(cellLength, p5) {
+		this._cellLength = cellLength;
+		this._p5 = p5;
+		this._coins = [];
+	}
+
+	addCoin(row, col, whose) {
+		const newCoin = new Coin(row, col, whose, this._cellLength, this._p5);
+		this._coins.push(newCoin);
+	}
+
+	update() {
+		for (const coin of this._coins) {
+			coin.update();
+		}
+	}
+
+	draw() {
+		for (const coin of this._coins) {
+			coin.draw();
 		}
 	}
 }
@@ -92,7 +108,6 @@ class Coin {
 	}
 
 	update() {
-		console.log("update coin")
 		if (this._isDropping) {
 			this._y += this._dy;
 			this._dy += COIN_DROP_ACCELERATION;
