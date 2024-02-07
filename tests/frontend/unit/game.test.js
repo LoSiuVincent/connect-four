@@ -162,14 +162,14 @@ describe("Game notify dropping a coin", () => {
 		const spy = jest.spyOn(game, "notify")
 		game.dropCoin(0, "player");
 
-		expect(spy).toHaveBeenCalledWith("dropCoin", { who: "player" });
+		expect(spy).toHaveBeenCalledWith("dropCoin", { who: "player", row: 0, col: 0});
 	})
 
 	test("should notify dropping a computer's coin", () => {
 		const spy = jest.spyOn(game, "notify")
-		game.dropCoin(0, "computer");
+		game.dropCoin(1, "computer");
 
-		expect(spy).toHaveBeenCalledWith("dropCoin", { who: "computer" });
+		expect(spy).toHaveBeenCalledWith("dropCoin", { who: "computer", row: 0, col: 1});
 	})
 })
 

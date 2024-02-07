@@ -20,13 +20,15 @@ export class Game {
 
 	dropCoin(colIndex, whoseMove) {
 		whoseMove = (whoseMove === undefined) ? "player" : whoseMove;
+		let coinRow;
 		for (let i = 0; i < 6; i++) {
 			if (this._board[i][colIndex] === "empty") {
 				this._board[i][colIndex] = whoseMove;
+				coinRow = i;
 				break;
 			}
 		}
-		this.notify("dropCoin", { who: whoseMove })
+		this.notify("dropCoin", { who: whoseMove, row: coinRow, col: colIndex});
 
 		this._checkGameOver();
 	}
