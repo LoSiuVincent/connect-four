@@ -2,6 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
+from src.bot.mcts.game import GameState
 from src.bot.mcts.node import Node
 
 
@@ -19,7 +20,7 @@ def test_is_leaf_node_returns_true():
 def test_is_leaf_node_returns_false():
     node = Node()
     children = [Node() for _ in range(7)]
-    node.add_children(children)
+    node._add_children(children)
 
     assert not node.is_leaf()
 
@@ -43,7 +44,7 @@ def test_get_child_with_highest_UCB(children_n_v, select_child, C):
         child.n = n
         child.v = v
         children.append(child)
-    node.add_children(children)
+    node._add_children(children)
     node.n = len(children) - 1
 
     assert node.get_child_with_highest_UCB(C) == children[select_child]
@@ -62,55 +63,68 @@ def test_get_action_with_highest_average_value(children_n_v, best_action):
         child.n = n
         child.v = v
         children.append(child)
-    root.add_children(children)
+    root._add_children(children)
     root.n = len(children) - 1
 
     assert root.get_best_action() == best_action
 
 
-def test_expand():
+@pytest.mark.parametrize(
+    'whose_turn_of_root,whose_turn_of_children', [('player', 'computer'), ('computer', 'player')]
+)
+def test_expand(whose_turn_of_root, whose_turn_of_children):
     game = Mock()
     game.get_available_actions.return_value = [0, 1, 2]
-    game.step.return_value = None
-    node = Node(game)
-    assert len(node.get_children()) == 0
+    node = Node(game, whose_turn=whose_turn_of_root)
+    assert len(node._get_children()) == 0
 
     node.expand()
 
-    assert len(node.get_children()) == 3
-    for child in node.get_children():
+    assert len(node._get_children()) == 3
+    for child in node._get_children():
         assert child._parent == node
         assert child._game is not None
-        assert child._game is not game
+        assert child._whose_turn == whose_turn_of_children
 
 
-def test_rollout():
-    actual_game = Mock()
-    actual_game.get_available_actions.return_value = [0, 1]
-    actual_game.is_terminal.side_effect = [False, False, True]
-    actual_game.get_value.return_value = 10
-    node = Node(actual_game)
+@pytest.mark.parametrize(
+    'whose_turn,last_state,rollout_value',
+    [
+        ('computer', GameState.PLAYER_WIN, 0),
+        ('computer', GameState.COMPUTER_WIN, 1),
+        ('computer', GameState.DRAW, 0.5),
+        ('player', GameState.PLAYER_WIN, 1),
+        ('player', GameState.COMPUTER_WIN, 0),
+        ('player', GameState.DRAW, 0.5),
+    ],
+)
+def test_rollout(whose_turn, last_state, rollout_value):
+    game_mock = Mock()
+    game_mock.get_available_actions.return_value = [0, 1]
+    game_mock.is_terminal.side_effect = [False, False, True]
+    game_mock.get_state.return_value = last_state
+    node = Node(game_mock, whose_turn=whose_turn)
 
-    rollout_value = node.rollout()
-
-    actual_game.is_terminal.assert_not_called()
-    assert rollout_value == 10
+    assert node.rollout() == rollout_value
 
 
-def test_backprop(game_mock):
-    root = Node(game_mock, n=1, v=1)
-    child = Node(game_mock, n=1, v=0)
-    grandchild = Node(game_mock, n=0, v=0)
-    root.add_children([child])
-    child.add_children([grandchild])
+@pytest.mark.parametrize(
+    'backprop_value,root_v,child_v,grandchild_v',
+    [(1, 2, 0, 1), (0.5, 1.5, 0.5, 0.5), (0, 1, 1, 0)],
+)
+def test_backprop(game_mock, backprop_value, root_v, child_v, grandchild_v):
+    root = Node(game_mock, n=2, v=1, whose_turn='computer')
+    child = Node(game_mock, n=1, v=0, whose_turn='player')
+    grandchild = Node(game_mock, n=0, v=0, whose_turn='computer')
+    root._add_children([child])
+    child._add_children([grandchild])
 
-    grandchild.backprop(10)
-
-    assert grandchild.n == 1
-    assert grandchild.v == 10
+    grandchild.backprop(backprop_value)
+    assert root.n == 3
+    assert root.v == root_v
 
     assert child.n == 2
-    assert child.v == 10
+    assert child.v == child_v
 
-    assert root.n == 2
-    assert root.v == 11
+    assert grandchild.n == 1
+    assert grandchild.v == grandchild_v

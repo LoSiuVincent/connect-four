@@ -1,8 +1,9 @@
 import math
 import random
 from copy import deepcopy
+from typing import Literal
 
-from .game import Game
+from .game import Game, GameState
 
 
 def _argmax(list_: list):
@@ -13,11 +14,19 @@ def _argmax(list_: list):
 
 
 class Node:
-    def __init__(self, game: Game = None, action: int = -1, n: int = 0, v: float = 0):
+    def __init__(
+        self,
+        game: Game = None,
+        action: int = -1,
+        n: int = 0,
+        v: float = 0,
+        whose_turn: Literal['player', 'computer'] = 'computer',
+    ):
         self._parent = self
         self._children = []
         self._game = game
         self._action = action
+        self._whose_turn = whose_turn
         self.n = n
         self.v = v
 
@@ -27,13 +36,8 @@ class Node:
     def is_leaf(self) -> bool:
         return len(self._children) == 0
 
-    def add_children(self, children: list['Node']) -> None:
-        for child in children:
-            child._parent = self
-        self._children.extend(children)
-
-    def get_children(self) -> list['Node']:
-        return self._children
+    def get_first_child(self) -> 'Node':
+        pass
 
     def get_child_with_highest_UCB(self, C) -> 'Node':
         UCBs = [child._calculate_UCB(C) for child in self._children]
@@ -51,23 +55,44 @@ class Node:
         children = []
         for action in self._game.get_available_actions():
             game_copy = deepcopy(self._game)
-            game_copy.step(action)
-            child_node = Node(game_copy, action=action)
+            game_copy.step(action, self._whose_turn)
+            child_node = Node(
+                game_copy,
+                action=action,
+                whose_turn='player' if self._whose_turn == 'computer' else 'computer',
+            )
             children.append(child_node)
-        self.add_children(children)
+        self._add_children(children)
 
     def rollout(self) -> float:
         game_copy = deepcopy(self._game)
+        current_turn = self._whose_turn
         while not game_copy.is_terminal():
             random_action = random.choice(self._game.get_available_actions())
-            game_copy.step(random_action)
-        return game_copy.get_value()
+            game_copy.step(random_action, current_turn)
+            current_turn = 'player' if current_turn == 'computer' else 'computer'
+
+        terminal_state = game_copy.get_state()
+        if terminal_state == GameState.DRAW:
+            return 0.5
+        elif terminal_state == GameState.PLAYER_WIN:
+            return 1 if self._whose_turn == 'player' else 0
+        elif terminal_state == GameState.COMPUTER_WIN:
+            return 1 if self._whose_turn == 'computer' else 0
 
     def backprop(self, value: float) -> None:
         self.n += 1
         self.v += value
         if not self._is_root():
-            self._parent.backprop(value)
+            self._parent.backprop(1 - value)
+
+    def _get_children(self) -> list['Node']:
+        return self._children
+
+    def _add_children(self, children: list['Node']) -> None:
+        for child in children:
+            child._parent = self
+        self._children.extend(children)
 
     def _is_root(self) -> bool:
         return self._parent == self
