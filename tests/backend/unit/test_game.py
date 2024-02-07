@@ -1,7 +1,7 @@
 import pytest
 
 from src.bot.board import Board
-from src.bot.mcts.game import ConnectFour
+from src.bot.mcts.game import ConnectFour, GameState
 
 
 def create_game_from_board_str(board_str: str):
@@ -45,30 +45,30 @@ def test_terminal_state_of_computer_wins():
     assert game.is_terminal()
 
 
-def test_value_of_player_wins():
+def test_player_wins():
     game = create_game_from_board_str('PPPPEEE|CCCEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
 
-    assert game.get_value() == -1
+    assert game.get_state() == GameState.PLAYER_WIN
 
 
-def test_value_of_computer_wins():
+def test_computer_wins():
     game = create_game_from_board_str('CCCCEEE|PPPEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
 
-    assert game.get_value() == 1
+    assert game.get_state() == GameState.COMPUTER_WIN
 
 
-def test_value_of_draw():
+def test_draw():
     game = create_game_from_board_str('CCPPCPC|CCPPCCP|PPCCPPC|CCPPPCP|PPPCPPP|CCCPCCC')
 
     assert game.is_terminal()
-    assert game.get_value() == 0
+    assert game.get_state() == GameState.DRAW
 
 
-def test_runtime_error_when_game_not_terminated():
+def test_normal_state():
     game = create_game_from_board_str('EEECEEE|EEEPEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE')
 
-    with pytest.raises(RuntimeError):
-        game.get_value()
+    assert not game.is_terminal()
+    assert game.get_state() == GameState.NORMAL
 
 
 @pytest.mark.parametrize(
@@ -78,14 +78,14 @@ def test_runtime_error_when_game_not_terminated():
         'PPPEEEE|CCCEEEE|EEEEEEE|EEEEEEE|EEEEEEE|EEEEEEE',
     ],
 )
-def test_step_makes_player_move(board_str):
+def test_makes_player_move(board_str):
     board = Board.create(board_str)
     game = ConnectFour(board, player_first=True)
 
-    game.step(3)
+    game.step(3, whose_move='player')
 
     assert game.is_terminal()
-    assert game.get_value() == -1
+    assert game.get_state() == GameState.PLAYER_WIN
 
 
 @pytest.mark.parametrize(
@@ -99,7 +99,7 @@ def test_step_makes_computer_move(board_str):
     board = Board.create(board_str)
     game = ConnectFour(board, player_first=False)
 
-    game.step(3)
+    game.step(3, whose_move='computer')
 
     assert game.is_terminal()
-    assert game.get_value() == 1
+    assert game.get_state() == GameState.COMPUTER_WIN

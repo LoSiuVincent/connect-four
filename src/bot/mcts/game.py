@@ -1,16 +1,24 @@
-from typing import Protocol
+from enum import Enum
+from typing import Literal, Protocol
 
 from src.bot.board import Board
 
 
+class GameState(Enum):
+    PLAYER_WIN = 0
+    COMPUTER_WIN = 1
+    DRAW = 2
+    NORMAL = 3
+
+
 class Game(Protocol):
-    def step(self, action: int) -> None: ...
+    def step(self, action: int, whose_move: Literal['player', 'computer']) -> None: ...
 
     def get_available_actions(self) -> list[int]: ...
 
     def is_terminal(self) -> bool: ...
 
-    def get_value(self) -> float: ...
+    def get_state(self) -> float: ...
 
 
 class ConnectFour(Game):
@@ -18,8 +26,7 @@ class ConnectFour(Game):
         self._board = board
         self._player_first = player_first
 
-    def step(self, action: int) -> None:
-        whose_move = self._get_whose_move()
+    def step(self, action: int, whose_move: Literal['player', 'computer']) -> None:
         self._board.drop_coin(action, whose_move)
 
     def get_available_actions(self) -> list[int]:
@@ -32,24 +39,14 @@ class ConnectFour(Game):
         else:
             return winner in ['player', 'computer']
 
-    def get_value(self) -> float:
+    def get_state(self) -> float:
         if not self.is_terminal():
-            raise RuntimeError('Game is not in terminal state')
+            return GameState.NORMAL
 
         winner = self._board.get_winner()
         if winner == 'player':
-            return -1
+            return GameState.PLAYER_WIN
         elif winner == 'computer':
-            return 1
+            return GameState.COMPUTER_WIN
         else:
-            return 0
-
-    def _get_whose_move(self) -> str:
-        num_computer_moves = self._board.get_num_computer_moves()
-        num_player_moves = self._board.get_num_player_moves()
-        if num_computer_moves < num_player_moves:
-            return 'computer'
-        elif num_computer_moves > num_player_moves:
-            return 'player'
-        else:
-            return 'player' if self._player_first else 'computer'
+            return GameState.DRAW
