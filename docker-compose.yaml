@@ -1,6 +1,6 @@
 version: '3.8'
 services:
   app:
-    image: lovincent536/connect-four:1.1
+    image: lovincent536/connect-four:1.1.1
     ports:
       - "8000:8000"

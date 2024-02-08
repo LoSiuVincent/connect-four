@@ -37,9 +37,10 @@ class MCTS:
 
         best_action = self._root.get_best_action()
 
-        if self._root.n != 0:
+        best_child = self._root.get_child_with_best_action()
+        if best_child.n != 0:
             logging.info(
-                f'Best action: {best_action} | Win rate: {self._root.v / self._root.n * 100:.3f}%'
+                f'Best action: {best_action} | Win rate: {best_child.v / best_child.n * 100:.3f}%'
             )
         else:
             logging.info(f'Best action: {best_action} | Win rate: Not available')
