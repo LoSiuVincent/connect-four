@@ -45,7 +45,7 @@ class Node:
 
     def get_best_action(self) -> int:
         return self.get_child_with_best_action()._action
-    
+
     def get_child_with_best_action(self) -> 'Node':
         best_child_idx = _argmax([child.n for child in self._children])
         best_child = self._children[best_child_idx]
